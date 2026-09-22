@@ -5,6 +5,15 @@ import useSWR from "swr";
 export default function SnippetForm({ onSubmit }) {
   const { data: languages } = useSWR("/api/language");
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
+  const [touchedValidation, setTouchedValidation] = useState({
+    title: false,
+    language: false,
+    code: false,
+  });
+
+  function handleBlurValidation(field) {
+    setTouchedValidation((prev) => ({ ...prev, [field]: true }));
+  }
 
   async function handleSubmitSnippet(event) {
     event.preventDefault();
@@ -21,7 +30,7 @@ export default function SnippetForm({ onSubmit }) {
     <form onSubmit={handleSubmitSnippet} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
         <label htmlFor="title" className="text-sm font-medium text-gray-700">
-          Title
+          Title (required)
         </label>
         <input
           type="text"
@@ -29,7 +38,12 @@ export default function SnippetForm({ onSubmit }) {
           name="title"
           placeholder="e.g Flexbox"
           required
-          className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-black"
+          onBlur={() => handleBlurValidation("title")}
+          className={`border rounded-md p-2 focus:outline-none focus:ring-1 ${
+            touchedValidation.title
+              ? "invalid:border-red-500 valid:border-green-600"
+              : "border-gray-300"
+          }`}
         />
 
         <div className="flex flex-col gap-1">
@@ -37,7 +51,7 @@ export default function SnippetForm({ onSubmit }) {
             htmlFor="codeSnippet"
             className="text-sm font-medium text-gray-700"
           >
-            Code
+            Code (required)
           </label>
 
           <select
@@ -45,7 +59,12 @@ export default function SnippetForm({ onSubmit }) {
             name="language"
             defaultValue=""
             required
-            className="border border-gray-300 rounded-md p-2 bg-white focus:outline-none focus:ring-2 focus:ring-black"
+            onBlur={() => handleBlurValidation("language")}
+            className={`border rounded-md p-2 bg-white focus:outline-none focus:ring-1 focus:ring-black ${
+              touchedValidation.language
+                ? "invalid:border-red-500 valid:border-green-600"
+                : "border-gray-300"
+            }`}
           >
             <option value="" disabled>
               Select a language
@@ -68,7 +87,12 @@ export default function SnippetForm({ onSubmit }) {
             rows={8}
             placeholder="Code snippet"
             required
-            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-black font-mono text-sm"
+            onBlur={() => handleBlurValidation("code")}
+            className={`border rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black font-mono text-sm${
+              touchedValidation.code
+                ? "invalid:border-red-500 valid:border-green-600"
+                : "border-gray-300"
+            }`}
           />
         </div>
 
