@@ -10,13 +10,39 @@ export default function SnippetForm({ onSubmit }) {
     language: false,
     code: false,
   });
+  const [formValues, setFormValues] = useState({
+    title: "",
+    language: "",
+    code: "",
+  });
 
   function handleBlurValidation(field) {
     setTouchedValidation((prev) => ({ ...prev, [field]: true }));
   }
 
+  function handleChange(event) {
+    const { name, value } = event.target;
+    setFormValues((prev) => ({ ...prev, [name]: value }));
+  }
+
+  const isTitleInvalid =
+    touchedValidation.title && formValues.title.trim() === "";
+  const isLanguageInvalid =
+    touchedValidation.language && formValues.language === "";
+  const isCodeInvalid = touchedValidation.code && formValues.code.trim() === "";
+
+  const isFormVaild =
+    formValues.title.trim() !== "" &&
+    formValues.language !== "" &&
+    formValues.code.trim() !== "";
+
   async function handleSubmitSnippet(event) {
     event.preventDefault();
+
+    setTouchedValidation({ title: true, language: true, code: true });
+    if (!isFormVaild) {
+      return;
+    }
 
     setIsLoadingSubmit(true);
 
@@ -38,13 +64,21 @@ export default function SnippetForm({ onSubmit }) {
           name="title"
           placeholder="e.g Flexbox"
           required
+          onChange={handleChange}
           onBlur={() => handleBlurValidation("title")}
           className={`border rounded-md p-2 focus:outline-none focus:ring-1 ${
-            touchedValidation.title
-              ? "invalid:border-red-500 valid:border-green-600"
-              : "border-gray-300"
+            isTitleInvalid
+              ? "border-red-500 bg-red-50"
+              : touchedValidation.title && formValues.title !== ""
+                ? "border-green-600 bg-green-50"
+                : "border-gray-300"
           }`}
         />
+        {isTitleInvalid && (
+          <p className="text-xs text-red-500 flex items-center gap-1 mt-0.5">
+            <span>⚠️</span> Please enter a title.
+          </p>
+        )}
 
         <div className="flex flex-col gap-1">
           <label
@@ -59,15 +93,18 @@ export default function SnippetForm({ onSubmit }) {
             name="language"
             defaultValue=""
             required
+            onChange={handleChange}
             onBlur={() => handleBlurValidation("language")}
             className={`border rounded-md p-2 bg-white focus:outline-none focus:ring-1 focus:ring-black ${
-              touchedValidation.language
-                ? "invalid:border-red-500 valid:border-green-600"
-                : "border-gray-300"
+              isLanguageInvalid
+                ? "border-red-500 bg-red-50"
+                : touchedValidation.language && formValues.language !== ""
+                  ? "border-green-600 bg-green-50"
+                  : "border-gray-300"
             }`}
           >
             <option value="" disabled>
-              Select a language
+              Please select a language
             </option>
 
             {languages?.map((language) => {
@@ -78,6 +115,12 @@ export default function SnippetForm({ onSubmit }) {
               );
             })}
           </select>
+
+          {isLanguageInvalid && (
+            <p className="text-xs text-red-500 flex items-center gap-1 mt-0.5">
+              <span>⚠️</span> Please select a language.
+            </p>
+          )}
         </div>
 
         <div className="flex flex-col gap-1">
@@ -87,13 +130,22 @@ export default function SnippetForm({ onSubmit }) {
             rows={8}
             placeholder="Code snippet"
             required
+            onChange={handleChange}
             onBlur={() => handleBlurValidation("code")}
             className={`border rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black font-mono text-sm${
-              touchedValidation.code
-                ? "invalid:border-red-500 valid:border-green-600"
-                : "border-gray-300"
+              isCodeInvalid
+                ? "border-red-500 bg-red-50"
+                : touchedValidation.code && formValues.code !== ""
+                  ? "border-green-600 bg-green-50"
+                  : "border-gray-300"
             }`}
           />
+
+          {isCodeInvalid && (
+            <p className="text-xs text-red-500 flex items-center gap-1 mt-0.5">
+              <span>⚠️</span> Please enter a code snippet.
+            </p>
+          )}
         </div>
 
         <div className="flex flex-col gap-1">
@@ -105,7 +157,7 @@ export default function SnippetForm({ onSubmit }) {
             name="notes"
             rows={8}
             placeholder="I use thin snippets ..."
-            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-black"
+            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
           />
         </div>
 
@@ -120,7 +172,7 @@ export default function SnippetForm({ onSubmit }) {
             type="text"
             id="installCommand"
             name="installCommand"
-            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-black"
+            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
           />
         </div>
 
@@ -133,7 +185,7 @@ export default function SnippetForm({ onSubmit }) {
             id="link"
             name="link"
             placeholder="https://..."
-            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-black"
+            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
           />
         </div>
       </div>
@@ -141,7 +193,7 @@ export default function SnippetForm({ onSubmit }) {
       <div className="flex flex-col gap-3 mt-4">
         <button
           type="submit"
-          disabled={isLoadingSubmit}
+          disabled={isLoadingSubmit || !isFormVaild}
           className="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 rounded-md transition-colors shadow-md disabled:opacity-50"
         >
           {isLoadingSubmit ? "Creating..." : "Create Snippet"}
