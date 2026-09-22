@@ -7,7 +7,15 @@ export default function SnippetPage() {
   const router = useRouter();
   const { id } = router.query;
 
-  const { data: snippet, error, isLoading } = useSWR(`/api/snippets/${id}`);
+  const {
+    data: snippet,
+    error,
+    isLoading,
+  } = useSWR(id ? `/api/snippets/${id}` : null);
+
+  if (!snippet) {
+    return <p>This snippet cound not be found.</p>;
+  }
 
   if (isLoading) {
     return <p>Just a second. Loading...</p>;
