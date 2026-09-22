@@ -22,7 +22,6 @@ const SnippetSchema = new Schema(
     },
     notes: {
       type: String,
-      required: true,
     },
     installCommand: {
       type: String,

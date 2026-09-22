@@ -14,8 +14,12 @@ export default async function handler(request, response) {
       const languages = await Language.find();
       response.status(200).json(languages);
     } catch (error) {
+      console.error(error);
       response.status(500).json({ error: "Error retrieving the languages." });
       return;
     }
   }
+
+  response.status(405).json({ status: "Method not allowed." });
+  return;
 }
