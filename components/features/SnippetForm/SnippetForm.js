@@ -1,45 +1,34 @@
 import Link from "next/link";
 import { useState } from "react";
 import useSWR from "swr";
+import FormField from "@/components/ui/FormField/FormField";
+import { getInputStateClasses } from "@/components/ui/getInputStateClasses/getInputStateClasses";
+import { useRequiredFieldsValidation } from "@/hooks/useRequiredFieldsValidation/useRequiredFieldsValidation";
+
+const requiredFields = ["title", "language", "code"];
 
 export default function SnippetForm({ onSubmit }) {
   const { data: languages } = useSWR("/api/language");
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
-  const [touchedValidation, setTouchedValidation] = useState({
-    title: false,
-    language: false,
-    code: false,
-  });
-  const [formValues, setFormValues] = useState({
-    title: "",
-    language: "",
-    code: "",
-  });
 
-  function handleBlurValidation(field) {
-    setTouchedValidation((prev) => ({ ...prev, [field]: true }));
-  }
-
-  function handleChange(event) {
-    const { name, value } = event.target;
-    setFormValues((prev) => ({ ...prev, [name]: value }));
-  }
-
-  const isTitleInvalid =
-    touchedValidation.title && formValues.title.trim() === "";
-  const isLanguageInvalid =
-    touchedValidation.language && formValues.language === "";
-  const isCodeInvalid = touchedValidation.code && formValues.code.trim() === "";
-
-  const isFormVaild =
-    formValues.title.trim() !== "" &&
-    formValues.language !== "" &&
-    formValues.code.trim() !== "";
+  const {
+    formValues,
+    handleChange,
+    handleBlurValidation,
+    touchAllFields,
+    isFieldInvalid,
+    isFieldValid,
+    isFormVaild,
+  } = useRequiredFieldsValidation(
+    { title: "", language: "", code: "" },
+    requiredFields
+  );
 
   async function handleSubmitSnippet(event) {
     event.preventDefault();
 
-    setTouchedValidation({ title: true, language: true, code: true });
+    touchAllFields();
+
     if (!isFormVaild) {
       return;
     }
@@ -54,10 +43,11 @@ export default function SnippetForm({ onSubmit }) {
 
   return (
     <form onSubmit={handleSubmitSnippet} className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1">
-        <label htmlFor="title" className="text-sm font-medium text-gray-700">
-          Title (required)
-        </label>
+      <FormField
+        label="Title (required)"
+        htmlFor="title"
+        error={isFieldInvalid("title") && "Please enter a title."}
+      >
         <input
           type="text"
           id="title"
@@ -66,129 +56,92 @@ export default function SnippetForm({ onSubmit }) {
           required
           onChange={handleChange}
           onBlur={() => handleBlurValidation("title")}
-          className={`border rounded-md p-2 focus:outline-none focus:ring-1 ${
-            isTitleInvalid
-              ? "border-red-500 bg-red-50"
-              : touchedValidation.title && formValues.title !== ""
-                ? "border-green-600 bg-green-50"
-                : "border-gray-300"
-          }`}
+          className={`border rounded-md p-2 focus:outline-none focus:ring-1 ${getInputStateClasses(
+            isFieldInvalid("title"),
+            isFieldValid("title")
+          )}`}
         />
-        {isTitleInvalid && (
-          <p className="text-xs text-red-500 flex items-center gap-1 mt-0.5">
-            <span>⚠️</span> Please enter a title.
-          </p>
-        )}
+      </FormField>
 
-        <div className="flex flex-col gap-1">
-          <label
-            htmlFor="codeSnippet"
-            className="text-sm font-medium text-gray-700"
-          >
-            Code (required)
-          </label>
+      <FormField
+        label="Language (required)"
+        htmlFor="language"
+        error={isFieldInvalid("language") && "Please select a language."}
+      >
+        <select
+          id="language"
+          name="language"
+          defaultValue=""
+          required
+          onChange={handleChange}
+          onBlur={() => handleBlurValidation("language")}
+          className={`border rounded-md p-2 bg-white focus:outline-none focus:ring-1 focus:ring-black ${getInputStateClasses(
+            isFieldInvalid("language"),
+            isFieldValid("language")
+          )}`}
+        >
+          <option value="" disabled>
+            Please select a language
+          </option>
 
-          <select
-            id="language"
-            name="language"
-            defaultValue=""
-            required
-            onChange={handleChange}
-            onBlur={() => handleBlurValidation("language")}
-            className={`border rounded-md p-2 bg-white focus:outline-none focus:ring-1 focus:ring-black ${
-              isLanguageInvalid
-                ? "border-red-500 bg-red-50"
-                : touchedValidation.language && formValues.language !== ""
-                  ? "border-green-600 bg-green-50"
-                  : "border-gray-300"
-            }`}
-          >
-            <option value="" disabled>
-              Please select a language
-            </option>
+          {languages?.map((language) => {
+            return (
+              <option key={language._id} value={language._id}>
+                {language.name}
+              </option>
+            );
+          })}
+        </select>
+      </FormField>
 
-            {languages?.map((language) => {
-              return (
-                <option key={language._id} value={language._id}>
-                  {language.name}
-                </option>
-              );
-            })}
-          </select>
+      <FormField
+        label="Code (required)"
+        htmlFor="codeSnippet"
+        error={isFieldInvalid("code") && "Please enter a code snippet."}
+      >
+        <textarea
+          id="codeSnippet"
+          name="code"
+          rows={8}
+          placeholder="Code snippet"
+          required
+          onChange={handleChange}
+          onBlur={() => handleBlurValidation("code")}
+          className={`border rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black font-mono text-sm ${getInputStateClasses(
+            isFieldInvalid("code"),
+            isFieldValid("code")
+          )}`}
+        />
+      </FormField>
 
-          {isLanguageInvalid && (
-            <p className="text-xs text-red-500 flex items-center gap-1 mt-0.5">
-              <span>⚠️</span> Please select a language.
-            </p>
-          )}
-        </div>
+      <FormField label="Notes" htmlFor="notes">
+        <textarea
+          id="notes"
+          name="notes"
+          rows={8}
+          placeholder="I use thin snippets ..."
+          className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
+        />
+      </FormField>
 
-        <div className="flex flex-col gap-1">
-          <textarea
-            id="codeSnippet"
-            name="code"
-            rows={8}
-            placeholder="Code snippet"
-            required
-            onChange={handleChange}
-            onBlur={() => handleBlurValidation("code")}
-            className={`border rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black font-mono text-sm${
-              isCodeInvalid
-                ? "border-red-500 bg-red-50"
-                : touchedValidation.code && formValues.code !== ""
-                  ? "border-green-600 bg-green-50"
-                  : "border-gray-300"
-            }`}
-          />
+      <FormField label="Install Command" htmlFor="installCommand">
+        <input
+          type="text"
+          id="installCommand"
+          name="installCommand"
+          className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
+        />
+      </FormField>
 
-          {isCodeInvalid && (
-            <p className="text-xs text-red-500 flex items-center gap-1 mt-0.5">
-              <span>⚠️</span> Please enter a code snippet.
-            </p>
-          )}
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <label htmlFor="notes" className="text-sm font-medium text-gray-700">
-            Notes
-          </label>
-          <textarea
-            id="notes"
-            name="notes"
-            rows={8}
-            placeholder="I use thin snippets ..."
-            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
-          />
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <label
-            htmlFor="installCommand"
-            className="text-sm font-medium text-gray-700"
-          >
-            Install Command
-          </label>
-          <input
-            type="text"
-            id="installCommand"
-            name="installCommand"
-            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
-          />
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <label htmlFor="link" className="text-sm font-medium text-gray-700">
-            Link
-          </label>
-          <input
-            type="url"
-            id="link"
-            name="link"
-            placeholder="https://..."
-            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
-          />
-        </div>
-      </div>
+      <FormField label="Link" htmlFor="link">
+        <input
+          type="url"
+          id="link"
+          name="link"
+          placeholder="https://..."
+          className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
+        />
+      </FormField>
 
       <div className="flex flex-col gap-3 mt-4">
         <button
