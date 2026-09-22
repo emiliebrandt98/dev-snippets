@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useState } from "react";
 import useSWR from "swr";
 
-export default function SnippetForm({ snippets, onSubmit }) {
+export default function SnippetForm({ onSubmit }) {
   const { data: languages } = useSWR("/api/language");
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
 

@@ -24,15 +24,15 @@ export default function CreateSnippetPage({ snippets }) {
   }
 
   return (
-    <>
-      <header>
-        <h1>DevSnippet</h1>
-        <p>Create Snippet</p>
+    <div className="max-w-2xl mx-auto p-4">
+      <header className="mb-6">
+        <h1 className="text-2xl font-bold">DevSnippet</h1>
+        <p className="text-gray-500 text-sm">Create Snippet</p>
       </header>
 
       <main>
         <SnippetForm snippets={snippets} onSubmit={handleCreateSubmit} />
       </main>
-    </>
+    </div>
   );
 }
