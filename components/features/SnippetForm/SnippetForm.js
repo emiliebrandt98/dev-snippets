@@ -12,7 +12,6 @@ export default function SnippetForm({ onSubmit }) {
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
 
   const {
-    formValues,
     handleChange,
     handleBlurValidation,
     touchAllFields,

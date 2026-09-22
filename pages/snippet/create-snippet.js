@@ -1,5 +1,6 @@
 import SnippetForm from "@/components/features/SnippetForm/SnippetForm";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 import { mutate } from "swr";
 
 export default function CreateSnippetPage({ snippets }) {
@@ -15,11 +16,12 @@ export default function CreateSnippetPage({ snippets }) {
     });
 
     if (!response.ok) {
-      console.error("Failed to create snippet");
+      toast.error("Failed to create snippet");
       return;
     }
 
     mutate("/api/snippets");
+    toast.success("Snippet successfully created!");
     router.push("/");
   }
 
