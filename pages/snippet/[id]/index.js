@@ -13,10 +13,6 @@ export default function SnippetPage() {
     isLoading,
   } = useSWR(id ? `/api/snippets/${id}` : null);
 
-  if (!snippet) {
-    return <p className="p-4 textgray-500">This snippet cound not be found.</p>;
-  }
-
   if (isLoading) {
     return <p className="p-4 text-gray-500">Just a second. Loading...</p>;
   }
@@ -28,6 +24,10 @@ export default function SnippetPage() {
         <p className="text-gray-500">Please try again later</p>
       </div>
     );
+  }
+
+  if (!snippet) {
+    return <p className="p-4 textgray-500">This snippet cound not be found.</p>;
   }
 
   const { language, title, code, notes, installCommand, link } = snippet;
