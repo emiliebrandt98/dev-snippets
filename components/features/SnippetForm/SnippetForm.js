@@ -20,13 +20,13 @@ export default function SnippetForm({ onSubmit }) {
   return (
     <form onSubmit={handleSubmitSnippet} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <label htmlFor="titel" className="text-sm font-medium text-gray-700">
-          Titel
+        <label htmlFor="title" className="text-sm font-medium text-gray-700">
+          Title
         </label>
         <input
           type="text"
-          id="titel"
-          name="titel"
+          id="title"
+          name="title"
           placeholder="e.g Flexbox"
           required
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-black"
@@ -42,7 +42,7 @@ export default function SnippetForm({ onSubmit }) {
 
           <select
             id="language"
-            name="code"
+            name="language"
             defaultValue=""
             required
             className="border border-gray-300 rounded-md p-2 bg-white focus:outline-none focus:ring-2 focus:ring-black"
@@ -53,7 +53,7 @@ export default function SnippetForm({ onSubmit }) {
 
             {languages?.map((language) => {
               return (
-                <option key={language._id} value={language.name}>
+                <option key={language._id} value={language._id}>
                   {language.name}
                 </option>
               );

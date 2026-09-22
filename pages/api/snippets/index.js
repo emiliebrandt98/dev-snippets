@@ -26,6 +26,10 @@ export default async function handler(request, response) {
   if (request.method === "POST") {
     try {
       const snippetsData = request.body;
+
+      //Dummy-User
+      snippetsData.userId = "60c72b2f9b1d8b2d88f12345";
+
       const newSnippet = await Snippet.create(snippetsData);
 
       response.status(201).json(newSnippet);

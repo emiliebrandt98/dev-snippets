@@ -15,11 +15,7 @@ const fetcher = async (url) => {
 };
 
 export default function App({ Component, pageProps }) {
-  const {
-    data: snippets,
-    error,
-    isLoading,
-  } = useSWR("/api/snippets/snippets", fetcher);
+  const { data: snippets, error, isLoading } = useSWR("/api/snippets", fetcher);
 
   return (
     <SWRConfig value={{ fetcher }}>
