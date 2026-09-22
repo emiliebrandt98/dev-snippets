@@ -1,13 +1,13 @@
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/router";
+import useSWR from "swr";
+import Link from "next/link";
 
 export default function SnippetPage() {
   const router = useRouter();
   const { id } = router.query;
 
-  const { data: snippet, error, isLoading } = useSWR(`/api/${id}`);
-  const { date, language, title, code, notes, installcommand, link } = snippet;
-  const formattedDate = new Date(date).toLocaleDateString("de-DE");
+  const { data: snippet, error, isLoading } = useSWR(`/api/snippets/${id}`);
 
   if (isLoading) {
     return <p>Just a second. Loading...</p>;
@@ -22,22 +22,39 @@ export default function SnippetPage() {
     );
   }
 
+  const { language, title, code, notes, installCommand, link } = snippet;
+  const formattedDate = new Date(snippet.createdAt).toLocaleDateString("de-DE");
+
   return (
     <>
       <header>
-        <ArrowLeft />
-        <small>{`${formattedDate} · ${language}`}</small>
+        <Link href={"/"}>
+          <ArrowLeft />
+        </Link>
+        <small>{`${formattedDate} · ${language?.name}`}</small>
         <h1>{title}</h1>
       </header>
 
       <main>
-        <section>{code}</section>
+        <h2>Code:</h2>
+        <p>{code}</p>
+
         <h2>Notes:</h2>
         <p>{notes}</p>
-        <h2>Install command:</h2>
-        <p>{installcommand}</p>
-        <h2>Link:</h2>
-        <p>{link}</p>
+
+        {installCommand && (
+          <>
+            <h2>Install Command:</h2>
+            <p>{installCommand}</p>
+          </>
+        )}
+
+        {link && (
+          <>
+            <h2>Link:</h2>
+            <p>{link}</p>
+          </>
+        )}
       </main>
     </>
   );
