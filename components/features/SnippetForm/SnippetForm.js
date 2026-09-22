@@ -1,11 +1,24 @@
 import Link from "next/link";
+import { useState } from "react";
 import useSWR from "swr";
 
-export default function SnippetForm({ snippets }) {
-  const { data: languages, error, isLoading } = useSWR("/api/language");
+export default function SnippetForm({ snippets, onSubmit }) {
+  const { data: languages } = useSWR("/api/language");
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
+
+  async function handleSubmitSnippet(event) {
+    event.preventDefault();
+
+    setIsLoadingSubmit(true);
+
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData);
+
+    await onSubmit(data);
+  }
 
   return (
-    <form>
+    <form onSubmit={handleSubmitSnippet}>
       <fieldset>
         <legend>Basic information</legend>
 
@@ -18,14 +31,11 @@ export default function SnippetForm({ snippets }) {
           required
         />
 
-        <label htmlFor="code">Language</label>
-        <select id="code" name="code" defaultValue="" required>
+        <label htmlFor="language">Language</label>
+        <select id="language" name="code" defaultValue="" required>
           <option value="" disabled>
             Select a language
           </option>
-
-          {isLoading && <option disabled>Loading languages...</option>}
-          {error && <option disabled>Failed to load languages</option>}
 
           {languages?.map((language) => {
             return (
@@ -36,9 +46,9 @@ export default function SnippetForm({ snippets }) {
           })}
         </select>
 
-        <label htmlFor="code">Code</label>
+        <label htmlFor="codeSnippet">Code</label>
         <textarea
-          id="code"
+          id="codeSnippet"
           name="code"
           rows={8}
           placeholder="Code snippet"
@@ -63,7 +73,9 @@ export default function SnippetForm({ snippets }) {
       </fieldset>
 
       <fieldset>
-        <button type="submit">Create Snippet</button>
+        <button type="submit" disabled={isLoadingSubmit}>
+          {isLoadingSubmit ? "Creating..." : "Create Snippet"}
+        </button>
         <Link href="/">
           <button type="button">Cancel</button>
         </Link>
