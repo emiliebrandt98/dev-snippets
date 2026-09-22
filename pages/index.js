@@ -5,13 +5,13 @@ export default function Home({ snippets, isLoading, error }) {
   if (error) return <p>Error fetching data.</p>;
 
   return (
-    <>
-      <header>
-        <h1>DevSnippets</h1>
+    <div className="max-w-2xl mx-auto p-4">
+      <header className="mb-6">
+        <h1 className="text-2xl font-bold">DevSnippets</h1>
       </header>
       <main>
         <SnippetsList snippets={snippets} />
       </main>
-    </>
+    </div>
   );
 }
