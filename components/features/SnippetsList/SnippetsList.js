@@ -2,7 +2,12 @@ import SnippetCard from "../SnippetCard/SnippetCard";
 
 export default function SnippetsList({ snippets }) {
   if (!snippets || snippets.length === 0) {
-    return <p>This snippet does not exist. Please try again.</p>;
+    return (
+      <>
+        <p>No snippets found. Create snippets to display them in a list.</p>
+        <snmall>{`You can create snippets with the "+" button.`}</snmall>
+      </>
+    );
   }
 
   return (
