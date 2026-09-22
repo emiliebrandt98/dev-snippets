@@ -11,17 +11,18 @@ export default function SnippetsList({ snippets }) {
   }
 
   return (
-    <>
+    <ul>
       {snippets.map((snippet) => {
         return (
-          <SnippetCard
-            key={snippet._id}
-            title={snippet.title}
-            language={snippet.language?.name}
-            date={snippet.createdAt}
-          />
+          <li key={snippet._id}>
+            <SnippetCard
+              title={snippet.title}
+              language={snippet.language?.name}
+              date={snippet.createdAt}
+            />
+          </li>
         );
       })}
-    </>
+    </ul>
   );
 }
