@@ -1,4 +1,6 @@
 import SnippetsList from "@/components/features/SnippetsList/SnippetsList";
+import { Plus } from "lucide-react";
+import Link from "next/link";
 
 export default function Home({ snippets, isLoading, error }) {
   if (isLoading) return <p>Loading...</p>;
@@ -11,6 +13,15 @@ export default function Home({ snippets, isLoading, error }) {
       </header>
       <main>
         <SnippetsList snippets={snippets} />
+        <Link href={"/snippet/create-snippet"}>
+          <button
+            type="button"
+            aria-label="create snippet"
+            className="inline-flex items-center justify-center w-10 h-10 aspect-square rounded-lg bg-gray-100 hover:bg-gray-200"
+          >
+            <Plus size={24} />
+          </button>
+        </Link>
       </main>
     </div>
   );
