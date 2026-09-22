@@ -11,9 +11,8 @@ export default function SnippetsList({ snippets }) {
         return (
           <SnippetCard
             key={snippet._id}
-            id={snippet._id}
             title={snippet.title}
-            language={snippet.language}
+            language={snippet.language?.name}
             date={snippet.createdAt}
           />
         );
