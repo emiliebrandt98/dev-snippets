@@ -37,7 +37,11 @@ export default function SnippetForm({ onSubmit }) {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
 
-    await onSubmit(data);
+    try {
+      await onSubmit(data);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (

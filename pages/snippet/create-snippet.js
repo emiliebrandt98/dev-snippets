@@ -20,9 +20,9 @@ export default function CreateSnippetPage({ snippets }) {
       return;
     }
 
-    mutate("/api/snippets");
-    toast.success("Snippet successfully created!");
-    router.push("/");
+    await mutate("/api/snippets");
+    await router.push("/");
+    toast.success("Your snippet was successfully created!");
   }
 
   return (
