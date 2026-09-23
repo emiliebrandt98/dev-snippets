@@ -38,6 +38,7 @@ export default function SnippetPage() {
       <header className="mb-4">
         <Link
           href="/"
+          aria-label="back to previous page"
           className="inline-flex items-center justify-center w-10 h-10 aspect-square rounded-lg bg-gray-100 hover:bg-gray-200"
         >
           <ArrowLeft className="w-5 h-5" />
@@ -50,14 +51,12 @@ export default function SnippetPage() {
             <h1 className="text-xl font-bold mt-1">{title}</h1>
           </div>
 
-          <Link href={`/snippet/${snippet?._id}/edit-snippet`}>
-            <button
-              type="button"
-              aria-label="edit snippet"
-              className="inline-flex items-center justify-center w-10 h-10 aspect-square rounded-lg bg-gray-100 hover:bg-gray-200"
-            >
-              <Pencil size={24} className="w-5 h-5" />
-            </button>
+          <Link
+            href={`/snippet/${snippet?._id}/edit-snippet`}
+            aria-label="edit snippet"
+            className="inline-flex items-center justify-center w-10 h-10 aspect-square rounded-lg bg-gray-100 hover:bg-gray-200"
+          >
+            <Pencil size={24} className="w-5 h-5" />
           </Link>
         </div>
       </header>
@@ -70,8 +69,12 @@ export default function SnippetPage() {
           {code}
         </pre>
 
-        <h2 className="font-bold text-lg mt-6 mb-2">Notes:</h2>
-        <p className="text-gray-700 whitespace-pre-line">{notes}</p>
+        {notes && (
+          <>
+            <h2 className="font-bold text-lg mt-6 mb-2">Notes:</h2>
+            <p className="text-gray-700 whitespace-pre-line">{notes}</p>
+          </>
+        )}
 
         {installCommand && (
           <>

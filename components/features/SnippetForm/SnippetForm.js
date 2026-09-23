@@ -42,7 +42,7 @@ export default function SnippetForm({
     if (isEditing && currentSnippet) {
       setFormValues({
         title: currentSnippet.title ?? "",
-        language: currentSnippet.language ?? "",
+        language: currentSnippet.language?._id ?? "",
         code: currentSnippet.code ?? "",
         notes: currentSnippet.notes ?? "",
         installCommand: currentSnippet.installCommand ?? "",
@@ -69,6 +69,8 @@ export default function SnippetForm({
       await onSubmit(data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoadingSubmit(false);
     }
   }
 
@@ -197,14 +199,9 @@ export default function SnippetForm({
         </button>
         <Link
           href={isEditing ? `/snippet/${snippetId}` : "/"}
-          className="w-full"
+          className="flex justify-center align-center w-full border border-gray-300 hover:bg-gray-100 font-medium py-2 rounded-md transition-colors text-gray-700"
         >
-          <button
-            type="button"
-            className="w-full border border-gray-300 hover:bg-gray-100 font-medium py-2 rounded-md transition-colors text-gray-700"
-          >
-            Cancel
-          </button>
+          Cancel
         </Link>
       </div>
     </form>

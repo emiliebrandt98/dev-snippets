@@ -27,22 +27,20 @@ export default function EditSnippetPage({ snippets }) {
     toast.success("Your snippet was successfully edited!");
   }
   return (
-    <>
-      <div className="max-w-2xl mx-auto p-4">
-        <header className="mb-6">
-          <h1 className="text-2xl font-bold">DevSnippet</h1>
-          <p className="text-gray-500 text-sm">Edit Snippet</p>
-        </header>
+    <div className="max-w-2xl mx-auto p-4">
+      <header className="mb-6">
+        <h1 className="text-2xl font-bold">DevSnippet</h1>
+        <p className="text-gray-500 text-sm">Edit Snippet</p>
+      </header>
 
-        <main>
-          <SnippetForm
-            snippets={snippets}
-            onSubmit={handleEditSubmit}
-            snippetId={id}
-            isEditing={true}
-          />
-        </main>
-      </div>
-    </>
+      <main>
+        <SnippetForm
+          snippets={snippets}
+          onSubmit={handleEditSubmit}
+          snippetId={id}
+          isEditing={true}
+        />
+      </main>
+    </div>
   );
 }
