@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
 import useSWR, { SWRConfig } from "swr";
+import { ToastContainer } from "react-toastify";
 
 const fetcher = async (url) => {
   const response = await fetch(url);
@@ -15,11 +16,7 @@ const fetcher = async (url) => {
 };
 
 export default function App({ Component, pageProps }) {
-  const {
-    data: snippets,
-    error,
-    isLoading,
-  } = useSWR("/api/snippets/snippets", fetcher);
+  const { data: snippets, error, isLoading } = useSWR("/api/snippets", fetcher);
 
   return (
     <SWRConfig value={{ fetcher }}>
@@ -28,6 +25,18 @@ export default function App({ Component, pageProps }) {
         error={error}
         isLoading={isLoading}
         {...pageProps}
+      />
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable={false}
+        pauseOnHover
+        theme="light"
       />
     </SWRConfig>
   );

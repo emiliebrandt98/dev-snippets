@@ -23,6 +23,29 @@ export default async function handler(request, response) {
     }
   }
 
+  if (request.method === "POST") {
+    try {
+      const snippetsData = request.body;
+
+      //Dummy-User
+      snippetsData.userId = "60c72b2f9b1d8b2d88f12345";
+
+      const newSnippet = await Snippet.create(snippetsData);
+
+      response.status(201).json(newSnippet);
+      return;
+    } catch (error) {
+      console.error(error);
+
+      if (error.name === "ValidationError") {
+        response.status(400).json({ error: error.message });
+        return;
+      }
+      response.status(500).json({ error: "Error creating a snippet." });
+      return;
+    }
+  }
+
   response.status(405).json({ status: "Method not allowed." });
   return;
 }
