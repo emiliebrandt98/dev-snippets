@@ -50,7 +50,7 @@ export default function SnippetPage() {
             <h1 className="text-xl font-bold mt-1">{title}</h1>
           </div>
 
-          <Link href={"/snippet/edit-snippet"}>
+          <Link href={`/snippet/${snippet?._id}/edit-snippet`}>
             <button
               type="button"
               aria-label="edit snippet"

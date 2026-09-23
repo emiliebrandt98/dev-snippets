@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 import FormField from "@/components/ui/FormField/FormField";
 import { getInputStateClasses } from "@/components/ui/getInputStateClasses/getInputStateClasses";
@@ -7,9 +7,15 @@ import { useRequiredFieldsValidation } from "@/hooks/useRequiredFieldsValidation
 
 const requiredFields = ["title", "language", "code"];
 
-export default function SnippetForm({ onSubmit }) {
+export default function SnippetForm({
+  onSubmit,
+  isEditing,
+  snippetId,
+  snippets,
+}) {
   const { data: languages } = useSWR("/api/language");
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
+  const currentSnippet = snippets?.find((snippet) => snippet._id === snippetId);
 
   const {
     handleChange,
@@ -57,6 +63,7 @@ export default function SnippetForm({ onSubmit }) {
           name="title"
           placeholder="e.g Flexbox"
           required
+          defaultValue={currentSnippet.title}
           onChange={handleChange}
           onBlur={() => handleBlurValidation("title")}
           className={`border rounded-md p-2 focus:outline-none focus:ring-1 ${getInputStateClasses(
@@ -74,7 +81,7 @@ export default function SnippetForm({ onSubmit }) {
         <select
           id="language"
           name="language"
-          defaultValue=""
+          defaultValue={currentSnippet.language}
           required
           onChange={handleChange}
           onBlur={() => handleBlurValidation("language")}
@@ -108,6 +115,7 @@ export default function SnippetForm({ onSubmit }) {
           rows={8}
           placeholder="e.g const ..."
           required
+          defaultValue={currentSnippet.code}
           onChange={handleChange}
           onBlur={() => handleBlurValidation("code")}
           className={`border rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black font-mono text-sm ${getInputStateClasses(
@@ -122,6 +130,7 @@ export default function SnippetForm({ onSubmit }) {
           id="notes"
           name="notes"
           rows={8}
+          defaultValue={currentSnippet.notes}
           placeholder="I use this snippets ..."
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
         />
@@ -132,6 +141,7 @@ export default function SnippetForm({ onSubmit }) {
           type="text"
           id="installCommand"
           name="installCommand"
+          defaultValue={currentSnippet.installCommand}
           placeholder="npm install ..."
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
         />
@@ -142,6 +152,7 @@ export default function SnippetForm({ onSubmit }) {
           type="url"
           id="link"
           name="link"
+          defaultValue={currentSnippet.link}
           placeholder="https://..."
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
         />
@@ -153,7 +164,11 @@ export default function SnippetForm({ onSubmit }) {
           disabled={isLoadingSubmit || !isFormVaild}
           className="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 rounded-md transition-colors shadow-md disabled:opacity-50"
         >
-          {isLoadingSubmit ? "Creating..." : "Create Snippet"}
+          {isLoadingSubmit
+            ? "Creating..."
+            : isEditing
+              ? "Save changes"
+              : "Create Snippet"}
         </button>
         <Link href="/" className="w-full">
           <button
