@@ -29,6 +29,7 @@ export default async function handler(request, response) {
 
       const snippet = await Snippet.findByIdAndUpdate(id, snippetData, {
         new: true,
+        runValidators: true,
       });
 
       if (!snippet) {
@@ -36,7 +37,7 @@ export default async function handler(request, response) {
         return;
       }
 
-      response.status(200).json({ status: "snippet edited" });
+      response.status(200).json(snippet);
       return;
     }
   } catch (error) {
