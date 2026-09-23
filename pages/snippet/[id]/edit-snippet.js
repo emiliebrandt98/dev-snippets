@@ -23,7 +23,7 @@ export default function EditSnippetPage({ snippets }) {
 
     await mutate(`/api/snippets/${id}`);
     await mutate("/api/snippets");
-    await router.push("/");
+    await router.push(`/snippet/${id}`);
     toast.success("Your snippet was successfully edited!");
   }
   return (
