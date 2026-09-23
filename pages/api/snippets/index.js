@@ -60,6 +60,7 @@ export default async function handler(request, response) {
       });
 
       response.status(200).json(deletedSnippet);
+      return;
     } catch (error) {
       console.error(error);
       response.status(400).json({ error: error.message });
