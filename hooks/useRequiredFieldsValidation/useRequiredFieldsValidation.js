@@ -36,6 +36,8 @@ export function useRequiredFieldsValidation(initialValues, requiredFields) {
   const isFormVaild = requiredFields.every((field) => !isFieldEmpty(field));
 
   return {
+    formValues,
+    setFormValues,
     handleChange,
     handleBlurValidation,
     touchAllFields,

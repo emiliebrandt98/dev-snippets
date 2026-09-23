@@ -7,11 +7,17 @@ import { useRequiredFieldsValidation } from "@/hooks/useRequiredFieldsValidation
 
 const requiredFields = ["title", "language", "code"];
 
-export default function SnippetForm({ onSubmit }) {
+export default function SnippetForm({
+  onSubmit,
+  isEditing,
+  snippetId,
+  initialValues,
+}) {
   const { data: languages } = useSWR("/api/language");
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
 
   const {
+    formValues,
     handleChange,
     handleBlurValidation,
     touchAllFields,
@@ -19,18 +25,22 @@ export default function SnippetForm({ onSubmit }) {
     isFieldValid,
     isFormVaild,
   } = useRequiredFieldsValidation(
-    { title: "", language: "", code: "" },
+    initialValues || {
+      title: "",
+      language: "",
+      code: "",
+      notes: "",
+      installCommand: "",
+      link: "",
+    },
     requiredFields
   );
 
   async function handleSubmitSnippet(event) {
     event.preventDefault();
-
     touchAllFields();
 
-    if (!isFormVaild) {
-      return;
-    }
+    if (!isFormVaild) return;
 
     setIsLoadingSubmit(true);
 
@@ -41,6 +51,8 @@ export default function SnippetForm({ onSubmit }) {
       await onSubmit(data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoadingSubmit(false);
     }
   }
 
@@ -57,6 +69,7 @@ export default function SnippetForm({ onSubmit }) {
           name="title"
           placeholder="e.g Flexbox"
           required
+          value={formValues.title}
           onChange={handleChange}
           onBlur={() => handleBlurValidation("title")}
           className={`border rounded-md p-2 focus:outline-none focus:ring-1 ${getInputStateClasses(
@@ -74,7 +87,7 @@ export default function SnippetForm({ onSubmit }) {
         <select
           id="language"
           name="language"
-          defaultValue=""
+          value={formValues.language}
           required
           onChange={handleChange}
           onBlur={() => handleBlurValidation("language")}
@@ -108,6 +121,7 @@ export default function SnippetForm({ onSubmit }) {
           rows={8}
           placeholder="e.g const ..."
           required
+          value={formValues.code}
           onChange={handleChange}
           onBlur={() => handleBlurValidation("code")}
           className={`border rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black font-mono text-sm ${getInputStateClasses(
@@ -122,6 +136,8 @@ export default function SnippetForm({ onSubmit }) {
           id="notes"
           name="notes"
           rows={8}
+          value={formValues.notes}
+          onChange={handleChange}
           placeholder="I use this snippets ..."
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
         />
@@ -132,6 +148,8 @@ export default function SnippetForm({ onSubmit }) {
           type="text"
           id="installCommand"
           name="installCommand"
+          value={formValues.installCommand}
+          onChange={handleChange}
           placeholder="npm install ..."
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
         />
@@ -142,6 +160,8 @@ export default function SnippetForm({ onSubmit }) {
           type="url"
           id="link"
           name="link"
+          value={formValues.link}
+          onChange={handleChange}
           placeholder="https://..."
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
         />
@@ -153,15 +173,17 @@ export default function SnippetForm({ onSubmit }) {
           disabled={isLoadingSubmit || !isFormVaild}
           className="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 rounded-md transition-colors shadow-md disabled:opacity-50"
         >
-          {isLoadingSubmit ? "Creating..." : "Create Snippet"}
+          {isLoadingSubmit
+            ? "Loading..."
+            : isEditing
+              ? "Save changes"
+              : "Create Snippet"}
         </button>
-        <Link href="/" className="w-full">
-          <button
-            type="button"
-            className="w-full border border-gray-300 hover:bg-gray-100 font-medium py-2 rounded-md transition-colors text-gray-700"
-          >
-            Cancel
-          </button>
+        <Link
+          href={isEditing ? `/snippet/${snippetId}` : "/"}
+          className="flex justify-center align-center w-full border border-gray-300 hover:bg-gray-100 font-medium py-2 rounded-md transition-colors text-gray-700"
+        >
+          Cancel
         </Link>
       </div>
     </form>

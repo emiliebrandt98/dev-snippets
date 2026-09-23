@@ -23,6 +23,23 @@ export default async function handler(request, response) {
       response.status(200).json(snippet);
       return;
     }
+
+    if (request.method === "PUT") {
+      const snippetData = request.body;
+
+      const snippet = await Snippet.findByIdAndUpdate(id, snippetData, {
+        new: true,
+        runValidators: true,
+      });
+
+      if (!snippet) {
+        response.status(404).json({ status: "Error editing Snippet." });
+        return;
+      }
+
+      response.status(200).json(snippet);
+      return;
+    }
   } catch (error) {
     if (error.name === "ValidationError") {
       response.status(400).json({ error: error.message });
