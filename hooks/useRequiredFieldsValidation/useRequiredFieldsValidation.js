@@ -37,6 +37,7 @@ export function useRequiredFieldsValidation(initialValues, requiredFields) {
 
   return {
     formValues,
+    setFormValues,
     handleChange,
     handleBlurValidation,
     touchAllFields,

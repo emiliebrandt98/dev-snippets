@@ -18,6 +18,8 @@ export default function SnippetForm({
   const currentSnippet = snippets?.find((snippet) => snippet._id === snippetId);
 
   const {
+    formValues,
+    setFormValues,
     handleChange,
     handleBlurValidation,
     touchAllFields,
@@ -25,9 +27,29 @@ export default function SnippetForm({
     isFieldValid,
     isFormVaild,
   } = useRequiredFieldsValidation(
-    { title: "", language: "", code: "" },
+    {
+      title: "",
+      language: "",
+      code: "",
+      notes: "",
+      installCommand: "",
+      link: "",
+    },
     requiredFields
   );
+
+  useEffect(() => {
+    if (isEditing && currentSnippet) {
+      setFormValues({
+        title: currentSnippet.title ?? "",
+        language: currentSnippet.language ?? "",
+        code: currentSnippet.code ?? "",
+        notes: currentSnippet.notes ?? "",
+        installCommand: currentSnippet.installCommand ?? "",
+        link: currentSnippet.link ?? "",
+      });
+    }
+  }, [isEditing, currentSnippet, setFormValues]);
 
   async function handleSubmitSnippet(event) {
     event.preventDefault();
@@ -63,7 +85,7 @@ export default function SnippetForm({
           name="title"
           placeholder="e.g Flexbox"
           required
-          defaultValue={currentSnippet.title}
+          value={formValues.title}
           onChange={handleChange}
           onBlur={() => handleBlurValidation("title")}
           className={`border rounded-md p-2 focus:outline-none focus:ring-1 ${getInputStateClasses(
@@ -81,7 +103,7 @@ export default function SnippetForm({
         <select
           id="language"
           name="language"
-          defaultValue={currentSnippet.language}
+          value={formValues.language}
           required
           onChange={handleChange}
           onBlur={() => handleBlurValidation("language")}
@@ -115,7 +137,7 @@ export default function SnippetForm({
           rows={8}
           placeholder="e.g const ..."
           required
-          defaultValue={currentSnippet.code}
+          value={formValues.code}
           onChange={handleChange}
           onBlur={() => handleBlurValidation("code")}
           className={`border rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black font-mono text-sm ${getInputStateClasses(
@@ -130,7 +152,8 @@ export default function SnippetForm({
           id="notes"
           name="notes"
           rows={8}
-          defaultValue={currentSnippet.notes}
+          value={formValues.notes}
+          onChange={handleChange}
           placeholder="I use this snippets ..."
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
         />
@@ -141,7 +164,8 @@ export default function SnippetForm({
           type="text"
           id="installCommand"
           name="installCommand"
-          defaultValue={currentSnippet.installCommand}
+          value={formValues.installCommand}
+          onChange={handleChange}
           placeholder="npm install ..."
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
         />
@@ -152,7 +176,8 @@ export default function SnippetForm({
           type="url"
           id="link"
           name="link"
-          defaultValue={currentSnippet.link}
+          value={formValues.link}
+          onChange={handleChange}
           placeholder="https://..."
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
         />
@@ -170,7 +195,10 @@ export default function SnippetForm({
               ? "Save changes"
               : "Create Snippet"}
         </button>
-        <Link href="/" className="w-full">
+        <Link
+          href={isEditing ? `/snippet/${snippetId}` : "/"}
+          className="w-full"
+        >
           <button
             type="button"
             className="w-full border border-gray-300 hover:bg-gray-100 font-medium py-2 rounded-md transition-colors text-gray-700"

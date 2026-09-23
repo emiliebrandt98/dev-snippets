@@ -9,7 +9,7 @@ export default function EditSnippetPage({ snippets }) {
 
   async function handleEditSubmit(data) {
     const response = await fetch(`/api/snippets/${id}`, {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
