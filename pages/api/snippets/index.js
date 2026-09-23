@@ -46,6 +46,27 @@ export default async function handler(request, response) {
     }
   }
 
+  if (request.method === "DELETE") {
+    try {
+      const { Ids } = request.body;
+
+      if (!Ids || !Array.isArray(Ids) || Ids.length === 0) {
+        response.status(400).json({ error: "No snippet Ids provided." });
+        return;
+      }
+
+      const deletedSnippet = await Snippet.deleteMany({
+        _id: { $in: Ids },
+      });
+
+      response.status(200).json(deletedSnippet);
+    } catch (error) {
+      console.error(error);
+      response.status(400).json({ error: error.message });
+      return;
+    }
+  }
+
   response.status(405).json({ status: "Method not allowed." });
   return;
 }
