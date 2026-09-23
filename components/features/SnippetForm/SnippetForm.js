@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useSWR from "swr";
 import FormField from "@/components/ui/FormField/FormField";
 import { getInputStateClasses } from "@/components/ui/getInputStateClasses/getInputStateClasses";
@@ -11,15 +11,13 @@ export default function SnippetForm({
   onSubmit,
   isEditing,
   snippetId,
-  snippets,
+  initialValues,
 }) {
   const { data: languages } = useSWR("/api/language");
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
-  const currentSnippet = snippets?.find((snippet) => snippet._id === snippetId);
 
   const {
     formValues,
-    setFormValues,
     handleChange,
     handleBlurValidation,
     touchAllFields,
@@ -27,7 +25,7 @@ export default function SnippetForm({
     isFieldValid,
     isFormVaild,
   } = useRequiredFieldsValidation(
-    {
+    initialValues || {
       title: "",
       language: "",
       code: "",
@@ -38,27 +36,11 @@ export default function SnippetForm({
     requiredFields
   );
 
-  useEffect(() => {
-    if (isEditing && currentSnippet) {
-      setFormValues({
-        title: currentSnippet.title ?? "",
-        language: currentSnippet.language?._id ?? "",
-        code: currentSnippet.code ?? "",
-        notes: currentSnippet.notes ?? "",
-        installCommand: currentSnippet.installCommand ?? "",
-        link: currentSnippet.link ?? "",
-      });
-    }
-  }, [isEditing, currentSnippet, setFormValues]);
-
   async function handleSubmitSnippet(event) {
     event.preventDefault();
-
     touchAllFields();
 
-    if (!isFormVaild) {
-      return;
-    }
+    if (!isFormVaild) return;
 
     setIsLoadingSubmit(true);
 
