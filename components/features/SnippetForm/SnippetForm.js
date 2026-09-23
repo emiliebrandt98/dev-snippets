@@ -102,7 +102,7 @@ export default function SnippetForm({ onSubmit }) {
           id="codeSnippet"
           name="code"
           rows={8}
-          placeholder="Code snippet"
+          placeholder="e.g const ..."
           required
           onChange={handleChange}
           onBlur={() => handleBlurValidation("code")}
@@ -118,7 +118,7 @@ export default function SnippetForm({ onSubmit }) {
           id="notes"
           name="notes"
           rows={8}
-          placeholder="I use thin snippets ..."
+          placeholder="I use this snippets ..."
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
         />
       </FormField>
@@ -128,6 +128,7 @@ export default function SnippetForm({ onSubmit }) {
           type="text"
           id="installCommand"
           name="installCommand"
+          placeholder="npm install ..."
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
         />
       </FormField>
