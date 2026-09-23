@@ -190,7 +190,7 @@ export default function SnippetForm({
           className="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 rounded-md transition-colors shadow-md disabled:opacity-50"
         >
           {isLoadingSubmit
-            ? "Creating..."
+            ? "Loading..."
             : isEditing
               ? "Save changes"
               : "Create Snippet"}
