@@ -1,6 +1,8 @@
 import SnippetsList from "@/components/features/SnippetsList/SnippetsList";
-import { Plus, Trash, X } from "lucide-react";
+import { Plus, Trash, X, Check } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import { mutate } from "swr";
 
 export default function Home({ snippets, isLoading, error }) {
   if (isLoading) return <p>Loading...</p>;
