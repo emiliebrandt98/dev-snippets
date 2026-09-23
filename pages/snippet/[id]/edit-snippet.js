@@ -1,6 +1,7 @@
 import SnippetForm from "@/components/features/SnippetForm/SnippetForm";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import { mutate } from "swr";
 
 export default function EditSnippetPage({ snippets }) {
   const router = useRouter();
@@ -34,7 +35,12 @@ export default function EditSnippetPage({ snippets }) {
         </header>
 
         <main>
-          <SnippetForm snippets={snippets} onSubmit={handleEditSubmit} />
+          <SnippetForm
+            snippets={snippets}
+            onSubmit={handleEditSubmit}
+            snippetId={id}
+            isEditing={true}
+          />
         </main>
       </div>
     </>
