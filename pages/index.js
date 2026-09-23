@@ -24,9 +24,11 @@ export default function Home({ snippets, isLoading, error }) {
     }
   }
 
-  function handleSelectSnippet(id) {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+  function handleSelectSnippet(snippetId) {
+    setSelectedIds((prevSelectedIds) =>
+      prevSelectedIds.includes(snippetId)
+        ? prevSelectedIds.filter((selectedId) => selectedId !== snippetId)
+        : [...prevSelectedIds, snippetId]
     );
   }
 
