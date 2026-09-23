@@ -48,15 +48,19 @@ export default async function handler(request, response) {
 
   if (request.method === "DELETE") {
     try {
-      const { Ids } = request.body;
+      const { snippetIds } = request.body;
 
-      if (!Ids || !Array.isArray(Ids) || Ids.length === 0) {
-        response.status(400).json({ error: "No snippet Ids provided." });
+      if (
+        !snippetIds ||
+        !Array.isArray(snippetIds) ||
+        snippetIds.length === 0
+      ) {
+        response.status(400).json({ error: "No snippet ids provided." });
         return;
       }
 
       const deletedSnippet = await Snippet.deleteMany({
-        _id: { $in: Ids },
+        _id: { $in: snippetIds },
       });
 
       response.status(200).json(deletedSnippet);

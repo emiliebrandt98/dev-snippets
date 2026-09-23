@@ -34,7 +34,7 @@ export default function Home({ snippets, isLoading, error }) {
     const response = await fetch("/api/snippets", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ids: selectedIds }),
+      body: JSON.stringify({ snippetIds: selectedIds }),
     });
 
     if (!response.ok) {
