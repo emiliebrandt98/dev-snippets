@@ -2,9 +2,6 @@ import "@/styles/globals.css";
 import useSWR, { SWRConfig } from "swr";
 import { ToastContainer } from "react-toastify";
 import NavigationBar from "@/components/features/NavigationBar/NavigationBar";
-import Link from "next/link";
-import { Plus } from "lucide-react";
-import { useRouter } from "next/router";
 
 const fetcher = async (url) => {
   const response = await fetch(url);
@@ -21,28 +18,16 @@ const fetcher = async (url) => {
 
 export default function App({ Component, pageProps }) {
   const { data: snippets, error, isLoading } = useSWR("/api/snippets", fetcher);
-  const router = useRouter();
-
-  const isOnCreatePage = router.pathname === "/snippet/create-snippet";
 
   return (
     <SWRConfig value={{ fetcher }}>
-      <div className="pb-16 md:pb-0">
+      <div className="pb-16 md:pb-0 mb-6">
         <Component
           snippets={snippets}
           error={error}
           isLoading={isLoading}
           {...pageProps}
         />
-        {!isOnCreatePage && (
-          <Link
-            href={"/snippet/create-snippet"}
-            aria-label="create snippet"
-            className="fixed bottom-24 right-6 z-50 inline-flex items-center justify-center w-10 h-10 rounded-lg  bg-purple-600 text-white hover:bg-purple-700 shadow-lg"
-          >
-            <Plus size={16} />
-          </Link>
-        )}
       </div>
       <NavigationBar />
 
