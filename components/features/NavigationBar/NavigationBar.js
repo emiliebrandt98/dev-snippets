@@ -14,7 +14,7 @@ export default function NavigationBar() {
   return (
     <nav
       className="
-  fixed bottom-0 left-0 right-0 z-50 flex justify-around items-center bg-white border-t border-gray-200 py-2 px-2
+  fixed bottom-0 left-0 right-0 z-50 flex justify-around items-center bg-white border-t border-gray-200 
   md:sticky md:top-0 md:border-t-0 md:border-b
 "
     >
@@ -26,7 +26,7 @@ export default function NavigationBar() {
             key={href}
             href={href}
             aria-label={label}
-            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-xs ${
+            className={`flex flex-col items-center gap-2 w-full h-full py-3 px-3 text-xs  ${
               isActive ? "bg-purple-100 text-purple-600" : "text-gray-600"
             }`}
           >
