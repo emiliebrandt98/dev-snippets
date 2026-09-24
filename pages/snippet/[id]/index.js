@@ -2,6 +2,7 @@ import { ArrowLeft, Pencil } from "lucide-react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import Link from "next/link";
+import CopyToClipboard from "@/components/ui/CopyToClipboard/CopyToClipboard";
 
 export default function SnippetPage() {
   const router = useRouter();
@@ -62,12 +63,15 @@ export default function SnippetPage() {
       </header>
 
       <main>
-        <pre
-          aria-label="code block"
-          className="bg-gray-100 rounded-lg p-4 text-sm font-mono whitespace-pre-wrap overflow-x-auto"
-        >
-          {code}
-        </pre>
+        <div className="flex items-end justify-between gap-2 bg-gray-100 rounded-lg p-3">
+          <pre
+            aria-label="code block"
+            className="text-sm font-mono whitespace-pre-wrap overflow-x-auto"
+          >
+            {code}
+          </pre>
+          <CopyToClipboard textToCopy={code} />
+        </div>
 
         {notes && (
           <>
@@ -79,23 +83,27 @@ export default function SnippetPage() {
         {installCommand && (
           <>
             <h2 className="font-bold text-lg mt-6 mb-2">Install Command:</h2>
-            <p className="bg-gray-100 rounded-md p-3 text-sm font-mono">
-              {installCommand}
-            </p>
+            <div className="flex items-center justify-between gap-2 bg-gray-100 rounded-md p-3">
+              <p className="text-sm font-mono">{installCommand}</p>
+              <CopyToClipboard textToCopy={installCommand} />
+            </div>
           </>
         )}
 
         {link && (
           <>
             <h2 className="font-bold text-lg mt-6 mb-2">Link:</h2>
-            <Link
-              href={link}
-              target="_blank"
-              rel="noreferrer"
-              className="block bg-gray-100 rounded-md p-3 text-sm text-blue-600 hover:underline break-all"
-            >
-              {link}
-            </Link>
+            <div className="flex items-center justify-between gap-2 bg-gray-100 rounded-md p-3">
+              <Link
+                href={link}
+                target="_blank"
+                rel="noreferrer"
+                className="text-sm text-blue-600 hover:underline break-all"
+              >
+                {link}
+              </Link>
+              <CopyToClipboard textToCopy={link} />
+            </div>
           </>
         )}
       </main>

@@ -1,4 +1,4 @@
-import { Copy } from "lucide-react";
+import { Check, Copy } from "lucide-react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -17,8 +17,16 @@ export default function CopyToClipboard({ textToCopy }) {
     }
   }
   return (
-    <button onClick={handleCopy} disabled={isCopied}>
-      {isCopied ? "Copied!" : <Copy size={16} />}
+    <button
+      onClick={handleCopy}
+      disabled={isCopied}
+      className="cursor-pointer inline-flex items-center justify-center w-6 h-6 aspect-square rounded-lg bg-gray-100 hover:bg-gray-200 "
+    >
+      {isCopied ? (
+        <Check size={16} className="text-green-600" />
+      ) : (
+        <Copy size={16} />
+      )}
     </button>
   );
 }
