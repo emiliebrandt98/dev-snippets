@@ -33,6 +33,10 @@ export default function Home({ snippets, isLoading, error }) {
   }
 
   async function handleDeleteConfirmed() {
+    if (isDeleting) return;
+
+    setIsDeleting(true);
+
     try {
       const response = await fetch("/api/snippets", {
         method: "DELETE",
@@ -44,8 +48,6 @@ export default function Home({ snippets, isLoading, error }) {
         toast.error("Failed to delete snippet(s)");
         return;
       }
-
-      setIsDeleting(true);
 
       await mutate("/api/snippets");
       toast.success("Snippet(s) successfully deleted!");
@@ -121,13 +123,14 @@ export default function Home({ snippets, isLoading, error }) {
         </Link>
       </main>
 
-      <DeleteConfirmationModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onConfirm={handleDeleteConfirmed}
-        selectedSnippets={selectedSnippets}
-        isDeleting={isDeleting}
-      />
+      {isModalOpen && (
+        <DeleteConfirmationModal
+          onClose={() => setIsModalOpen(false)}
+          onConfirm={handleDeleteConfirmed}
+          selectedSnippets={selectedSnippets}
+          isDeleting={isDeleting}
+        />
+      )}
     </div>
   );
 }

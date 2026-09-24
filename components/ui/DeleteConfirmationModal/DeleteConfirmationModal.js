@@ -1,15 +1,12 @@
 import { useState } from "react";
 
 export default function DeleteConfirmationModal({
-  isOpen,
   onClose,
   onConfirm,
   selectedSnippets,
   isDeleting,
 }) {
   const [showAllTitles, setShowAllTitles] = useState(false);
-
-  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
