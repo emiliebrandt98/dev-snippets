@@ -4,9 +4,9 @@ import { useRouter } from "next/router";
 
 const navigationsItems = [
   { href: "/", label: "Home", Icon: House },
-  { href: "/public", label: "Public", Icon: GlobeCode },
-  { href: "/favorites", label: "Favorites", Icon: Star },
-  { href: "/profile", label: "Profile", Icon: User },
+  { href: "/snippet/public", label: "Public", Icon: GlobeCode },
+  { href: "/snippet/favorites", label: "Favorites", Icon: Star },
+  { href: "/snippet/profile", label: "Profile", Icon: User },
 ];
 
 export default function NavigationBar() {

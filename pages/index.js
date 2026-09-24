@@ -113,14 +113,6 @@ export default function Home({ snippets, isLoading, error }) {
           selectedIds={selectedIds}
           onSelectSnippet={handleSelectSnippet}
         />
-
-        <Link
-          href={"/snippet/create-snippet"}
-          aria-label="create snippet"
-          className="fixed bottom-24 right-6 z-50 inline-flex items-center justify-center w-14 h-14 rounded-lg  bg-purple-600 text-white hover:bg-purple-700 shadow-lg"
-        >
-          <Plus size={24} />
-        </Link>
       </main>
 
       {isModalOpen && (
