@@ -76,6 +76,7 @@ export default function SnippetPage() {
               overflowX: "auto",
               margin: "0",
             }}
+            codeTagProps={{ style: { background: "transparent" } }}
           >
             {code}
           </SyntaxHighlighter>
