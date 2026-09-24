@@ -1,11 +1,14 @@
+import { useState } from "react";
+
 export default function DeleteConfirmationModal({
   isOpen,
   onClose,
   onConfirm,
   selectedSnippets,
-  showAllTitles,
-  setShowAllTitle,
+  isDeleting,
 }) {
+  const [showAllTitles, setShowAllTitles] = useState(false);
+
   if (!isOpen) return null;
 
   return (
@@ -32,14 +35,14 @@ export default function DeleteConfirmationModal({
         {selectedSnippets.length > 10 && !showAllTitles && (
           <button
             type="button"
-            onClick={() => setShowAllTitle(true)}
+            onClick={() => setShowAllTitles(true)}
             className="text-xs text-blue-600 hover:underline mb-4 block"
           >
             Show more ({selectedSnippets.length - 10} more)
           </button>
         )}
 
-        <div>
+        <div className="flex items-center justify-end gap-2 mb-4">
           <button
             type="button"
             onClick={onClose}
@@ -50,9 +53,10 @@ export default function DeleteConfirmationModal({
           <button
             type="button"
             onClick={onConfirm}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm font-medium transition-colors"
+            disabled={isDeleting}
+            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm font-medium transition-colors disabled:opacity-50"
           >
-            Yes, delete
+            {isDeleting ? "Deleting..." : "Yes, delete"}
           </button>
         </div>
       </div>

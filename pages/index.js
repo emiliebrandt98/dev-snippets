@@ -1,5 +1,5 @@
 import SnippetsList from "@/components/features/SnippetsList/SnippetsList";
-import { Plus, Trash, X, Check } from "lucide-react";
+import { Plus, Trash, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { mutate } from "swr";
@@ -10,7 +10,7 @@ export default function Home({ snippets, isLoading, error }) {
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showAllTitles, setShowAllTitle] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error fetching data.</p>;
@@ -33,24 +33,32 @@ export default function Home({ snippets, isLoading, error }) {
   }
 
   async function handleDeleteConfirmed() {
-    const response = await fetch("/api/snippets", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ snippetIds: selectedIds }),
-    });
+    try {
+      const response = await fetch("/api/snippets", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ snippetIds: selectedIds }),
+      });
 
-    if (!response.ok) {
-      toast.error("Failed to delete snippet(s)");
-      return;
+      if (!response.ok) {
+        toast.error("Failed to delete snippet(s)");
+        return;
+      }
+
+      setIsDeleting(true);
+
+      await mutate("/api/snippets");
+      toast.success("Snippet(s) successfully deleted!");
+
+      setIsDeleteMode(false);
+      setSelectedIds([]);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error(error);
+      toast.error("Error deleting snippet(s).");
+    } finally {
+      setIsDeleting(false);
     }
-
-    await mutate("/api/snippets");
-    toast.success("Snippet(s) successfully deleted!");
-
-    setIsDeleteMode(false);
-    setSelectedIds([]);
-    setIsModalOpen(false);
-    setShowAllTitle(false);
   }
 
   const selectedSnippets = snippets.filter((snippet) =>
@@ -68,10 +76,7 @@ export default function Home({ snippets, isLoading, error }) {
           {isDeleteMode && (
             <button
               type="button"
-              onClick={() => {
-                setIsDeleteMode(false);
-                setSelectedIds([]);
-              }}
+              onClick={handleToggleDeleteMode}
               aria-label="Cancel delete mode"
               className="inline-flex items-center justify-center w-10 h-10 aspect-square rounded-lg bg-gray-100 hover:bg-gray-200"
             >
@@ -91,11 +96,12 @@ export default function Home({ snippets, isLoading, error }) {
             }
             className={`inline-flex items-center justify-center w-10 h-10 aspect-square rounded-lg transition-colors ${
               selectedIds.length > 0
-                ? "bg-red-600 hover:bg-red-700 text-white"
+                ? "bg-red-600 w-14 hover:bg-red-700 text-white gap-2"
                 : "bg-gray-100 hover:bg-gray-200 text-gray-700"
             }`}
           >
-            {selectedIds.length > 0 ? <Check size={16} /> : <Trash size={16} />}
+            <Trash size={16} />
+            <span>{selectedIds.length > 0 ? selectedIds.length : null}</span>
           </button>
         </div>
 
@@ -120,8 +126,7 @@ export default function Home({ snippets, isLoading, error }) {
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleDeleteConfirmed}
         selectedSnippets={selectedSnippets}
-        showAllTitles={showAllTitles}
-        setShowAllTitle={setShowAllTitle}
+        isDeleting={isDeleting}
       />
     </div>
   );
