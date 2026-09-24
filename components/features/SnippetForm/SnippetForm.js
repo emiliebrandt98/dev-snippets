@@ -4,6 +4,7 @@ import useSWR from "swr";
 import FormField from "@/components/ui/FormField/FormField";
 import { getInputStateClasses } from "@/components/ui/getInputStateClasses/getInputStateClasses";
 import { useRequiredFieldsValidation } from "@/hooks/useRequiredFieldsValidation/useRequiredFieldsValidation";
+import MultiSelect from "../MultiSelect/MultiSelect";
 
 const requiredFields = ["title", "language", "code"];
 
@@ -141,6 +142,10 @@ export default function SnippetForm({
           placeholder="I use this snippets ..."
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
         />
+      </FormField>
+
+      <FormField label="Tags" htmlFor="multiselect">
+        <MultiSelect />
       </FormField>
 
       <FormField label="Install Command" htmlFor="installCommand">
