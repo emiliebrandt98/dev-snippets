@@ -20,9 +20,13 @@ export default function CopyToClipboard({ textToCopy }) {
     <button
       onClick={handleCopy}
       disabled={isCopied}
-      className="cursor-pointer inline-flex items-center justify-center w-6 h-6 aspect-square rounded-lg bg-gray-100 hover:bg-gray-200 "
+      className="cursor-pointer inline-flex items-center justify-center w-6 h-6 aspect-square rounded-lg bg-gray-100"
     >
-      {isCopied ? <Check size={16} /> : <Copy size={16} />}
+      {isCopied ? (
+        <Check size={16} className="cursor-auto" />
+      ) : (
+        <Copy size={16} />
+      )}
     </button>
   );
 }
