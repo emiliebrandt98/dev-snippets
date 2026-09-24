@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import Link from "next/link";
 import CopyToClipboard from "@/components/ui/CopyToClipboard/CopyToClipboard";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 export default function SnippetPage() {
   const router = useRouter();
@@ -34,6 +36,8 @@ export default function SnippetPage() {
   const { language, title, code, notes, installCommand, link } = snippet;
   const formattedDate = new Date(snippet.createdAt).toLocaleDateString("de-DE");
 
+  const safeLanguage = language?.syntx || "text";
+
   return (
     <div className="max-w-md mx-auto p-4">
       <header className="mb-4">
@@ -64,12 +68,20 @@ export default function SnippetPage() {
 
       <main>
         <div className="flex items-end justify-between gap-2 bg-gray-100 rounded-lg p-3">
-          <pre
-            aria-label="code block"
-            className="text-sm font-mono whitespace-pre-wrap overflow-x-auto"
+          <SyntaxHighlighter
+            language={safeLanguage}
+            showLineNumbers
+            style={oneLight}
+            customStyle={{
+              background: "transparent",
+              fontSize: "0.8rem",
+              overflowX: "auto",
+              margin: "0",
+            }}
+            codeTagProps={{ style: { background: "transparent" } }}
           >
             {code}
-          </pre>
+          </SyntaxHighlighter>
           <CopyToClipboard textToCopy={code} />
         </div>
 
