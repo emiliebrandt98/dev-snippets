@@ -36,6 +36,8 @@ export default function SnippetPage() {
   const { language, title, code, notes, installCommand, link } = snippet;
   const formattedDate = new Date(snippet.createdAt).toLocaleDateString("de-DE");
 
+  const safeLanguage = language?.syntax || "text";
+
   return (
     <div className="max-w-md mx-auto p-4">
       <header className="mb-4">
@@ -67,7 +69,7 @@ export default function SnippetPage() {
       <main>
         <div className="flex items-end justify-between gap-2 bg-gray-100 rounded-lg p-3">
           <SyntaxHighlighter
-            language={language?.syntax}
+            language={safeLanguage}
             showLineNumbers
             style={oneLight}
             customStyle={{
