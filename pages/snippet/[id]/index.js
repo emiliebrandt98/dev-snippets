@@ -36,7 +36,7 @@ export default function SnippetPage() {
   const { language, title, code, notes, installCommand, link } = snippet;
   const formattedDate = new Date(snippet.createdAt).toLocaleDateString("de-DE");
 
-  const safeLanguage = language?.syntx || "text";
+  const safeLanguage = language?.syntax || "text";
 
   return (
     <div className="max-w-md mx-auto p-4">
