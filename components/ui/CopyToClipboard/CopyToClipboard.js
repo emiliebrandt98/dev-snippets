@@ -20,6 +20,7 @@ export default function CopyToClipboard({ textToCopy }) {
     <button
       onClick={handleCopy}
       disabled={isCopied}
+      aria-label="copy text"
       className="cursor-pointer inline-flex items-center justify-center w-6 h-6 aspect-square rounded-lg bg-gray-100"
     >
       {isCopied ? (
