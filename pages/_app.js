@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import useSWR, { SWRConfig } from "swr";
 import { ToastContainer } from "react-toastify";
+import NavigationBar from "@/components/features/NavigationBar/NavigationBar";
 
 const fetcher = async (url) => {
   const response = await fetch(url);
@@ -26,6 +27,7 @@ export default function App({ Component, pageProps }) {
         isLoading={isLoading}
         {...pageProps}
       />
+      <NavigationBar />
       <ToastContainer
         position="top-center"
         autoClose={3000}
