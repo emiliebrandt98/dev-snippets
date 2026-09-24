@@ -117,7 +117,7 @@ export default function Home({ snippets, isLoading, error }) {
         <Link
           href={"/snippet/create-snippet"}
           aria-label="create snippet"
-          className="fixed bottom-6 right-6 z-50 inline-flex items-center justify-center w-14 h-14 rounded-lg bg-gray-400 hover:bg-gray-500 shadow-lg"
+          className="fixed bottom-24 right-6 z-50 inline-flex items-center justify-center w-14 h-14 rounded-lg bg-gray-400 hover:bg-gray-500 shadow-lg"
         >
           <Plus size={24} />
         </Link>

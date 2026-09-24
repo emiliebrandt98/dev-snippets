@@ -21,13 +21,15 @@ export default function App({ Component, pageProps }) {
 
   return (
     <SWRConfig value={{ fetcher }}>
-      <Component
-        snippets={snippets}
-        error={error}
-        isLoading={isLoading}
-        {...pageProps}
-      />
-      <NavigationBar />
+      <div className="pb-16 md:pb-0">
+        <Component
+          snippets={snippets}
+          error={error}
+          isLoading={isLoading}
+          {...pageProps}
+        />
+        <NavigationBar />
+      </div>
       <ToastContainer
         position="top-center"
         autoClose={3000}
