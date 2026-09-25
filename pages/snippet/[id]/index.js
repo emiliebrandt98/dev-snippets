@@ -67,6 +67,16 @@ export default function SnippetPage() {
       </header>
 
       <main>
+        <ul className="flex flex-wrap gap-2 mt-2 list-none pl-0">
+          {snippet.tags.map((tag) => (
+            <li
+              key={tag._id}
+              className="px-3 py-1 text-sm text-gray-700 bg-gray-100 rounded-lg"
+            >
+              {tag.label}
+            </li>
+          ))}
+        </ul>
         <div className="flex items-end justify-between gap-2 bg-gray-100 rounded-lg p-3">
           <SyntaxHighlighter
             language={safeLanguage}
