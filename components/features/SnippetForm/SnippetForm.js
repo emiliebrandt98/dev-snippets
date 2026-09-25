@@ -145,7 +145,15 @@ export default function SnippetForm({
       </FormField>
 
       <FormField label="Tags" htmlFor="multiselect">
-        <MultiSelect />
+        <MultiSelect
+          availableTags={allTagsFromApi}
+          selectedTagIds={formState.tagIds}
+          onSelectionChange={(newIds) =>
+            setFormState({ ...formState, tagIds: newIds })
+          }
+          onCreateTag={(newTag) => saveNewTagToApi(newTag)}
+          onDeleteTag={(tagId) => deleteTagFromApi(tagId)}
+        />
       </FormField>
 
       <FormField label="Install Command" htmlFor="installCommand">

@@ -2,14 +2,20 @@ import { Trash } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 const initialOptions = [];
 
-export default function MultiSelect() {
-  const [allOptions, setAllOptions] = useState(initialOptions);
-  const [selectedIds, setSelectedIds] = useState([]);
-  const [isSelectOpen, setIsSelectOpen] = useState(false);
-  const [inputValue, setInputValue] = useState("");
+export default function MultiSelect({
+  availabeleTags,
+  selectedTagIds,
+  onSelectionChange,
+  onCreateTag,
+  onDeleteTag,
+  maxTags = DEFAULT_MAX_TAGS,
+}) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const containerRef = useRef(null);
+  const inputRef = useRef(null);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -17,160 +23,197 @@ export default function MultiSelect() {
         containerRef.current &&
         !containerRef.current.contains(event.target)
       ) {
-        setIsSelectOpen(false);
+        setIsDropdownOpen(false);
         setErrorMessage("");
       }
     }
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const selectedOptions = allOptions.filter((option) =>
-    selectedIds.includes(option.id)
+  const normalizedSearchTerm = searchTerm.trim();
+  const isMaxTagsReached = selectedTagIds.length <= maxTags;
+
+  const selectedTags = availabeleTags.filter((tags) =>
+    selectedTagIds.includes(tags.id)
   );
 
-  const filteredOption = allOptions.filter((option) =>
-    option.label.toLowerCase().includes(inputValue.toLowerCase())
+  const filteredTags = availabeleTags.filter((tag) =>
+    tag.label.toLowerCase().includes(normalizedSearchTerm.toLowerCase())
   );
 
-  const handleSelect = (id) => {
-    if (!selectedIds.includes(id)) {
-      setSelectedIds([...selectedIds, id]);
-    }
-    setInputValue("");
-    setErrorMessage("");
-  };
-
-  const handleRemove = (itemId, event) => {
-    event.stopPropagation();
-    setSelectedIds(selectedIds.filter((id) => id !== itemId));
-  };
-
-  const handleCreate = () => {
-    if (!inputValue.trim()) return;
-
-    const trimmedInput = inputValue.trim();
-
-    const existingOption = allOptions.find(
-      (option) =>
-        option.label.toLocaleLowerCase() === trimmedInput.toLocaleLowerCase()
+  const canCreateNewTag =
+    normalizedSearchTerm !== "" &&
+    !availabeleTags.some(
+      (tag) => tag.label.toLowerCase() === normalizedSearchTerm.toLowerCase()
     );
 
-    if (existingOption) {
-      setErrorMessage(`This tag "${trimmedInput}" existe already!`);
+  function handleSearchTermChange(event) {
+    setSearchTerm(event.target.value);
+    setIsDropdownOpen(true);
+    if (errorMessage) setErrorMessage("");
+  }
+
+  function handleSelectTag(tagId) {
+    if (selectedTagIds.includes(tagId)) return;
+
+    if (isMaxTagsReached) {
+      setErrorMessage(`Max of ${maxTags} are reached.`);
       return;
     }
 
-    const newOption = {
-      id: Date.now().toString(),
-      label: trimmedInput,
-      color: "#e0e7ff",
-    };
-
-    setAllOptions([...allOptions, newOption]);
-    setSelectedIds([...selectedIds, newOption.id]);
-    setInputValue("");
+    onSelectionChange([...selectedTagIds, tagId]);
+    setSearchTerm("");
     setErrorMessage("");
-  };
+  }
 
-  const handleDeleteOption = (itemId, event) => {
+  function handleRemoveTag(tagId, event) {
     event.stopPropagation();
-    setAllOptions(allOptions.filter((option) => option.id !== itemId));
-    setSelectedIds(selectedIds.filter((id) => id !== itemId));
-  };
+    onSelectionChange(selectedTagIds.filter((id) => id !== tagId));
+  }
 
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      event.stopPropagation();
-      if (!inputValue.trim()) return;
+  function handleCreateTag() {
+    if (!normalizedSearchTerm) return;
 
-      const trimmedInput = inputValue.trim();
-      const existingOption = allOptions.find(
-        (option) =>
-          option.label.toLocaleLowerCase() === trimmedInput.toLocaleLowerCase()
-      );
-
-      if (existingOption) {
-        if (!selectedIds.includes(existingOption.id)) {
-          setSelectedIds([...selectedIds, existingOption.id]);
-          setInputValue("");
-          setErrorMessage("");
-        } else {
-          setErrorMessage(`This "${trimmedInput}" tag is already selected.`);
-        }
-      } else {
-        handleCreate();
-      }
+    if (isMaxTagsReached) {
+      setErrorMessage(`Max of ${maxTags} are reached.`);
+      return;
     }
-  };
+
+    const newTag = { id: crypto.randomUUID(), label: normalizedSearchTerm };
+    onCreateTag(newTag);
+    onSelectionChange([...selectedTagIds, newTag.id]);
+    (setSearchTerm(""), setErrorMessage(""));
+  }
+
+  function handleDeleteTag(tagId, event) {
+    event.stopPropagation();
+    onDeleteTag(tagId);
+    onSelectionChange(selectedTagIds.filter((id) => id !== tagId));
+  }
+
+  function handleKeyDown(event) {
+    if (event.key !== "Enter") return;
+    event.preventDefault();
+
+    if (!normalizedSearchTerm) return;
+
+    const matchingTag = availabeleTags.find(
+      (tag) => tag.label.toLowerCase() === normalizedSearchTerm.toLowerCase()
+    );
+
+    if (!matchingTag) {
+      handleCreateTag();
+      return;
+    }
+
+    if (selectedTagIds.includes(matchingTag.id)) {
+      setErrorMessage(`You already selected "${normalizedSearchTerm}"`);
+    } else {
+      handleSelectTag(matchingTag.id);
+    }
+  }
 
   return (
-    <div>
-      <div ref={containerRef} className="relative">
-        <div onClick={() => setIsSelectOpen(true)}>
-          {selectedOptions.map((option) => (
-            <span key={option.id}>
-              {option.label}
+    <div className="relative">
+      <label htmlFor="tag-serach" className="sr-only">
+        Select or create a tag.
+      </label>
+
+      <div
+        ref={containerRef}
+        onClick={() => inputRef.current?.focus()}
+        className="flex flex-wrap items-center gap-1 p-2 border border-gray-300 rounded-md focus-within:ring-1 focus-within:ring-black"
+      >
+        {selectedTagIds.map((tag) => (
+          <span
+            key={tag.id}
+            className="flex items-center gap-1 px-2 py-1 bg-gray-100 rounded"
+          >
+            {tag.label}
+            <button
+              type="button"
+              onClick={(event) => handleRemoveTag(tag.id, event)}
+              aria-label={`Remove ${tag.label}`}
+            >
+              x
+            </button>
+          </span>
+        ))}
+
+        <input
+          id="tag-serach"
+          ref={inputRef}
+          type="text"
+          value={searchTerm}
+          onChange={handleSearchTermChange}
+          onFocus={() => setIsDropdownOpen(true)}
+          onKeyDown={handleKeyDown}
+          disabled={isMaxTagsReached}
+          placeholder={
+            selectedTags.length === 0 ? "Search or create a tag" : ""
+          }
+          className="flex-1 min-w-32 outline-none disabled:cursor-not-allowed"
+        />
+      </div>
+
+      {errorMessage && (
+        <p role="alert" className="mt-1 text-sm text-red-600">
+          {errorMessage}
+        </p>
+      )}
+      {!errorMessage && isMaxTagsReached && (
+        <p className="mt-1 text-sm text-gray-500">
+          Max of {maxTags} are reached.
+        </p>
+      )}
+
+      {isDropdownOpen && (
+        <ul
+          role="listbox"
+          aria-label="Available tags"
+          className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-md max-h-60 overflow-y-auto"
+        >
+          {filteredTags.map((tag) => (
+            <li
+              key={tag.id}
+              role="option"
+              aria-selected={selectedTagIds.includes(tag.id)}
+              className="flex items-center justify-between px-2 py-1 hover:bg-gray-50"
+            >
               <button
                 type="button"
-                onClick={(event) => handleRemove(option.id, event)}
+                onClick={() => handleSelectTag(tag.id)}
+                className="flex-1 text-left"
               >
-                x
+                {tag.label}
               </button>
-            </span>
+              <button
+                type="button"
+                onClick={(event) => handleDeleteTag(tag.id, event)}
+                title="Remove tag completly."
+                aria-label={`${tag.label} löschen`}
+              >
+                <Trash size={16} />
+              </button>
+            </li>
           ))}
 
-          <input
-            type="text"
-            placeholder={
-              selectedOptions.length === 0 ? "Select or create tags" : ""
-            }
-            value={inputValue}
-            onChange={(event) => {
-              setInputValue(event.target.value);
-              setIsSelectOpen(true);
-              if (errorMessage) setErrorMessage("");
-            }}
-            onFocus={() => setIsSelectOpen(true)}
-            onKeyDown={handleKeyDown}
-            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
-          />
-        </div>
-
-        {errorMessage && <p>{errorMessage}</p>}
-
-        {isSelectOpen && (
-          <div>
-            <ul>
-              {filteredOption.map((option) => (
-                <li key={option.id} onClick={() => handleSelect(option.id)}>
-                  <span>{option.label}</span>
-                  <button
-                    onClick={(event) => handleDeleteOption(option.id, event)}
-                    title="Delete tag"
-                  >
-                    <Trash />
-                  </button>
-                </li>
-              ))}
-            </ul>
-
-            {inputValue.trim() &&
-              !allOptions.some(
-                (option) =>
-                  option.label.toLowerCase() === inputValue.toLowerCase()
-              ) && (
-                <div>
-                  <button onClick={handleCreate}>
-                    <span className="label">Create</span>
-                    <span>{inputValue}</span>
-                  </button>
-                </div>
-              )}
-          </div>
-        )}
-      </div>
+          {canCreateNewTag && !isMaxTagsReached && (
+            <li>
+              <button
+                type="button"
+                onClick={handleCreateTag}
+                className="w-full px-2 py-1 text-left hover:bg-gray-50"
+              >
+                <span className="font-medium">Erstellen: </span>
+                {normalizedSearchTerm}
+              </button>
+            </li>
+          )}
+        </ul>
+      )}
     </div>
   );
 }
