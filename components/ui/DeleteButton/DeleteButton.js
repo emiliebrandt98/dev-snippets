@@ -8,7 +8,7 @@ export default function DeleteButton({
   setIsModalOpen,
 }) {
   return (
-    <div className="flex items-center justify-end gap-2 mb-4">
+    <div className="flex items-center justify-end gap-2">
       {isDeleteMode && (
         <button
           type="button"
