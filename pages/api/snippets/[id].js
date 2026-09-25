@@ -1,5 +1,6 @@
 import dbConnect from "@/db/connect";
 import Snippet from "@/db/models/Snippet";
+import "@/db/models/Tag";
 
 export default async function handler(request, response) {
   try {
@@ -13,7 +14,9 @@ export default async function handler(request, response) {
 
   try {
     if (request.method === "GET") {
-      const snippet = await Snippet.findById(id).populate("language");
+      const snippet = await Snippet.findById(id)
+        .populate("language")
+        .populate("tags");
 
       if (!snippet) {
         response.status(404).json({ status: "Snippet not found." });

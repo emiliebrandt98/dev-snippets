@@ -21,7 +21,7 @@ export default function App({ Component, pageProps }) {
 
   return (
     <SWRConfig value={{ fetcher }}>
-      <div className="pb-16 md:pb-0 mb-6">
+      <div className="pb-16 mb-6">
         <Component
           snippets={snippets}
           error={error}

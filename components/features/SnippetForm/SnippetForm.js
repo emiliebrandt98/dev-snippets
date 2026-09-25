@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { useState } from "react";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import FormField from "@/components/ui/FormField/FormField";
 import { getInputStateClasses } from "@/components/ui/getInputStateClasses/getInputStateClasses";
 import { useRequiredFieldsValidation } from "@/hooks/useRequiredFieldsValidation/useRequiredFieldsValidation";
+import MultiSelect from "../MultiSelect/MultiSelect";
+import { toast } from "react-toastify";
 
 const requiredFields = ["title", "language", "code"];
 
@@ -14,10 +16,14 @@ export default function SnippetForm({
   initialValues,
 }) {
   const { data: languages } = useSWR("/api/language");
+  const { data: tags, mutate: mutateTags } = useSWR("/api/tag");
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
+  const [isCreatingTag, setIsCreatingTag] = useState(false);
+  const [deletingTagId, setDeletingTagId] = useState(null);
 
   const {
     formValues,
+    setFormValues,
     handleChange,
     handleBlurValidation,
     touchAllFields,
@@ -32,9 +38,69 @@ export default function SnippetForm({
       notes: "",
       installCommand: "",
       link: "",
+      tagsIds: [],
     },
     requiredFields
   );
+
+  async function handleCreateTag(label) {
+    setIsCreatingTag(true);
+
+    try {
+      const response = await fetch("/api/tag", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ label }),
+      });
+
+      if (!response.ok) {
+        toast.error("Error creating tag.");
+        return;
+      }
+
+      const createdTag = await response.json();
+      await mutateTags();
+      setFormValues((prev) => ({
+        ...prev,
+        tagIds: [...(prev.tagIds ?? []), createdTag._id],
+      }));
+    } catch (error) {
+      console.error(error);
+      toast.error("Error creating tag.");
+    } finally {
+      setIsCreatingTag(false);
+    }
+  }
+
+  async function handleDeleteTag(tagId) {
+    setDeletingTagId(tagId);
+    try {
+      const response = await fetch("/api/tag", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tagIds: tagId }),
+      });
+
+      if (!response.ok) {
+        toast.error("Error deleting tag.");
+        return;
+      }
+
+      await mutateTags();
+      await mutate(
+        (key) => typeof key === "string" && key.startsWith("/api/snippets")
+      );
+      setFormValues((prev) => ({
+        ...prev,
+        tagIds: (prev.tagIds ?? []).filter((id) => id !== tagId),
+      }));
+    } catch (error) {
+      console.error(error);
+      toast.error("Error deleting tag.");
+    } finally {
+      setDeletingTagId(null);
+    }
+  }
 
   async function handleSubmitSnippet(event) {
     event.preventDefault();
@@ -46,6 +112,7 @@ export default function SnippetForm({
 
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
+    data.tags = formValues.tagIds ?? [];
 
     try {
       await onSubmit(data);
@@ -140,6 +207,23 @@ export default function SnippetForm({
           onChange={handleChange}
           placeholder="I use this snippets ..."
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
+        />
+      </FormField>
+
+      <FormField label="Tags" htmlFor="tags">
+        <MultiSelect
+          availableTags={
+            tags?.map((tag) => ({ id: tag._id, label: tag.label })) ?? []
+          }
+          selectedTagIds={formValues.tagIds ?? []}
+          onSelectionChange={(newIds) =>
+            setFormValues((prev) => ({ ...prev, tagIds: newIds }))
+          }
+          onCreateTag={handleCreateTag}
+          onDeleteTag={handleDeleteTag}
+          isCreatingTag={isCreatingTag}
+          deletingTagId={deletingTagId}
+          maxTags={4}
         />
       </FormField>
 

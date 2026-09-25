@@ -1,5 +1,6 @@
 import dbConnect from "@/db/connect";
 import Snippet from "@/db/models/Snippet";
+import "@/db/models/Tag";
 
 export default async function handler(request, response) {
   try {
@@ -13,6 +14,7 @@ export default async function handler(request, response) {
     try {
       const snippets = await Snippet.find()
         .populate("language")
+        .populate("tags")
         .sort({ createdAt: -1 });
       response.status(200).json(snippets);
       return;

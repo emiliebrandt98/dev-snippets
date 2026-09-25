@@ -31,6 +31,15 @@ const SnippetSchema = new Schema(
       type: String,
       trim: true,
     },
+    tags: {
+      type: [Schema.Types.ObjectId],
+      ref: "Tag",
+      default: [],
+      validate: {
+        validator: (tags) => tags.length <= 4,
+        message: "One Snippet can have max 4 tags.",
+      },
+    },
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User",

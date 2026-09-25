@@ -15,9 +15,7 @@ export default function NavigationBar() {
   return (
     <nav
       className="
-  fixed bottom-4 left-4 right-4 z-10 p-1.5 flex justify-around items-center bg-white rounded-full drop-shadow-xl border-gray-200 
-  md:sticky md:top-0 md:border-t-0 md:border-b
-"
+  fixed bottom-4 left-4 right-4 z-10 p-1.5 flex justify-around items-center bg-white rounded-full drop-shadow-xl border-gray-200  "
     >
       {navigationsItems.map(({ href, label, Icon }) => {
         const isActive = router.pathname === href;

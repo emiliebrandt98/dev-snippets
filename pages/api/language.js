@@ -13,6 +13,7 @@ export default async function handler(request, response) {
     try {
       const languages = await Language.find();
       response.status(200).json(languages);
+      return;
     } catch (error) {
       console.error(error);
       response.status(500).json({ error: "Error retrieving the languages." });
