@@ -209,7 +209,7 @@ export default function SnippetForm({
           }
           onCreateTag={handleCreateTag}
           onDeleteTag={handleDeleteTag}
-          maxTags={20}
+          maxTags={4}
         />
       </FormField>
 

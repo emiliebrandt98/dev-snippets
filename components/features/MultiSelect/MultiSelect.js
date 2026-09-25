@@ -113,13 +113,12 @@ export default function MultiSelect({
   }
 
   return (
-    <div className="relative">
+    <div ref={containerRef} className="relative">
       <label htmlFor="tag-serach" className="sr-only">
         Select or create a tag.
       </label>
 
       <div
-        ref={containerRef}
         onClick={() => inputRef.current?.focus()}
         className="flex flex-wrap items-center gap-1 p-2 border border-gray-300 rounded-md focus-within:ring-1 focus-within:ring-black"
       >
