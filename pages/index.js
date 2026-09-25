@@ -1,5 +1,4 @@
 import SnippetsList from "@/components/features/SnippetsList/SnippetsList";
-import { Trash, X } from "lucide-react";
 import DeleteConfirmationModal from "@/components/ui/DeleteConfirmationModal/DeleteConfirmationModal";
 import useSnippetSelection from "@/hooks/useSnippetSelection/useSnippetSelection";
 import DeleteButton from "@/components/ui/DeleteButton/DeleteButton";
@@ -36,12 +35,12 @@ export default function Home({ snippets, isLoading, error, onSearch, search }) {
     return matchesTitle || matchesCode || matchesTags;
   }
 
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error fetching data.</p>;
+
   const searchedSnippets = snippets.filter((snippet) =>
     matchesSearch(search, snippet)
   );
-
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error fetching data.</p>;
 
   return (
     <div className="max-w-2xl mx-auto p-4">
