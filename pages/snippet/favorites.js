@@ -1,10 +1,17 @@
+import SearchBar from "@/components/features/SearchBar/SearchBar";
 import SnippetsList from "@/components/features/SnippetsList/SnippetsList";
 import DeleteButton from "@/components/ui/DeleteButton/DeleteButton";
 import DeleteConfirmationModal from "@/components/ui/DeleteConfirmationModal/DeleteConfirmationModal";
 import useFavorite from "@/hooks/useFavorite/useFavorite";
 import useSnippetSelection from "@/hooks/useSnippetSelection/useSnippetSelection";
 
-export default function FavoritesPage({ snippets, isLoading, error }) {
+export default function FavoritesPage({
+  snippets,
+  isLoading,
+  error,
+  onSearch,
+  search,
+}) {
   const { favoriteIds } = useFavorite();
   const {
     isDeleteMode,
@@ -40,12 +47,17 @@ export default function FavoritesPage({ snippets, isLoading, error }) {
       </header>
 
       <main>
-        <DeleteButton
-          isDeleteMode={isDeleteMode}
-          onToggleDeleteMode={onToggleDeleteMode}
-          selectedIds={selectedIds}
-          setIsModalOpen={setIsModalOpen}
-        />
+        <section className="flex flex-row items-center gap-2 mb-4">
+          <div className="flex-1">
+            <SearchBar onSearch={onSearch} search={search} />
+          </div>
+          <DeleteButton
+            isDeleteMode={isDeleteMode}
+            onToggleDeleteMode={onToggleDeleteMode}
+            selectedIds={selectedIds}
+            setIsModalOpen={setIsModalOpen}
+          />
+        </section>
 
         {favoriteSnippets.length === 0 ? (
           <p className="p-4 textgray-500">

@@ -16,13 +16,15 @@ export default function SearchBar({ search, onSearch }) {
         className="bg-transparent outline-none text-sm w-full"
         placeholder="Search"
       />
-      <button
-        onClick={handleRemoveSearchValue}
-        type="button"
-        className="cursor-pointer"
-      >
-        <X size={16} />
-      </button>
+      {search.length > 0 ? (
+        <button
+          onClick={handleRemoveSearchValue}
+          type="button"
+          className="cursor-pointer"
+        >
+          <X size={16} />
+        </button>
+      ) : null}
     </div>
   );
 }
