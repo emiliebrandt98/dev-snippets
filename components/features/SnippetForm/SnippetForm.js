@@ -198,7 +198,7 @@ export default function SnippetForm({
         />
       </FormField>
 
-      <FormField label="Tags" htmlFor="multiselect">
+      <FormField label="Tags" htmlFor="tags">
         <MultiSelect
           availableTags={
             tags?.map((tag) => ({ id: tag._id, label: tag.label })) ?? []
