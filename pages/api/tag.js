@@ -13,6 +13,7 @@ export default async function handler(request, response) {
     try {
       const tags = await Tag.find().sort({ createdAt: -1 });
       response.status(200).json(tags);
+      return;
     } catch (error) {
       console.error(error);
       response.status(500).json({ error: "Error retrieving the tags." });
