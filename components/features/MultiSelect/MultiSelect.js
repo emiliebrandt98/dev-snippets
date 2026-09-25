@@ -116,6 +116,7 @@ export default function MultiSelect({
               type="button"
               onClick={(event) => handleRemoveTag(tag.id, event)}
               aria-label={`Remove ${tag.label}`}
+              className="cursor-pointer"
             >
               <X size={16} />
             </button>
@@ -152,7 +153,7 @@ export default function MultiSelect({
         <ul
           role="listbox"
           aria-label="Available tags"
-          className="absolute flex flex-col gap-2 top-full left-0 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-md max-h-60 overflow-y-auto"
+          className="absolute z-10 flex flex-col gap-2 top-full left-0 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-md max-h-60 overflow-y-auto"
         >
           {filteredTags.map((tag) => {
             const isSelected = selectedTagIds.includes(tag.id);
@@ -169,7 +170,7 @@ export default function MultiSelect({
                   disabled={isSelected}
                   className="flex-1 text-left disabled:text-gray-400 disabled:cursor-not-allowed"
                 >
-                  {tag.label}{" "}
+                  {tag.label}
                   {isSelected && (
                     <span className="text-xs text-gray-400">(selected)</span>
                   )}
@@ -180,7 +181,7 @@ export default function MultiSelect({
                   disabled={deletingTagId === tag.id}
                   title="Remove tag completly."
                   aria-label={`${tag.label} löschen`}
-                  className="disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Trash size={16} />
                 </button>
