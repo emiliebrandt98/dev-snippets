@@ -61,6 +61,7 @@ export default function MultiSelect({
 
     if (isMaxTagsReached) {
       setErrorMessage(`Max of ${maxTags} are reached.`);
+      setIsDropdownOpen(false);
       return;
     }
 
@@ -72,6 +73,7 @@ export default function MultiSelect({
   function handleRemoveTag(tagId, event) {
     event.stopPropagation();
     onSelectionChange(selectedTagIds.filter((id) => id !== tagId));
+    setErrorMessage("");
   }
 
   function handleCreateTag() {
@@ -79,7 +81,7 @@ export default function MultiSelect({
     if (!normalizedSearchTerm) return;
 
     if (isMaxTagsReached) {
-      setErrorMessage(`Maximal ${maxTags} Tags möglich.`);
+      setErrorMessage(`Max of ${maxTags} tags reached.`);
       return;
     }
 
@@ -92,28 +94,6 @@ export default function MultiSelect({
     if (deletingTagId) return;
     event.stopPropagation();
     onDeleteTag(tagId);
-  }
-
-  function handleKeyDown(event) {
-    if (event.key !== "Enter") return;
-    event.preventDefault();
-
-    if (!normalizedSearchTerm) return;
-
-    const matchingTag = availableTags.find(
-      (tag) => tag.label.toLowerCase() === normalizedSearchTerm.toLowerCase()
-    );
-
-    if (!matchingTag) {
-      handleCreateTag();
-      return;
-    }
-
-    if (selectedTagIds.includes(matchingTag.id)) {
-      setErrorMessage(`You already selected "${normalizedSearchTerm}"`);
-    } else {
-      handleSelectTag(matchingTag.id);
-    }
   }
 
   return (
@@ -149,17 +129,16 @@ export default function MultiSelect({
           value={searchTerm}
           onChange={handleSearchTermChange}
           onFocus={() => setIsDropdownOpen(true)}
-          onKeyDown={handleKeyDown}
-          disabled={isMaxTagsReached}
           placeholder={
             selectedTags.length === 0 ? "Search or create a tag" : ""
           }
-          className="flex-1 min-w-32 outline-none disabled:cursor-not-allowed"
+          className="flex-1 min-w-32 outline-none"
         />
       </div>
 
       {errorMessage && (
-        <p role="alert" className="mt-1 text-sm text-red-600">
+        <p role="alert" className=" flex gap-2 mt-1 text-sm text-red-600">
+          <span>⚠️</span>
           {errorMessage}
         </p>
       )}
@@ -173,34 +152,41 @@ export default function MultiSelect({
         <ul
           role="listbox"
           aria-label="Available tags"
-          className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-md max-h-60 overflow-y-auto"
+          className="absolute flex flex-col gap-2 top-full left-0 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-md max-h-60 overflow-y-auto"
         >
-          {filteredTags.map((tag) => (
-            <li
-              key={tag.id}
-              role="option"
-              aria-selected={selectedTagIds.includes(tag.id)}
-              className="flex items-center justify-between px-2 py-1 hover:bg-gray-50"
-            >
-              <button
-                type="button"
-                onClick={() => handleSelectTag(tag.id)}
-                className="flex-1 text-left"
+          {filteredTags.map((tag) => {
+            const isSelected = selectedTagIds.includes(tag.id);
+            return (
+              <li
+                key={tag.id}
+                role="option"
+                aria-selected={isSelected}
+                className="flex items-center justify-between px-2 py-1 hover:bg-gray-50"
               >
-                {tag.label}
-              </button>
-              <button
-                type="button"
-                onClick={(event) => handleDeleteTag(tag.id, event)}
-                disabled={deletingTagId === tag.id}
-                title="Remove tag completly."
-                aria-label={`${tag.label} löschen`}
-                className="disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <Trash size={16} />
-              </button>
-            </li>
-          ))}
+                <button
+                  type="button"
+                  onClick={() => handleSelectTag(tag.id)}
+                  disabled={isSelected}
+                  className="flex-1 text-left disabled:text-gray-400 disabled:cursor-not-allowed"
+                >
+                  {tag.label}{" "}
+                  {isSelected && (
+                    <span className="text-xs text-gray-400">(selected)</span>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={(event) => handleDeleteTag(tag.id, event)}
+                  disabled={deletingTagId === tag.id}
+                  title="Remove tag completly."
+                  aria-label={`${tag.label} löschen`}
+                  className="disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Trash size={16} />
+                </button>
+              </li>
+            );
+          })}
 
           {canCreateNewTag && !isMaxTagsReached && (
             <li>
