@@ -1,5 +1,6 @@
 import dbConnect from "@/db/connect";
 import Snippet from "@/db/models/Snippet";
+import "@/db/models/Tag";
 
 export default async function handler(request, response) {
   try {
