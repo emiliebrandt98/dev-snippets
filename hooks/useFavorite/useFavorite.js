@@ -5,17 +5,18 @@ export default function useFavorite() {
     defaultValue: [],
   });
 
-  const isFavorite = favoriteIds.includes(snippetId);
-
   function handleToggleFavorite(id) {
     if (favoriteIds.includes(id)) {
-      setFavoriteIds(favoriteIds.filter((favoriteId) => favoriteId !== id));
+      const updatedFavoriteIds = favoriteIds.filter(
+        (favoriteId) => favoriteId !== id
+      );
+      setFavoriteIds(updatedFavoriteIds);
     } else {
       setFavoriteIds([...favoriteIds, id]);
     }
   }
   return {
     onToggleFavorite: handleToggleFavorite,
-    isFavorite,
+    favoriteIds,
   };
 }

@@ -2,7 +2,8 @@ import useFavorite from "@/hooks/useFavorite/useFavorite";
 import { Star } from "lucide-react";
 
 export default function FavoriteButton({ snippetId }) {
-  const { isFavorite, onToggleFavorite } = useFavorite();
+  const { favoriteIds, onToggleFavorite } = useFavorite();
+  const isFavorite = favoriteIds.includes(snippetId);
 
   return (
     <button

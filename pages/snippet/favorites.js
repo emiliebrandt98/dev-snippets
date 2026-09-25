@@ -1,6 +1,23 @@
 import SnippetsList from "@/components/features/SnippetsList/SnippetsList";
+import DeleteButton from "@/components/ui/DeleteButton/DeleteButton";
+import DeleteConfirmationModal from "@/components/ui/DeleteConfirmationModal/DeleteConfirmationModal";
+import useFavorite from "@/hooks/useFavorite/useFavorite";
+import useSnippetSelection from "@/hooks/useSnippetSelection/useSnippetSelection";
 
 export default function FavoritesPage({ snippets, isLoading, error }) {
+  const { favoriteIds } = useFavorite();
+  const {
+    isDeleteMode,
+    selectedIds,
+    onToggleDeleteMode,
+    setIsModalOpen,
+    onSelectSnippet,
+    onDeleteConfirmed,
+    isModalOpen,
+    isDeleting,
+    selectedSnippets,
+  } = useSnippetSelection(snippets);
+
   if (isLoading) {
     return <p className="p-4 text-gray-500">Just a second. Loading...</p>;
   }
@@ -14,7 +31,7 @@ export default function FavoritesPage({ snippets, isLoading, error }) {
     );
   }
   const favoriteSnippets =
-    snippets.filter((snippet) => isFavorite.includes(snippet._id)) ?? [];
+    snippets.filter((snippet) => favoriteIds.includes(snippet._id)) ?? [];
 
   if (favoriteSnippets.length === 0) {
     return (
@@ -31,8 +48,29 @@ export default function FavoritesPage({ snippets, isLoading, error }) {
       </header>
 
       <main>
-        <SnippetsList snippets={favoriteSnippets} />
+        <DeleteButton
+          isDeleteMode={isDeleteMode}
+          onToggleDeleteMode={onToggleDeleteMode}
+          selectedIds={selectedIds}
+          setIsModalOpen={setIsModalOpen}
+        />
+
+        <SnippetsList
+          snippets={favoriteSnippets}
+          isDeleteMode={isDeleteMode}
+          selectedIds={selectedIds}
+          onSelectSnippet={onSelectSnippet}
+        />
       </main>
+
+      {isModalOpen && (
+        <DeleteConfirmationModal
+          onClose={() => setIsModalOpen(false)}
+          onConfirm={onDeleteConfirmed}
+          selectedSnippets={selectedSnippets}
+          isDeleting={isDeleting}
+        />
+      )}
     </div>
   );
 }
