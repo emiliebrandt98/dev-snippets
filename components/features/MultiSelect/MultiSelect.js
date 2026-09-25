@@ -1,14 +1,13 @@
 import { Trash } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
-const initialOptions = [];
 
 export default function MultiSelect({
-  availabeleTags,
+  availableTags,
   selectedTagIds,
   onSelectionChange,
   onCreateTag,
   onDeleteTag,
-  maxTags = DEFAULT_MAX_TAGS,
+  maxTags,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -35,17 +34,17 @@ export default function MultiSelect({
   const normalizedSearchTerm = searchTerm.trim();
   const isMaxTagsReached = selectedTagIds.length <= maxTags;
 
-  const selectedTags = availabeleTags.filter((tags) =>
+  const selectedTags = availableTags.filter((tags) =>
     selectedTagIds.includes(tags.id)
   );
 
-  const filteredTags = availabeleTags.filter((tag) =>
+  const filteredTags = availableTags.filter((tag) =>
     tag.label.toLowerCase().includes(normalizedSearchTerm.toLowerCase())
   );
 
   const canCreateNewTag =
     normalizedSearchTerm !== "" &&
-    !availabeleTags.some(
+    !availableTags.some(
       (tag) => tag.label.toLowerCase() === normalizedSearchTerm.toLowerCase()
     );
 
@@ -99,7 +98,7 @@ export default function MultiSelect({
 
     if (!normalizedSearchTerm) return;
 
-    const matchingTag = availabeleTags.find(
+    const matchingTag = availableTags.find(
       (tag) => tag.label.toLowerCase() === normalizedSearchTerm.toLowerCase()
     );
 

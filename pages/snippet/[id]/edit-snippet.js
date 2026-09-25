@@ -51,6 +51,9 @@ export default function EditSnippetPage() {
     notes: snippet.notes ?? "",
     installCommand: snippet.installCommand ?? "",
     link: snippet.link ?? "",
+    tagIds: (snippet.tags ?? []).map((tag) =>
+      typeof tag === "object" ? tag._id : tag
+    ),
   };
 
   return (

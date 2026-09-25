@@ -8,7 +8,7 @@ const TagSchema = new mongoose.Schema(
       trim: true,
     },
   },
-  { timestamps: ture }
+  { timestamps: true }
 );
 
 export default mongoose.models.Tag || mongoose.model("Tag", TagSchema);
