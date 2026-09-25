@@ -32,7 +32,7 @@ export default function MultiSelect({
   }, []);
 
   const normalizedSearchTerm = searchTerm.trim();
-  const isMaxTagsReached = selectedTagIds.length <= maxTags;
+  const isMaxTagsReached = selectedTagIds.length >= maxTags;
 
   const selectedTags = availableTags.filter((tags) =>
     selectedTagIds.includes(tags.id)
@@ -76,20 +76,18 @@ export default function MultiSelect({
     if (!normalizedSearchTerm) return;
 
     if (isMaxTagsReached) {
-      setErrorMessage(`Max of ${maxTags} are reached.`);
+      setErrorMessage(`Maximal ${maxTags} Tags möglich.`);
       return;
     }
 
-    const newTag = { id: crypto.randomUUID(), label: normalizedSearchTerm };
-    onCreateTag(newTag);
-    onSelectionChange([...selectedTagIds, newTag.id]);
-    (setSearchTerm(""), setErrorMessage(""));
+    onCreateTag(normalizedSearchTerm);
+    setSearchTerm("");
+    setErrorMessage("");
   }
 
   function handleDeleteTag(tagId, event) {
     event.stopPropagation();
     onDeleteTag(tagId);
-    onSelectionChange(selectedTagIds.filter((id) => id !== tagId));
   }
 
   function handleKeyDown(event) {
@@ -125,10 +123,10 @@ export default function MultiSelect({
         onClick={() => inputRef.current?.focus()}
         className="flex flex-wrap items-center gap-1 p-2 border border-gray-300 rounded-md focus-within:ring-1 focus-within:ring-black"
       >
-        {selectedTagIds.map((tag) => (
+        {selectedTags.map((tag) => (
           <span
             key={tag.id}
-            className="flex items-center gap-1 px-2 py-1 bg-gray-100 rounded"
+            className="flex items-center gap-1 px-3 py-1 text-sm bg-gray-100 rounded-lg"
           >
             {tag.label}
             <button

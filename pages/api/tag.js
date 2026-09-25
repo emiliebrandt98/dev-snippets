@@ -11,7 +11,7 @@ export default async function handler(request, response) {
 
   if (request.method === "GET") {
     try {
-      const tags = await Tag.find();
+      const tags = await Tag.find().sort({ createdAt: -1 });
       response.status(200).json(tags);
     } catch (error) {
       console.error(error);

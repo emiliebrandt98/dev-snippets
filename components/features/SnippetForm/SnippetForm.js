@@ -205,7 +205,7 @@ export default function SnippetForm({
           }
           selectedTagIds={formValues.tagIds ?? []}
           onSelectionChange={(newIds) =>
-            setFormState((prev) => ({ ...prev, tagIds: newIds }))
+            setFormValues((prev) => ({ ...prev, tagIds: newIds }))
           }
           onCreateTag={handleCreateTag}
           onDeleteTag={handleDeleteTag}
