@@ -39,6 +39,7 @@ export default function SnippetsList({
                 id={snippet._id}
                 language={snippet.language?.name}
                 date={snippet.createdAt}
+                tags={snippet.tags?.label}
               />
             </div>
           </li>
