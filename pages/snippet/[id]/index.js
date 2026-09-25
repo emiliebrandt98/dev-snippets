@@ -5,6 +5,7 @@ import Link from "next/link";
 import CopyToClipboard from "@/components/ui/CopyToClipboard/CopyToClipboard";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
+import FavoriteButton from "@/components/ui/FavoriteButton/FavoriteButton";
 
 export default function SnippetPage() {
   const router = useRouter();
@@ -56,13 +57,16 @@ export default function SnippetPage() {
             <h1 className="text-xl font-bold mt-1">{title}</h1>
           </div>
 
-          <Link
-            href={`/snippet/${snippet?._id}/edit-snippet`}
-            aria-label="edit snippet"
-            className="inline-flex items-center justify-center w-10 h-10 aspect-square rounded-lg bg-gray-100 hover:bg-gray-200"
-          >
-            <Pencil size={24} className="w-5 h-5" />
-          </Link>
+          <div className="flex items-cener gap-2">
+            <FavoriteButton snippetId={id} />
+            <Link
+              href={`/snippet/${snippet?._id}/edit-snippet`}
+              aria-label="edit snippet"
+              className="inline-flex items-center justify-center w-8 h-8 aspect-square rounded-lg bg-gray-100 hover:bg-gray-200"
+            >
+              <Pencil size={16} />
+            </Link>
+          </div>
         </div>
       </header>
 
