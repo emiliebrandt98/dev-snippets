@@ -1,4 +1,4 @@
-import { Trash } from "lucide-react";
+import { Trash, X } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 
 export default function MultiSelect({
@@ -7,6 +7,8 @@ export default function MultiSelect({
   onSelectionChange,
   onCreateTag,
   onDeleteTag,
+  isCreatingTag = false,
+  deletingTagId = null,
   maxTags,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -73,6 +75,7 @@ export default function MultiSelect({
   }
 
   function handleCreateTag() {
+    if (isCreatingTag) return;
     if (!normalizedSearchTerm) return;
 
     if (isMaxTagsReached) {
@@ -86,6 +89,7 @@ export default function MultiSelect({
   }
 
   function handleDeleteTag(tagId, event) {
+    if (deletingTagId) return;
     event.stopPropagation();
     onDeleteTag(tagId);
   }
@@ -133,7 +137,7 @@ export default function MultiSelect({
               onClick={(event) => handleRemoveTag(tag.id, event)}
               aria-label={`Remove ${tag.label}`}
             >
-              x
+              <X size={16} />
             </button>
           </span>
         ))}
@@ -188,8 +192,10 @@ export default function MultiSelect({
               <button
                 type="button"
                 onClick={(event) => handleDeleteTag(tag.id, event)}
+                disabled={deletingTagId === tag.id}
                 title="Remove tag completly."
                 aria-label={`${tag.label} löschen`}
+                className="disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Trash size={16} />
               </button>
@@ -201,9 +207,12 @@ export default function MultiSelect({
               <button
                 type="button"
                 onClick={handleCreateTag}
+                disabled={isCreatingTag}
                 className="w-full px-2 py-1 text-left hover:bg-gray-50"
               >
-                <span className="font-medium">Erstellen: </span>
+                <span className="font-medium">
+                  {isCreatingTag ? "Creating..." : "Create:"}
+                </span>
                 {normalizedSearchTerm}
               </button>
             </li>

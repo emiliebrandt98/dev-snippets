@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useState } from "react";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import FormField from "@/components/ui/FormField/FormField";
 import { getInputStateClasses } from "@/components/ui/getInputStateClasses/getInputStateClasses";
 import { useRequiredFieldsValidation } from "@/hooks/useRequiredFieldsValidation/useRequiredFieldsValidation";
@@ -18,6 +18,8 @@ export default function SnippetForm({
   const { data: languages } = useSWR("/api/language");
   const { data: tags, mutate: mutateTags } = useSWR("/api/tag");
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
+  const [isCreatingTag, setIsCreatingTag] = useState(false);
+  const [deletingTagId, setDeletingTagId] = useState(null);
 
   const {
     formValues,
@@ -42,6 +44,8 @@ export default function SnippetForm({
   );
 
   async function handleCreateTag(label) {
+    setIsCreatingTag(true);
+
     try {
       const response = await fetch("/api/tag", {
         method: "POST",
@@ -63,10 +67,13 @@ export default function SnippetForm({
     } catch (error) {
       console.error(error);
       toast.error("Error creating tag.");
+    } finally {
+      setIsCreatingTag(false);
     }
   }
 
   async function handleDeleteTag(tagId) {
+    setDeletingTagId(tagId);
     try {
       const response = await fetch("/api/tag", {
         method: "DELETE",
@@ -80,6 +87,9 @@ export default function SnippetForm({
       }
 
       await mutateTags();
+      await mutate(
+        (key) => typeof key === "string" && key.startsWith("/api/snippets")
+      );
       setFormValues((prev) => ({
         ...prev,
         tagIds: (prev.tagIds ?? []).filter((id) => id !== tagId),
@@ -87,6 +97,8 @@ export default function SnippetForm({
     } catch (error) {
       console.error(error);
       toast.error("Error deleting tag.");
+    } finally {
+      setDeletingTagId(null);
     }
   }
 
@@ -209,6 +221,8 @@ export default function SnippetForm({
           }
           onCreateTag={handleCreateTag}
           onDeleteTag={handleDeleteTag}
+          isCreatingTag={isCreatingTag}
+          deletingTagId={deletingTagId}
           maxTags={4}
         />
       </FormField>
