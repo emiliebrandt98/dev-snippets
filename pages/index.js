@@ -3,6 +3,7 @@ import DeleteConfirmationModal from "@/components/ui/DeleteConfirmationModal/Del
 import useSnippetSelection from "@/hooks/useSnippetSelection/useSnippetSelection";
 import DeleteButton from "@/components/ui/DeleteButton/DeleteButton";
 import SearchBar from "@/components/features/SearchBar/SearchBar";
+import useSearchMatch from "@/hooks/useSearchMatch/useSearchMatch";
 
 export default function Home({ snippets, isLoading, error, onSearch, search }) {
   const {
@@ -17,48 +18,10 @@ export default function Home({ snippets, isLoading, error, onSearch, search }) {
     selectedSnippets,
   } = useSnippetSelection(snippets);
 
-  const FIELD_ORDER = ["title", "code", "tag"];
-
-  function getSearchMatch(searchTerm, snippet) {
-    const trimmedTerm = searchTerm.trim();
-    if (!trimmedTerm) return { isMatch: true, matchedFields: [] };
-
-    const normalizedTerm = trimmedTerm.toLowerCase();
-    const matchedFields = [];
-
-    if (snippet.title.toLowerCase().includes(normalizedTerm))
-      matchedFields.push("title");
-    if (snippet.code.toLowerCase().includes(normalizedTerm))
-      matchedFields.push("code");
-    if (
-      (snippet.tags ?? []).some((tag) =>
-        tag.label.toLowerCase().includes(normalizedTerm)
-      )
-    ) {
-      matchedFields.push("tag");
-
-      return { isMatch: matchedFields.length > 0, matchedFields };
-    }
-  }
+  const { searchedSnippets } = useSearchMatch(snippets, search);
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error fetching data.</p>;
-
-  const searchResults = (snippets ?? []).map((snippet) => ({
-    snippet,
-    match: getSearchMatch(search, snippet),
-  }));
-
-  const searchedSnippets = searchResults
-    .filter(({ match }) => match.isMatch)
-    .map(({ snippet, match }) => ({
-      ...snippet,
-      matchedFields: match.matchedFields,
-    }));
-
-  const matchedFieldsSummary = FIELD_ORDER.filter((field) =>
-    searchedSnippets.some((snippet) => snippet.matchedFields.includes(field))
-  );
 
   return (
     <div className="max-w-2xl mx-auto p-4">
@@ -69,11 +32,7 @@ export default function Home({ snippets, isLoading, error, onSearch, search }) {
       <main>
         <section className="flex flex-row items-center gap-2 mb-4">
           <div className="flex-1">
-            <SearchBar
-              onSearch={onSearch}
-              search={search}
-              matchedFields={matchedFieldsSummary}
-            />
+            <SearchBar onSearch={onSearch} search={search} />
           </div>
           <DeleteButton
             isDeleteMode={isDeleteMode}

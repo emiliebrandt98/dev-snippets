@@ -19,10 +19,10 @@ export default function SnippetCard({
       <div className="flex flex-row justify-between">
         <div>
           <p className="text-sm text-gray-500">{`${formattedDate} · ${language}`}</p>
-          <h2 className="font-semibold text-lg mt-1">
-            {title}{" "}
+          <h2 className="flex flex-col font-semibold text-lg mt-1">
+            {title}
             {otherMatches.length > 0 && (
-              <span className="ml-2 text-xs font-normal text-gray-400">
+              <span className=" text-xs font-normal text-gray-400">
                 (found in {otherMatches.join(", ")})
               </span>
             )}
