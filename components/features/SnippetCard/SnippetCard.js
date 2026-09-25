@@ -1,3 +1,4 @@
+import FavoriteButton from "@/components/ui/FavoriteButton/FavoriteButton";
 import Link from "next/link";
 
 export default function SnippetCard({ id, title, language, date, tags }) {
@@ -7,8 +8,13 @@ export default function SnippetCard({ id, title, language, date, tags }) {
       href={`/snippet/${id}`}
       className="block rounded-lg bg-gray-50 p-4 hover:bg-gray-100 transition"
     >
-      <p className="text-sm text-gray-500">{`${formattedDate} · ${language}`}</p>
-      <h2 className="font-semibold text-lg mt-1">{title}</h2>
+      <div className="flex flex-row justify-between">
+        <div>
+          <p className="text-sm text-gray-500">{`${formattedDate} · ${language}`}</p>
+          <h2 className="font-semibold text-lg mt-1">{title}</h2>
+        </div>
+        <FavoriteButton snippetId={id} />
+      </div>
       <ul className="flex flex-wrap gap-2 mt-2 list-none pl-0">
         {tags.map((tag) => (
           <li
