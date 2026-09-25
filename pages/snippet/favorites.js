@@ -33,15 +33,6 @@ export default function FavoritesPage({ snippets, isLoading, error }) {
   const favoriteSnippets =
     snippets.filter((snippet) => favoriteIds.includes(snippet._id)) ?? [];
 
-  if (favoriteSnippets.length === 0) {
-    return (
-      <p className="p-4 textgray-500">
-        There is no favorite snippets. Mark snippets as favorite to view them
-        here.
-      </p>
-    );
-  }
-
   return (
     <div className="max-w-2xl mx-auto p-4">
       <header className="mb-6">
@@ -55,6 +46,13 @@ export default function FavoritesPage({ snippets, isLoading, error }) {
           selectedIds={selectedIds}
           setIsModalOpen={setIsModalOpen}
         />
+
+        {favoriteSnippets.length === 0 ? (
+          <p className="p-4 textgray-500">
+            There is no favorite snippets. Mark snippets as favorite to view
+            them here.
+          </p>
+        ) : null}
 
         <SnippetsList
           snippets={favoriteSnippets}

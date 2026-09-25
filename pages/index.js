@@ -34,6 +34,15 @@ export default function Home({ snippets, isLoading, error }) {
           setIsModalOpen={setIsModalOpen}
         />
 
+        {!snippets || snippets.length === 0 ? (
+          <>
+            <p className="font-semibold">
+              No snippets found. Create snippets to display them in a list.
+            </p>
+            <p className="text-gray-500">{`You can create snippets with the "+" button.`}</p>
+          </>
+        ) : null}
+
         <SnippetsList
           snippets={snippets}
           isDeleteMode={isDeleteMode}
