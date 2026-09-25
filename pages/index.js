@@ -1,10 +1,11 @@
 import SnippetsList from "@/components/features/SnippetsList/SnippetsList";
-import { Trash, X } from "lucide-react";
 import DeleteConfirmationModal from "@/components/ui/DeleteConfirmationModal/DeleteConfirmationModal";
 import useSnippetSelection from "@/hooks/useSnippetSelection/useSnippetSelection";
 import DeleteButton from "@/components/ui/DeleteButton/DeleteButton";
+import SearchBar from "@/components/features/SearchBar/SearchBar";
+import useSearchMatch from "@/hooks/useSearchMatch/useSearchMatch";
 
-export default function Home({ snippets, isLoading, error }) {
+export default function Home({ snippets, isLoading, error, onSearch, search }) {
   const {
     isDeleteMode,
     onToggleDeleteMode,
@@ -17,6 +18,8 @@ export default function Home({ snippets, isLoading, error }) {
     selectedSnippets,
   } = useSnippetSelection(snippets);
 
+  const { searchedSnippets } = useSearchMatch(snippets, search);
+
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error fetching data.</p>;
 
@@ -27,12 +30,17 @@ export default function Home({ snippets, isLoading, error }) {
       </header>
 
       <main>
-        <DeleteButton
-          isDeleteMode={isDeleteMode}
-          onToggleDeleteMode={onToggleDeleteMode}
-          selectedIds={selectedIds}
-          setIsModalOpen={setIsModalOpen}
-        />
+        <section className="flex flex-row items-center gap-2 mb-4">
+          <div className="flex-1">
+            <SearchBar onSearch={onSearch} search={search} />
+          </div>
+          <DeleteButton
+            isDeleteMode={isDeleteMode}
+            onToggleDeleteMode={onToggleDeleteMode}
+            selectedIds={selectedIds}
+            setIsModalOpen={setIsModalOpen}
+          />
+        </section>
 
         {!snippets || snippets.length === 0 ? (
           <>
@@ -44,7 +52,7 @@ export default function Home({ snippets, isLoading, error }) {
         ) : null}
 
         <SnippetsList
-          snippets={snippets}
+          snippets={searchedSnippets}
           isDeleteMode={isDeleteMode}
           selectedIds={selectedIds}
           onSelectSnippet={onSelectSnippet}
