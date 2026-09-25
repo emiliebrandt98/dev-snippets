@@ -1,27 +1,15 @@
+import useFavorite from "@/hooks/useFavorite/useFavorite";
 import { Star } from "lucide-react";
-import useLocalStorageState from "use-local-storage-state";
 
 export default function FavoriteButton({ snippetId }) {
-  const [favoriteIds, setFavoriteIds] = useLocalStorageState("Favorite", {
-    defaultValue: [],
-  });
-
-  const isFavorite = favoriteIds.includes(snippetId);
-
-  function handleToggleFavorite(id) {
-    if (favoriteIds.includes(id)) {
-      setFavoriteIds(favoriteIds.filter((favoriteId) => favoriteId !== id));
-    } else {
-      setFavoriteIds([...favoriteIds, id]);
-    }
-  }
+  const { isFavorite, onToggleFavorite } = useFavorite();
 
   return (
     <button
       onClick={(event) => {
         event.preventDefault();
         event.stopPropagation();
-        handleToggleFavorite(snippetId);
+        onToggleFavorite(snippetId);
       }}
       type="button"
       aria-pressed={isFavorite}
