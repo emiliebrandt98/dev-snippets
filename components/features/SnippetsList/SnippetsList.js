@@ -29,6 +29,7 @@ export default function SnippetsList({
                 language={snippet.language?.name}
                 date={snippet.createdAt}
                 tags={snippet.tags}
+                matchedFields={snippet.matchedFields}
               />
             </div>
           </li>

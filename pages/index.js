@@ -17,29 +17,47 @@ export default function Home({ snippets, isLoading, error, onSearch, search }) {
     selectedSnippets,
   } = useSnippetSelection(snippets);
 
-  function matchesSearch(searchTerm, snippet) {
-    if (!search) return true;
+  const FIELD_ORDER = ["title", "code", "tag"];
 
-    const normalizedSearchTerm = searchTerm.toLowerCase();
+  function getSearchMatch(searchTerm, snippet) {
+    const trimmedTerm = searchTerm.trim();
+    if (!trimmedTerm) return { isMatch: true, matchedFields: [] };
 
-    const matchesTitle = snippet.title
-      .toLowerCase()
-      .includes(normalizedSearchTerm);
-    const matchesCode = snippet.code
-      .toLowerCase()
-      .includes(normalizedSearchTerm);
-    const matchesTags = (snippet.tags ?? []).some((tag) =>
-      tag.label.toLowerCase().includes(normalizedSearchTerm)
-    );
+    const normalizedTerm = trimmedTerm.toLowerCase();
+    const matchedFields = [];
 
-    return matchesTitle || matchesCode || matchesTags;
+    if (snippet.title.toLowerCase().includes(normalizedTerm))
+      matchedFields.push("title");
+    if (snippet.code.toLowerCase().includes(normalizedTerm))
+      matchedFields.push("code");
+    if (
+      (snippet.tags ?? []).some((tag) =>
+        tag.label.toLowerCase().includes(normalizedTerm)
+      )
+    ) {
+      matchedFields.push("tag");
+
+      return { isMatch: matchedFields.length > 0, matchedFields };
+    }
   }
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error fetching data.</p>;
 
-  const searchedSnippets = snippets.filter((snippet) =>
-    matchesSearch(search, snippet)
+  const searchResults = (snippets ?? []).map((snippet) => ({
+    snippet,
+    match: getSearchMatch(search, snippet),
+  }));
+
+  const searchedSnippets = searchResults
+    .filter(({ match }) => match.isMatch)
+    .map(({ snippet, match }) => ({
+      ...snippet,
+      matchedFields: match.matchedFields,
+    }));
+
+  const matchedFieldsSummary = FIELD_ORDER.filter((field) =>
+    searchedSnippets.some((snippet) => snippet.matchedFields.includes(field))
   );
 
   return (
@@ -51,7 +69,11 @@ export default function Home({ snippets, isLoading, error, onSearch, search }) {
       <main>
         <section className="flex flex-row items-center gap-2 mb-4">
           <div className="flex-1">
-            <SearchBar onSearch={onSearch} search={search} />
+            <SearchBar
+              onSearch={onSearch}
+              search={search}
+              matchedFields={matchedFieldsSummary}
+            />
           </div>
           <DeleteButton
             isDeleteMode={isDeleteMode}
