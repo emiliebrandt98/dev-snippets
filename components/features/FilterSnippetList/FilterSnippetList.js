@@ -1,91 +1,6 @@
 import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import useSWR from "swr";
-
-export const EMPTY_FILTER = { languages: [], tags: [], years: [] };
-
-function getChipClass(isActive) {
-  const baseClass = "rounded-full px-3 py-1 text-sm";
-
-  if (isActive) {
-    return `${baseClass} bg-purple-100`;
-  }
-  return `${baseClass} bg-gray-100`;
-}
-
-function getYears(snippets) {
-  const years = [];
-
-  snippets.forEach((snippet) => {
-    const year = new Date(snippet.createdAt).getFullYear();
-
-    if (!years.includes(year)) {
-      years.push(year);
-    }
-  });
-
-  return years.sort((a, b) => a - b);
-}
-
-function FilterSection({
-  title,
-  items,
-  selectedIds,
-  isLoading,
-  error,
-  onToggle,
-  onClear,
-}) {
-  return (
-    <section className="mb-6">
-      <h3 className="mb-3 text-lg font-bold">{title}</h3>
-
-      {isLoading && <p>Loading...</p>}
-      {error && <p>Could not load data.</p>}
-
-      {!isLoading && !error && (
-        <>
-          <ul className="flex flex-wrap gap-2">
-            <li>
-              <button
-                type="button"
-                onClick={onClear}
-                className={getChipClass(selectedIds.length === 0)}
-              >
-                All
-              </button>
-            </li>
-
-            {items.map((item) => {
-              const isActive = selectedIds.includes(item.id);
-
-              return (
-                <li key={item.id}>
-                  <button
-                    type="button"
-                    aria-pressed={isActive}
-                    onClick={() => onToggle(item.id)}
-                    className={getChipClass(isActive)}
-                  >
-                    {item.label}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-
-          <button
-            type="button"
-            onClick={onClear}
-            className="mt-3 text-sm underline"
-          >
-            clear
-          </button>
-        </>
-      )}
-    </section>
-  );
-}
+import FilterSection from "../FilterSection/FilterSection";
 
 export default function FilterSnippetList({
   onActiveFilterItems,
@@ -95,29 +10,6 @@ export default function FilterSnippetList({
   const filterDialogRef = useRef(null);
   const [openFilter, setOpenFilter] = useState(false);
   const [draftFilterItems, setDraftFilterItems] = useState(EMPTY_FILTER);
-
-  const {
-    data: tags,
-    isLoading: isLoadingTags,
-    error: errorTags,
-  } = useSWR("/api/tag");
-  const {
-    data: languages,
-    isLoading: isLoadingLanguages,
-    error: errorLanguages,
-  } = useSWR("/api/language");
-
-  const languageItems = (languages ?? []).map((language) => {
-    return { id: language._id, label: language.name };
-  });
-
-  const tagItems = (tags ?? []).map((tag) => {
-    return { id: tag._id, label: tag.name };
-  });
-
-  const yearItems = getYears(snippets ?? []).map((year) => {
-    return { id: year, label: year };
-  });
 
   const activeFilterCount =
     activeFilterItems.languages.length +
@@ -172,21 +64,31 @@ export default function FilterSnippetList({
 
   return (
     <>
-      <button type="button" onClick={handleOpenFilter}>
-        Filter
-        {activeFilterCount > 0 && <span>{activeFilterCount}</span>}
-      </button>
-
-      {activeFilterCount > 0 ? (
-        <button type="button" onClick={handleClearFilter}>
-          clear
+      <div className="flex flex-row items-center justify-between">
+        <button
+          type="button"
+          onClick={handleOpenFilter}
+          className="flex flex-row gap-2 p-2 cursor-pointer justify-center items-center h-8 rounded-lg bg-gray-100 hover:bg-gray-200"
+        >
+          Filter
+          {activeFilterCount > 0 && <span>· {activeFilterCount}</span>}
         </button>
-      ) : null}
+
+        {activeFilterCount > 0 ? (
+          <button
+            type="button"
+            onClick={handleClearFilter}
+            className="underline cursor-pointer p-2"
+          >
+            clear
+          </button>
+        ) : null}
+      </div>
 
       <dialog
         ref={filterDialogRef}
         onClose={() => setOpenFilter(false)}
-        className="m-0 mt-auto w-full rounded-t-3xl p-6 backdrop:bg-black/40"
+        className="m-0 mt-auto w-full max-w-full rounded-t-3xl p-6 backdrop:bg-black/40"
       >
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-2xl font-bold">Filter</h2>
