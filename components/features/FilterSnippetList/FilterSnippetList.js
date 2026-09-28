@@ -1,7 +1,7 @@
 import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import FilterSection from "../FilterSection/FilterSection";
-import { EMPTY_FILTER } from "@/lib/filter/filterItems";
+import { EMPTY_FILTER } from "@/lib/filter/filterSnippets";
 import useFilterOptions from "@/hooks/useFilterOptions/useFilterOptions";
 
 export default function FilterSnippetList({

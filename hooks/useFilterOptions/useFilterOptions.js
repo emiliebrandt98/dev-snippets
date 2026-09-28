@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { getYears } from "@/lib/filter/filterItems";
+import { getYears } from "@/lib/filter/filterSnippets";
 
 export default function useFilterOptions(snippets) {
   const {

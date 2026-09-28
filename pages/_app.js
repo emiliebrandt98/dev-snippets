@@ -3,7 +3,7 @@ import useSWR, { SWRConfig } from "swr";
 import { ToastContainer } from "react-toastify";
 import NavigationBar from "@/components/features/NavigationBar/NavigationBar";
 import { useState } from "react";
-import { EMPTY_FILTER } from "@/lib/filter/filterItems";
+import { EMPTY_FILTER } from "@/lib/filter/filterSnippets";
 
 const fetcher = async (url) => {
   const response = await fetch(url);

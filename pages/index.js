@@ -5,6 +5,7 @@ import DeleteButton from "@/components/ui/DeleteButton/DeleteButton";
 import SearchBar from "@/components/features/SearchBar/SearchBar";
 import useSearchMatch from "@/hooks/useSearchMatch/useSearchMatch";
 import FilterSnippetList from "@/components/features/FilterSnippetList/FilterSnippetList";
+import filterSnippets from "@/lib/filter/filterSnippets";
 
 export default function Home({
   snippets,
@@ -27,10 +28,31 @@ export default function Home({
     selectedSnippets,
   } = useSnippetSelection(snippets);
 
-  const { searchedSnippets } = useSearchMatch(snippets, search);
+  const filteredSnippets = filterSnippets(snippets ?? [], activeFilterItems);
+  console.log("filteredSnippets:", filteredSnippets);
+
+  const { searchedSnippets } = useSearchMatch(filteredSnippets, search);
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error fetching data.</p>;
+
+  const hasSearch = search && search.trim() !== "";
+
+  const hasActiveFilter =
+    activeFilterItems.languages.length > 0 ||
+    activeFilterItems.tags.length > 0 ||
+    activeFilterItems.years.length > 0;
+
+  const showNoSnippets = !snippets || snippets.length === 0;
+
+  const showNoFilterResults =
+    !showNoSnippets && hasActiveFilter && filteredSnippets.length === 0;
+
+  const showNoSearchResults =
+    !showNoSnippets &&
+    hasSearch &&
+    filteredSnippets.length > 0 &&
+    searchedSnippets.length === 0;
 
   return (
     <div className="max-w-2xl mx-auto p-4">
@@ -59,7 +81,7 @@ export default function Home({
           />
         </section>
 
-        {!snippets || snippets.length === 0 ? (
+        {showNoSnippets ? (
           <>
             <p className="font-semibold">
               No snippets found. Create snippets to display them in a list.
@@ -68,11 +90,15 @@ export default function Home({
           </>
         ) : null}
 
-        {search &&
-        search.trim() !== "" &&
-        snippets.length > 0 &&
-        searchedSnippets.length === 0 ? (
-          <p className="p-4 textgray-500">
+        {showNoFilterResults ? (
+          <p className="p-4 text-gray-500">
+            No snippets match the selected filters. Try changing or clearing
+            them.
+          </p>
+        ) : null}
+
+        {showNoSearchResults ? (
+          <p className="p-4 text-gray-500">
             No snippets found with this search term. Please try something else.
           </p>
         ) : null}
