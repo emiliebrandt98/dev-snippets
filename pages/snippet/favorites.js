@@ -1,3 +1,4 @@
+import FilterSnippetList from "@/components/features/FilterSnippetList/FilterSnippetList";
 import SearchBar from "@/components/features/SearchBar/SearchBar";
 import SnippetsList from "@/components/features/SnippetsList/SnippetsList";
 import DeleteButton from "@/components/ui/DeleteButton/DeleteButton";
@@ -12,6 +13,8 @@ export default function FavoritesPage({
   error,
   onSearch,
   search,
+  activeFilterItems,
+  onActiveFilterItems,
 }) {
   const { favoriteIds } = useFavorite();
   const {
@@ -52,15 +55,23 @@ export default function FavoritesPage({
       </header>
 
       <main>
-        <section className="flex flex-row items-center gap-2 mb-4">
-          <div className="flex-1">
-            <SearchBar onSearch={onSearch} search={search} />
+        <section className="flex flex-col mb-4 gap-2">
+          <div className="flex flex-row items-center gap-2">
+            <div className="flex-1">
+              <SearchBar onSearch={onSearch} search={search} />
+            </div>
+            <DeleteButton
+              isDeleteMode={isDeleteMode}
+              onToggleDeleteMode={onToggleDeleteMode}
+              selectedIds={selectedIds}
+              setIsModalOpen={setIsModalOpen}
+            />
           </div>
-          <DeleteButton
-            isDeleteMode={isDeleteMode}
-            onToggleDeleteMode={onToggleDeleteMode}
-            selectedIds={selectedIds}
-            setIsModalOpen={setIsModalOpen}
+
+          <FilterSnippetList
+            activeFilterItems={activeFilterItems}
+            onActiveFilterItems={onActiveFilterItems}
+            snippets={snippets}
           />
         </section>
 
