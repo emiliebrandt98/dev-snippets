@@ -50,7 +50,7 @@ function FilterSection({
               <button
                 type="button"
                 onClick={onClear}
-                className="getChipClass(selectedIds.length === 0)"
+                className={getChipClass(selectedIds.length === 0)}
               >
                 All
               </button>
@@ -94,7 +94,7 @@ export default function FilterSnippetList({
 }) {
   const filterDialogRef = useRef(null);
   const [openFilter, setOpenFilter] = useState(false);
-  const [draftFilterItems, setDraftFilterItems] = useState([]);
+  const [draftFilterItems, setDraftFilterItems] = useState(EMPTY_FILTER);
 
   const {
     data: tags,
@@ -111,7 +111,7 @@ export default function FilterSnippetList({
     return { id: language._id, label: language.name };
   });
 
-  const tagItem = (tags ?? []).map((tag) => {
+  const tagItems = (tags ?? []).map((tag) => {
     return { id: tag._id, label: tag.name };
   });
 
@@ -201,7 +201,7 @@ export default function FilterSnippetList({
 
         <FilterSection
           title="Language"
-          ites={languageItems}
+          items={languageItems}
           selectedIds={draftFilterItems.languages}
           isLoading={isLoadingLanguages}
           error={errorLanguages}
@@ -209,8 +209,8 @@ export default function FilterSnippetList({
           onClear={() => handleClearCategory("languages")}
         />
         <FilterSection
-          title="Language"
-          items={tagItem}
+          title="Tags"
+          items={tagItems}
           selectedIds={draftFilterItems.tags}
           isLoading={isLoadingTags}
           error={errorTags}
