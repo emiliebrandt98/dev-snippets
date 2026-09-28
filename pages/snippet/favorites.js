@@ -1,10 +1,18 @@
+import SearchBar from "@/components/features/SearchBar/SearchBar";
 import SnippetsList from "@/components/features/SnippetsList/SnippetsList";
 import DeleteButton from "@/components/ui/DeleteButton/DeleteButton";
 import DeleteConfirmationModal from "@/components/ui/DeleteConfirmationModal/DeleteConfirmationModal";
 import useFavorite from "@/hooks/useFavorite/useFavorite";
+import useSearchMatch from "@/hooks/useSearchMatch/useSearchMatch";
 import useSnippetSelection from "@/hooks/useSnippetSelection/useSnippetSelection";
 
-export default function FavoritesPage({ snippets, isLoading, error }) {
+export default function FavoritesPage({
+  snippets,
+  isLoading,
+  error,
+  onSearch,
+  search,
+}) {
   const { favoriteIds } = useFavorite();
   const {
     isDeleteMode,
@@ -18,6 +26,12 @@ export default function FavoritesPage({ snippets, isLoading, error }) {
     selectedSnippets,
   } = useSnippetSelection(snippets);
 
+  const favoriteSnippets = (snippets ?? []).filter((snippet) =>
+    favoriteIds.includes(snippet._id)
+  );
+
+  const { searchedSnippets } = useSearchMatch(favoriteSnippets, search);
+
   if (isLoading) {
     return <p className="p-4 text-gray-500">Just a second. Loading...</p>;
   }
@@ -30,8 +44,6 @@ export default function FavoritesPage({ snippets, isLoading, error }) {
       </div>
     );
   }
-  const favoriteSnippets =
-    snippets.filter((snippet) => favoriteIds.includes(snippet._id)) ?? [];
 
   return (
     <div className="max-w-2xl mx-auto p-4">
@@ -40,12 +52,17 @@ export default function FavoritesPage({ snippets, isLoading, error }) {
       </header>
 
       <main>
-        <DeleteButton
-          isDeleteMode={isDeleteMode}
-          onToggleDeleteMode={onToggleDeleteMode}
-          selectedIds={selectedIds}
-          setIsModalOpen={setIsModalOpen}
-        />
+        <section className="flex flex-row items-center gap-2 mb-4">
+          <div className="flex-1">
+            <SearchBar onSearch={onSearch} search={search} />
+          </div>
+          <DeleteButton
+            isDeleteMode={isDeleteMode}
+            onToggleDeleteMode={onToggleDeleteMode}
+            selectedIds={selectedIds}
+            setIsModalOpen={setIsModalOpen}
+          />
+        </section>
 
         {favoriteSnippets.length === 0 ? (
           <p className="p-4 textgray-500">
@@ -54,8 +71,14 @@ export default function FavoritesPage({ snippets, isLoading, error }) {
           </p>
         ) : null}
 
+        {searchedSnippets.length === 0 ? (
+          <p className="p-4 textgray-500">
+            No snippets found with this search term. Please try something else.
+          </p>
+        ) : null}
+
         <SnippetsList
-          snippets={favoriteSnippets}
+          snippets={searchedSnippets}
           isDeleteMode={isDeleteMode}
           selectedIds={selectedIds}
           onSelectSnippet={onSelectSnippet}

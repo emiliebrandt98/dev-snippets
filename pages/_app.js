@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import useSWR, { SWRConfig } from "swr";
 import { ToastContainer } from "react-toastify";
 import NavigationBar from "@/components/features/NavigationBar/NavigationBar";
+import { useState } from "react";
 
 const fetcher = async (url) => {
   const response = await fetch(url);
@@ -19,6 +20,8 @@ const fetcher = async (url) => {
 export default function App({ Component, pageProps }) {
   const { data: snippets, error, isLoading } = useSWR("/api/snippets", fetcher);
 
+  const [search, setSearch] = useState("");
+
   return (
     <SWRConfig value={{ fetcher }}>
       <div className="pb-16 mb-6">
@@ -26,6 +29,8 @@ export default function App({ Component, pageProps }) {
           snippets={snippets}
           error={error}
           isLoading={isLoading}
+          search={search}
+          onSearch={setSearch}
           {...pageProps}
         />
       </div>
