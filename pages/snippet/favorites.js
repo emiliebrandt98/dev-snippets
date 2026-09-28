@@ -3,6 +3,7 @@ import SnippetsList from "@/components/features/SnippetsList/SnippetsList";
 import DeleteButton from "@/components/ui/DeleteButton/DeleteButton";
 import DeleteConfirmationModal from "@/components/ui/DeleteConfirmationModal/DeleteConfirmationModal";
 import useFavorite from "@/hooks/useFavorite/useFavorite";
+import useSearchMatch from "@/hooks/useSearchMatch/useSearchMatch";
 import useSnippetSelection from "@/hooks/useSnippetSelection/useSnippetSelection";
 
 export default function FavoritesPage({
@@ -25,6 +26,16 @@ export default function FavoritesPage({
     selectedSnippets,
   } = useSnippetSelection(snippets);
 
+  const favoriteSnippets = (snippets ?? []).filter((snippet) =>
+    favoriteIds.includes(snippet._id)
+  );
+
+  const { searchedSnippets } = useSearchMatch(favoriteSnippets, search);
+
+  console.log("favoriteIds:", favoriteIds);
+  console.log("favoriteSnippets:", favoriteSnippets);
+  console.log("searchedSnippets:", searchedSnippets);
+
   if (isLoading) {
     return <p className="p-4 text-gray-500">Just a second. Loading...</p>;
   }
@@ -37,8 +48,6 @@ export default function FavoritesPage({
       </div>
     );
   }
-  const favoriteSnippets =
-    snippets.filter((snippet) => favoriteIds.includes(snippet._id)) ?? [];
 
   return (
     <div className="max-w-2xl mx-auto p-4">
@@ -66,8 +75,14 @@ export default function FavoritesPage({
           </p>
         ) : null}
 
+        {searchedSnippets.length === 0 ? (
+          <p className="p-4 textgray-500">
+            No snippets found with this search term. Please try something else.
+          </p>
+        ) : null}
+
         <SnippetsList
-          snippets={favoriteSnippets}
+          snippets={searchedSnippets}
           isDeleteMode={isDeleteMode}
           selectedIds={selectedIds}
           onSelectSnippet={onSelectSnippet}

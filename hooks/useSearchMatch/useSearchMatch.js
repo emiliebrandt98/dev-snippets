@@ -1,4 +1,4 @@
-export default function useSearchMatch(snippets, search) {
+export default function useSearchMatch(snippets, search = "") {
   function getSearchMatch(searchTerm, snippet) {
     const trimmedTerm = searchTerm.trim();
     if (!trimmedTerm) return { isMatch: true, matchedFields: [] };
