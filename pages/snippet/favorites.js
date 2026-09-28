@@ -32,10 +32,6 @@ export default function FavoritesPage({
 
   const { searchedSnippets } = useSearchMatch(favoriteSnippets, search);
 
-  console.log("favoriteIds:", favoriteIds);
-  console.log("favoriteSnippets:", favoriteSnippets);
-  console.log("searchedSnippets:", searchedSnippets);
-
   if (isLoading) {
     return <p className="p-4 text-gray-500">Just a second. Loading...</p>;
   }
