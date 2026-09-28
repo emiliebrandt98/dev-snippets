@@ -71,7 +71,10 @@ export default function FavoritesPage({
           </p>
         ) : null}
 
-        {searchedSnippets.length === 0 ? (
+        {search &&
+        search.trim() !== "" &&
+        favoriteSnippets.length > 0 &&
+        searchedSnippets.length === 0 ? (
           <p className="p-4 textgray-500">
             No snippets found with this search term. Please try something else.
           </p>

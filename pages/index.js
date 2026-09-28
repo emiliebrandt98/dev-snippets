@@ -51,7 +51,10 @@ export default function Home({ snippets, isLoading, error, onSearch, search }) {
           </>
         ) : null}
 
-        {searchedSnippets.length === 0 ? (
+        {search &&
+        search.trim() !== "" &&
+        snippets.length > 0 &&
+        searchedSnippets.length === 0 ? (
           <p className="p-4 textgray-500">
             No snippets found with this search term. Please try something else.
           </p>
