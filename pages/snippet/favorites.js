@@ -6,6 +6,7 @@ import DeleteConfirmationModal from "@/components/ui/DeleteConfirmationModal/Del
 import useFavorite from "@/hooks/useFavorite/useFavorite";
 import useSearchMatch from "@/hooks/useSearchMatch/useSearchMatch";
 import useSnippetSelection from "@/hooks/useSnippetSelection/useSnippetSelection";
+import filterSnippets from "@/lib/filter/filterSnippets";
 
 export default function FavoritesPage({
   snippets,
@@ -32,8 +33,12 @@ export default function FavoritesPage({
   const favoriteSnippets = (snippets ?? []).filter((snippet) =>
     favoriteIds.includes(snippet._id)
   );
+  const filteredSnippets = filterSnippets(
+    favoriteSnippets ?? [],
+    activeFilterItems
+  );
 
-  const { searchedSnippets } = useSearchMatch(favoriteSnippets, search);
+  const { searchedSnippets } = useSearchMatch(filteredSnippets, search);
 
   if (isLoading) {
     return <p className="p-4 text-gray-500">Just a second. Loading...</p>;
@@ -47,6 +52,24 @@ export default function FavoritesPage({
       </div>
     );
   }
+
+  const hasSearch = search && search.trim() !== "";
+
+  const hasActiveFilter =
+    activeFilterItems.languages.length > 0 ||
+    activeFilterItems.tags.length > 0 ||
+    activeFilterItems.years.length > 0;
+
+  const showNoSnippets = !favoriteSnippets || favoriteSnippets.length === 0;
+
+  const showNoFilterResults =
+    !showNoSnippets && hasActiveFilter && filteredSnippets.length === 0;
+
+  const showNoSearchResults =
+    !showNoSnippets &&
+    hasSearch &&
+    filteredSnippets.length > 0 &&
+    searchedSnippets.length === 0;
 
   return (
     <div className="max-w-2xl mx-auto p-4">
@@ -75,18 +98,22 @@ export default function FavoritesPage({
           />
         </section>
 
-        {favoriteSnippets.length === 0 ? (
-          <p className="p-4 textgray-500">
+        {showNoSnippets ? (
+          <p className="text-gray-500">
             There is no favorite snippets. Mark snippets as favorite to view
             them here.
           </p>
         ) : null}
 
-        {search &&
-        search.trim() !== "" &&
-        favoriteSnippets.length > 0 &&
-        searchedSnippets.length === 0 ? (
-          <p className="p-4 textgray-500">
+        {showNoFilterResults ? (
+          <p className="p-4 text-gray-500">
+            No snippets match the selected filters. Try changing or clearing
+            them.
+          </p>
+        ) : null}
+
+        {showNoSearchResults ? (
+          <p className="p-4 text-gray-500">
             No snippets found with this search term. Please try something else.
           </p>
         ) : null}
