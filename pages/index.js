@@ -29,7 +29,6 @@ export default function Home({
   } = useSnippetSelection(snippets);
 
   const filteredSnippets = filterSnippets(snippets ?? [], activeFilterItems);
-  console.log("filteredSnippets:", filteredSnippets);
 
   const { searchedSnippets } = useSearchMatch(filteredSnippets, search);
 
@@ -61,8 +60,8 @@ export default function Home({
       </header>
 
       <main>
-        <section className="flex flex-col mb-4">
-          <div className="flex flex-row items-center gap-2 mb-4">
+        <section className="flex flex-col mb-4 gap-2">
+          <div className="flex flex-row items-center gap-2">
             <div className="flex-1">
               <SearchBar onSearch={onSearch} search={search} />
             </div>

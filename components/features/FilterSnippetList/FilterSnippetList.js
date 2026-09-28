@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { Filter, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import FilterSection from "../FilterSection/FilterSection";
 import { EMPTY_FILTER } from "@/lib/filter/filterSnippets";
@@ -76,13 +76,13 @@ export default function FilterSnippetList({
 
   return (
     <>
-      <div className="flex flex-row items-center justify-between">
+      <div className="flex flex-row items-center justify-between py-2">
         <button
           type="button"
           onClick={handleOpenFilter}
-          className="flex flex-row gap-2 p-2 cursor-pointer justify-center items-center h-8 rounded-lg bg-gray-100 hover:bg-gray-200"
+          className="flex flex-row gap-2 px-3 py-1 cursor-pointer justify-center items-center rounded-lg border border-gray-300 hover:border-gray-100 hover:bg-gray-100"
         >
-          Filter
+          <Filter size={16} /> Filter
           {activeFilterCount > 0 && <span>· {activeFilterCount}</span>}
         </button>
 
@@ -90,7 +90,7 @@ export default function FilterSnippetList({
           <button
             type="button"
             onClick={handleClearFilter}
-            className="underline cursor-pointer p-2"
+            className="px-3 py-1 underline cursor-pointer"
           >
             clear
           </button>
