@@ -13,6 +13,20 @@ function getChipClass(isActive) {
   return `${baseClass} bg-gray-100`;
 }
 
+function getYears(snippets) {
+  const years = [];
+
+  snippets.forEach((snippet) => {
+    const year = new Date(snippet.createdAt).getFullYear();
+
+    if (!years.includes(year)) {
+      years.push(year);
+    }
+  });
+
+  return years.sort((a, b) => a - b);
+}
+
 function FilterSection({
   title,
   items,
@@ -76,6 +90,7 @@ function FilterSection({
 export default function FilterSnippetList({
   onActiveFilterItems,
   activeFilterItems,
+  snippets,
 }) {
   const filterDialogRef = useRef(null);
   const [openFilter, setOpenFilter] = useState(false);
@@ -100,7 +115,7 @@ export default function FilterSnippetList({
     return { id: tag._id, label: tag.name };
   });
 
-  const yearItems = Years.map((year) => {
+  const yearItems = getYears(snippets ?? []).map((year) => {
     return { id: year, label: year };
   });
 
@@ -186,7 +201,7 @@ export default function FilterSnippetList({
 
         <FilterSection
           title="Language"
-          item={languageItems}
+          ites={languageItems}
           selectedIds={draftFilterItems.languages}
           isLoading={isLoadingLanguages}
           error={errorLanguages}
@@ -195,7 +210,7 @@ export default function FilterSnippetList({
         />
         <FilterSection
           title="Language"
-          item={tagItem}
+          items={tagItem}
           selectedIds={draftFilterItems.tags}
           isLoading={isLoadingTags}
           error={errorTags}
@@ -204,7 +219,7 @@ export default function FilterSnippetList({
         />
         <FilterSection
           title="Year"
-          item={yearItems}
+          items={yearItems}
           selectedIds={draftFilterItems.years}
           isLoading={false}
           error={null}
