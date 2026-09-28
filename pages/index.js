@@ -4,8 +4,17 @@ import useSnippetSelection from "@/hooks/useSnippetSelection/useSnippetSelection
 import DeleteButton from "@/components/ui/DeleteButton/DeleteButton";
 import SearchBar from "@/components/features/SearchBar/SearchBar";
 import useSearchMatch from "@/hooks/useSearchMatch/useSearchMatch";
+import FilterSnippetList from "@/components/features/FilterSnippetList/FilterSnippetList";
 
-export default function Home({ snippets, isLoading, error, onSearch, search }) {
+export default function Home({
+  snippets,
+  isLoading,
+  error,
+  onSearch,
+  search,
+  activeFilterItems,
+  onActiveFilterItems,
+}) {
   const {
     isDeleteMode,
     onToggleDeleteMode,
@@ -30,15 +39,23 @@ export default function Home({ snippets, isLoading, error, onSearch, search }) {
       </header>
 
       <main>
-        <section className="flex flex-row items-center gap-2 mb-4">
-          <div className="flex-1">
-            <SearchBar onSearch={onSearch} search={search} />
+        <section className="flex flex-col mb-4">
+          <div className="flex flex-row items-center gap-2 mb-4">
+            <div className="flex-1">
+              <SearchBar onSearch={onSearch} search={search} />
+            </div>
+            <DeleteButton
+              isDeleteMode={isDeleteMode}
+              onToggleDeleteMode={onToggleDeleteMode}
+              selectedIds={selectedIds}
+              setIsModalOpen={setIsModalOpen}
+            />
           </div>
-          <DeleteButton
-            isDeleteMode={isDeleteMode}
-            onToggleDeleteMode={onToggleDeleteMode}
-            selectedIds={selectedIds}
-            setIsModalOpen={setIsModalOpen}
+
+          <FilterSnippetList
+            activeFilterItems={activeFilterItems}
+            onActiveFilterItems={onActiveFilterItems}
+            snippets={snippets}
           />
         </section>
 

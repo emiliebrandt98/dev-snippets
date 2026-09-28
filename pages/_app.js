@@ -3,6 +3,7 @@ import useSWR, { SWRConfig } from "swr";
 import { ToastContainer } from "react-toastify";
 import NavigationBar from "@/components/features/NavigationBar/NavigationBar";
 import { useState } from "react";
+import { EMPTY_FILTER } from "@/components/features/FilterSnippetList/FilterSnippetList";
 
 const fetcher = async (url) => {
   const response = await fetch(url);
@@ -21,6 +22,7 @@ export default function App({ Component, pageProps }) {
   const { data: snippets, error, isLoading } = useSWR("/api/snippets", fetcher);
 
   const [search, setSearch] = useState("");
+  const [activeFilterItems, setActiveFilterItems] = useState(EMPTY_FILTER);
 
   return (
     <SWRConfig value={{ fetcher }}>
@@ -31,6 +33,8 @@ export default function App({ Component, pageProps }) {
           isLoading={isLoading}
           search={search}
           onSearch={setSearch}
+          activeFilterItems={activeFilterItems}
+          onActiveFilterItems={setActiveFilterItems}
           {...pageProps}
         />
       </div>
