@@ -29,7 +29,7 @@ export default function SnippetForm({
     touchAllFields,
     isFieldInvalid,
     isFieldValid,
-    isFormVaild,
+    isFormValid,
   } = useRequiredFieldsValidation(
     initialValues || {
       title: "",
@@ -106,7 +106,7 @@ export default function SnippetForm({
     event.preventDefault();
     touchAllFields();
 
-    if (!isFormVaild) return;
+    if (!isFormValid) return;
 
     setIsLoadingSubmit(true);
 
@@ -254,7 +254,7 @@ export default function SnippetForm({
       <div className="flex flex-col gap-3 mt-4">
         <button
           type="submit"
-          disabled={isLoadingSubmit || !isFormVaild}
+          disabled={isLoadingSubmit || !isFormValid}
           className="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 rounded-md transition-colors shadow-md disabled:opacity-50"
         >
           {isLoadingSubmit

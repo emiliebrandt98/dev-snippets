@@ -1,6 +1,10 @@
 import { useState } from "react";
 
-export function useRequiredFieldsValidation(initialValues, requiredFields) {
+export function useRequiredFieldsValidation(
+  initialValues,
+  requiredFields,
+  fieldRules = {}
+) {
   const [formValues, setFormValues] = useState(initialValues);
   const [touchedValidation, setTouchedValidation] = useState(
     Object.fromEntries(requiredFields.map((field) => [field, false]))
@@ -25,15 +29,30 @@ export function useRequiredFieldsValidation(initialValues, requiredFields) {
     return formValues[field]?.toString().trim() === "";
   }
 
+  function hasFieldRuleError(field) {
+    const rule = fieldRules[field];
+    if (!rule) return false;
+    return !rule(formValues[field]);
+  }
+
   function isFieldInvalid(field) {
-    return touchedValidation[field] && isFieldEmpty(field);
+    return (
+      touchedValidation[field] &&
+      (isFieldEmpty(field) || hasFieldRuleError(field))
+    );
   }
 
   function isFieldValid(field) {
-    return touchedValidation[field] && !isFieldEmpty(field);
+    return (
+      touchedValidation[field] &&
+      !isFieldEmpty(field) &&
+      !hasFieldRuleError(field)
+    );
   }
 
-  const isFormVaild = requiredFields.every((field) => !isFieldEmpty(field));
+  const isFormValid = requiredFields.every(
+    (field) => !isFieldEmpty(field) && !hasFieldRuleError(field)
+  );
 
   return {
     formValues,
@@ -43,6 +62,6 @@ export function useRequiredFieldsValidation(initialValues, requiredFields) {
     touchAllFields,
     isFieldInvalid,
     isFieldValid,
-    isFormVaild,
+    isFormValid,
   };
 }

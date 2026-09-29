@@ -24,6 +24,8 @@ export default function App({ Component, pageProps }) {
 
   const [search, setSearch] = useState("");
   const [activeFilterItems, setActiveFilterItems] = useState(EMPTY_FILTER);
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   return (
     <SessionProvider session={pageProps.session}>
@@ -32,7 +34,11 @@ export default function App({ Component, pageProps }) {
           <Component
             snippets={snippets}
             error={error}
+            isLoadingSubmit={isLoadingSubmit}
+            onIsLoadingSubmit={setIsLoadingSubmit}
             isLoading={isLoading}
+            errorMessage={errorMessage}
+            onSetErrorMessage={setErrorMessage}
             search={search}
             onSearch={setSearch}
             activeFilterItems={activeFilterItems}

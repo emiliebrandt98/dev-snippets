@@ -1,33 +1,55 @@
-import FormField from "@/components/ui/FormField/FormField";
 import { signIn } from "next-auth/react";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import Link from "next/link";
+import FormField from "@/components/ui/FormField/FormField";
+import { getInputStateClasses } from "@/components/ui/getInputStateClasses/getInputStateClasses";
+import { useRequiredFieldsValidation } from "@/hooks/useRequiredFieldsValidation/useRequiredFieldsValidation";
 
-export default function LoginPage() {
+const initialValues = { email: "", password: "" };
+const requiredFields = ["email", "password"];
+const fieldRules = {
+  email: (value) => /^\S+@\S+\.\S+$/.test(value),
+};
+
+export default function LoginPage({
+  isLoadingSubmit,
+  onIsLoadingSubmit,
+  errorMessage,
+  onSetErrorMessage,
+}) {
   const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState("");
+
+  const {
+    formValues,
+    handleChange,
+    handleBlurValidation,
+    touchAllFields,
+    isFieldInvalid,
+    isFormValid,
+  } = useRequiredFieldsValidation(initialValues, requiredFields, fieldRules);
 
   async function handleSubmit(event) {
     event.preventDefault();
-    setErrorMessage("");
+    onSetErrorMessage("");
+    touchAllFields();
 
-    const formData = new FormData(event.target);
-    const email = formData.get("email");
-    const password = formData.get("password");
+    if (!isFormValid) return;
+
+    onIsLoadingSubmit(true);
 
     const result = await signIn("credentials", {
-      email: email,
-      password: password,
+      email: formValues.email,
+      password: formValues.password,
       redirect: false,
     });
 
     if (result.error) {
-      setErrorMessage("Invalid E-Mail or password.");
+      onSetErrorMessage("Invalid E-Mail or password.");
+      onIsLoadingSubmit(false);
       return;
     }
 
-    router.pus("/");
+    router.push("/");
   }
 
   return (
@@ -39,39 +61,63 @@ export default function LoginPage() {
         Please enter your credentials to log in.
       </p>
 
-      <form onSubmit={handleSubmit} className="mt-8">
-        <FormField>
+      <form
+        onSubmit={handleSubmit}
+        noValidate
+        className="mt-8 flex flex-col gap-6"
+      >
+        <FormField
+          label="E-Mail"
+          htmlFor="email"
+          error={isFieldInvalid("email") ? "Please enter a valid E-Mail." : ""}
+        >
           <input
             id="email"
             name="email"
             type="email"
-            required
+            value={formValues.email}
+            onChange={handleChange}
+            onBlur={() => handleBlurValidation("email")}
             placeholder="Enter your E-Mail"
-            className="mb-6 mt-3 w-full rounded-md border border-gray-600 px-4 py-3"
+            className={`w-full rounded-md border px-4 py-3 ${getInputStateClasses(
+              isFieldInvalid("email"),
+              false
+            )}`}
           />
         </FormField>
-        <FormField>
+
+        <FormField
+          label="Password"
+          htmlFor="password"
+          error={isFieldInvalid("password") ? "Password is required." : ""}
+        >
           <input
             id="password"
             name="password"
             type="password"
-            required
+            value={formValues.password}
+            onChange={handleChange}
+            onBlur={() => handleBlurValidation("password")}
             placeholder="Enter your Password"
-            className="mb-6 mt-3 w-full rounded-md border border-gray-600 px-4 py-3"
+            className={`w-full rounded-md border px-4 py-3 ${getInputStateClasses(
+              isFieldInvalid("password"),
+              false
+            )}`}
           />
         </FormField>
 
         {errorMessage && (
-          <p role="alert" className="mb-4 text-red-600">
+          <p role="alert" className="text-red-600">
             {errorMessage}
           </p>
         )}
 
         <button
           type="submit"
-          className="w-full rounded-md bg-gray-600 py-3 text-xl font-semibold text-white"
+          disabled={isLoadingSubmit}
+          className="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 rounded-md transition-colors shadow-md disabled:opacity-50"
         >
-          Login
+          {isLoadingSubmit ? "Loading..." : "Login"}
         </button>
       </form>
 
