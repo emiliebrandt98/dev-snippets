@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import FormField from "@/components/ui/FormField/FormField";
 import { getInputStateClasses } from "@/components/ui/getInputStateClasses/getInputStateClasses";
@@ -66,6 +67,7 @@ export default function RegisterPage({
 
       router.push("/");
     } catch (error) {
+      console.error(error);
       onSetErrorMessage("Something went wrong. Please try again.");
       onIsLoadingSubmit(false);
     }
