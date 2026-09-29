@@ -4,7 +4,8 @@ import { ToastContainer } from "react-toastify";
 import NavigationBar from "@/components/features/NavigationBar/NavigationBar";
 import { useState } from "react";
 import { EMPTY_FILTER } from "@/lib/filter/filterSnippets";
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider, useSession } from "next-auth/react";
+import AuthGuard from "@/components/AuthGuard/AuthGuard";
 
 const fetcher = async (url) => {
   const response = await fetch(url);
@@ -19,8 +20,13 @@ const fetcher = async (url) => {
   return response.json();
 };
 
-export default function App({ Component, pageProps }) {
-  const { data: snippets, error, isLoading } = useSWR("/api/snippets", fetcher);
+function AppContent({ Component, pageProps }) {
+  const { status } = useSession();
+  const {
+    data: snippets,
+    error,
+    isLoading,
+  } = useSWR(status === "authenticated" ? "/api/snippets" : null, fetcher);
 
   const [search, setSearch] = useState("");
   const [activeFilterItems, setActiveFilterItems] = useState(EMPTY_FILTER);
@@ -28,7 +34,7 @@ export default function App({ Component, pageProps }) {
   const [errorMessage, setErrorMessage] = useState("");
 
   return (
-    <SessionProvider session={pageProps.session}>
+    <AuthGuard>
       <SWRConfig value={{ fetcher }}>
         <div className="pb-16 mb-6">
           <Component
@@ -61,6 +67,13 @@ export default function App({ Component, pageProps }) {
           theme="light"
         />
       </SWRConfig>
+    </AuthGuard>
+  );
+}
+export default function App({ Component, pageProps }) {
+  return (
+    <SessionProvider session={pageProps.session}>
+      <AppContent Component={Component} pageProps={pageProps} />
     </SessionProvider>
   );
 }

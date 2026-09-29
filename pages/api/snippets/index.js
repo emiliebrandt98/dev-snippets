@@ -21,7 +21,7 @@ export default async function handler(request, response) {
 
   if (request.method === "GET") {
     try {
-      const snippets = await Snippet.find()
+      const snippets = await Snippet.find({ userId: session.user.id })
         .populate("language")
         .populate("tags")
         .sort({ createdAt: -1 });
@@ -38,8 +38,7 @@ export default async function handler(request, response) {
     try {
       const snippetsData = request.body;
 
-      //Dummy-User
-      snippetsData.userId = "60c72b2f9b1d8b2d88f12345";
+      snippetsData.userId = session.user.id;
 
       const newSnippet = await Snippet.create(snippetsData);
 
@@ -72,6 +71,7 @@ export default async function handler(request, response) {
 
       const deletedSnippet = await Snippet.deleteMany({
         _id: { $in: snippetIds },
+        userId: session.user.id,
       });
 
       response.status(200).json(deletedSnippet);
