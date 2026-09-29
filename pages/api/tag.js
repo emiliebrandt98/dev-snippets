@@ -1,7 +1,16 @@
 import dbConnect from "@/db/connect";
 import Tag from "@/db/models/Tag";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./auth/[...nextauth]";
 
 export default async function handler(request, response) {
+  const session = await getServerSession(request, response, authOptions);
+
+  if (!session) {
+    response.status(401).json({ message: "Not authenticated." });
+    return;
+  }
+
   try {
     await dbConnect();
   } catch (error) {
