@@ -123,6 +123,11 @@ export default function LoginRegisterForm({
           htmlFor="password"
           error={isFieldInvalid("password") ? passwordError : ""}
         >
+          {isRegister && (
+            <p className="text-gray-500 text-sm">
+              Your password must be at least 8 characters long.
+            </p>
+          )}
           <input
             id="password"
             name="password"
