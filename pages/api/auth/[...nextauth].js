@@ -13,13 +13,20 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials || !credentials.email || !credentials.password) {
+        if (
+          !credentials ||
+          typeof credentials.email !== "string" ||
+          typeof credentials.password !== "string"
+        ) {
           return null;
         }
 
+        const email = credentials.email.trim().toLowerCase();
+
         await dbConnect();
 
-        const user = await User.findOne({ email: credentials.email });
+        const user = await User.findOne({ email: email });
+
         if (!user) {
           return null;
         }
