@@ -1,5 +1,4 @@
 import FormField from "@/components/ui/FormField/FormField";
-import { getInputStateClasses } from "@/components/ui/getInputStateClasses/getInputStateClasses";
 import { useRequiredFieldsValidation } from "@/hooks/useRequiredFieldsValidation/useRequiredFieldsValidation";
 import Link from "next/link";
 
@@ -69,10 +68,13 @@ export default function LoginRegisterForm({
                 onChange={handleChange}
                 onBlur={() => handleBlurValidation("firstName")}
                 placeholder="e.g. Max"
-                className={`w-full rounded-md border px-4 py-3 ${getInputStateClasses(
-                  isFieldInvalid("firstName"),
-                  isFieldValid("firstName")
-                )}`}
+                className={`w-full rounded-md border px-4 py-3 ${
+                  isFieldInvalid("firstName")
+                    ? "border-red-500 bg-red-50"
+                    : isFieldValid("firstName")
+                      ? "border-green-600 bg-green-50"
+                      : "border-gray-300"
+                }`}
               />
             </FormField>
 
@@ -89,10 +91,13 @@ export default function LoginRegisterForm({
                 onChange={handleChange}
                 onBlur={() => handleBlurValidation("lastName")}
                 placeholder="e.g. Meier"
-                className={`w-full rounded-md border px-4 py-3 ${getInputStateClasses(
-                  isFieldInvalid("lastName"),
-                  isFieldValid("lastName")
-                )}`}
+                className={`w-full rounded-md border px-4 py-3 ${
+                  isFieldInvalid("lastName")
+                    ? "border-red-500 bg-red-50"
+                    : isFieldValid("lastName")
+                      ? "border-green-600 bg-green-50"
+                      : "border-gray-300"
+                }`}
               />
             </FormField>
           </>
@@ -111,10 +116,13 @@ export default function LoginRegisterForm({
             onChange={handleChange}
             onBlur={() => handleBlurValidation("email")}
             placeholder="Enter your E-Mail"
-            className={`w-full rounded-md border px-4 py-3 ${getInputStateClasses(
-              isFieldInvalid("email"),
-              isRegister && isFieldValid("email")
-            )}`}
+            className={`w-full rounded-md border px-4 py-3 ${
+              isFieldInvalid("email")
+                ? "border-red-500 bg-red-50"
+                : isRegister && isFieldValid("email")
+                  ? "border-green-600 bg-green-50"
+                  : "border-gray-300"
+            }`}
           />
         </FormField>
 
@@ -136,10 +144,13 @@ export default function LoginRegisterForm({
             onChange={handleChange}
             onBlur={() => handleBlurValidation("password")}
             placeholder="Enter your Password"
-            className={`w-full rounded-md border px-4 py-3 ${getInputStateClasses(
-              isFieldInvalid("password"),
-              isRegister && isFieldValid("password")
-            )}`}
+            className={`w-full rounded-md border px-4 py-3 ${
+              isFieldInvalid("password")
+                ? "border-red-500 bg-red-50"
+                : isRegister && isFieldValid("password")
+                  ? "border-green-600 bg-green-50"
+                  : "border-gray-300"
+            }`}
           />
         </FormField>
 
