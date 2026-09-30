@@ -9,11 +9,10 @@ export default function AuthGuard({ children }) {
   const { status } = useSession();
   const isPublicRoute = publicRoutes.includes(router.pathname);
 
-  useEffect(() => {
-    if (status === "unauthenticated" && !isPublicRoute) {
-      router.replace("/login");
-    }
-  }, [status, isPublicRoute, router]);
+  if (status === "unauthenticated" && !isPublicRoute) {
+    router.replace("/login");
+    return null;
+  }
 
   if (isPublicRoute) {
     return children;

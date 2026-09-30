@@ -45,7 +45,7 @@ export default function RegisterPage({
         return;
       }
 
-      router.push("/");
+      router.push("/login");
     } catch (error) {
       console.error(error);
       onSetErrorMessage("Something went wrong. Please try again.");
