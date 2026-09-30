@@ -26,7 +26,6 @@ export const authOptions = {
         await dbConnect();
 
         const user = await User.findOne({ email: email });
-
         if (!user) {
           return null;
         }
