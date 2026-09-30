@@ -1,8 +1,18 @@
 import dbConnect from "@/db/connect";
 import Snippet from "@/db/models/Snippet";
 import "@/db/models/Tag";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]";
+import { areTagsOwnedByUser } from "@/lib/tags/areTagsOwnedByUser";
 
 export default async function handler(request, response) {
+  const session = await getServerSession(request, response, authOptions);
+
+  if (!session) {
+    response.status(401).json({ message: "Not authenticated." });
+    return;
+  }
+
   try {
     await dbConnect();
   } catch (error) {
@@ -14,7 +24,10 @@ export default async function handler(request, response) {
 
   try {
     if (request.method === "GET") {
-      const snippet = await Snippet.findById(id)
+      const snippet = await Snippet.findOne({
+        _id: id,
+        userId: session.user.id,
+      })
         .populate("language")
         .populate("tags");
 
@@ -30,10 +43,26 @@ export default async function handler(request, response) {
     if (request.method === "PUT") {
       const snippetData = request.body;
 
-      const snippet = await Snippet.findByIdAndUpdate(id, snippetData, {
-        new: true,
-        runValidators: true,
-      });
+      snippetData.userId = session.user.id;
+
+      const tagsAreValid = await areTagsOwnedByUser(
+        snippetData.tags || [],
+        session.user.id
+      );
+
+      if (!tagsAreValid) {
+        response.status(400).json({ error: "Invalid tags." });
+        return;
+      }
+
+      const snippet = await Snippet.findOneAndUpdate(
+        { _id: id, userId: session.user.id },
+        snippetData,
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
 
       if (!snippet) {
         response.status(404).json({ status: "Error editing Snippet." });

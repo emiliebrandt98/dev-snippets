@@ -2,7 +2,6 @@ import Link from "next/link";
 import { useState } from "react";
 import useSWR, { mutate } from "swr";
 import FormField from "@/components/ui/FormField/FormField";
-import { getInputStateClasses } from "@/components/ui/getInputStateClasses/getInputStateClasses";
 import { useRequiredFieldsValidation } from "@/hooks/useRequiredFieldsValidation/useRequiredFieldsValidation";
 import MultiSelect from "../MultiSelect/MultiSelect";
 import { toast } from "react-toastify";
@@ -29,7 +28,7 @@ export default function SnippetForm({
     touchAllFields,
     isFieldInvalid,
     isFieldValid,
-    isFormVaild,
+    isFormValid,
   } = useRequiredFieldsValidation(
     initialValues || {
       title: "",
@@ -106,7 +105,7 @@ export default function SnippetForm({
     event.preventDefault();
     touchAllFields();
 
-    if (!isFormVaild) return;
+    if (!isFormValid) return;
 
     setIsLoadingSubmit(true);
 
@@ -139,10 +138,13 @@ export default function SnippetForm({
           value={formValues.title}
           onChange={handleChange}
           onBlur={() => handleBlurValidation("title")}
-          className={`border rounded-md p-2 focus:outline-none focus:ring-1 ${getInputStateClasses(
-            isFieldInvalid("title"),
-            isFieldValid("title")
-          )}`}
+          className={`border rounded-md p-2 focus:outline-none focus:ring-1 ${
+            isFieldInvalid("title")
+              ? "border-red-500 bg-red-50"
+              : isFieldValid("title")
+                ? "border-green-600 bg-green-50"
+                : "border-gray-300"
+          }`}
         />
       </FormField>
 
@@ -158,10 +160,13 @@ export default function SnippetForm({
           required
           onChange={handleChange}
           onBlur={() => handleBlurValidation("language")}
-          className={`border rounded-md p-2 bg-white focus:outline-none focus:ring-1 focus:ring-black ${getInputStateClasses(
-            isFieldInvalid("language"),
-            isFieldValid("language")
-          )}`}
+          className={`border rounded-md p-2 focus:outline-none focus:ring-1 ${
+            isFieldInvalid("language")
+              ? "border-red-500 bg-red-50"
+              : isFieldValid("language")
+                ? "border-green-600 bg-green-50"
+                : "border-gray-300"
+          }`}
         >
           <option value="" disabled>
             Please select a language
@@ -191,10 +196,13 @@ export default function SnippetForm({
           value={formValues.code}
           onChange={handleChange}
           onBlur={() => handleBlurValidation("code")}
-          className={`border rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black font-mono text-sm ${getInputStateClasses(
-            isFieldInvalid("code"),
-            isFieldValid("code")
-          )}`}
+          className={`border rounded-md p-2 focus:outline-none focus:ring-1 ${
+            isFieldInvalid("code")
+              ? "border-red-500 bg-red-50"
+              : isFieldValid("code")
+                ? "border-green-600 bg-green-50"
+                : "border-gray-300"
+          } `}
         />
       </FormField>
 
@@ -254,7 +262,7 @@ export default function SnippetForm({
       <div className="flex flex-col gap-3 mt-4">
         <button
           type="submit"
-          disabled={isLoadingSubmit || !isFormVaild}
+          disabled={isLoadingSubmit || !isFormValid}
           className="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 rounded-md transition-colors shadow-md disabled:opacity-50"
         >
           {isLoadingSubmit

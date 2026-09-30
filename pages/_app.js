@@ -4,6 +4,8 @@ import { ToastContainer } from "react-toastify";
 import NavigationBar from "@/components/features/NavigationBar/NavigationBar";
 import { useState } from "react";
 import { EMPTY_FILTER } from "@/lib/filter/filterSnippets";
+import { SessionProvider, useSession } from "next-auth/react";
+import AuthGuard from "@/components/AuthGuard/AuthGuard";
 
 const fetcher = async (url) => {
   const response = await fetch(url);
@@ -18,40 +20,60 @@ const fetcher = async (url) => {
   return response.json();
 };
 
-export default function App({ Component, pageProps }) {
-  const { data: snippets, error, isLoading } = useSWR("/api/snippets", fetcher);
+function AppContent({ Component, pageProps }) {
+  const { status } = useSession();
+  const {
+    data: snippets,
+    error,
+    isLoading,
+  } = useSWR(status === "authenticated" ? "/api/snippets" : null, fetcher);
 
   const [search, setSearch] = useState("");
   const [activeFilterItems, setActiveFilterItems] = useState(EMPTY_FILTER);
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   return (
-    <SWRConfig value={{ fetcher }}>
-      <div className="pb-16 mb-6">
-        <Component
-          snippets={snippets}
-          error={error}
-          isLoading={isLoading}
-          search={search}
-          onSearch={setSearch}
-          activeFilterItems={activeFilterItems}
-          onActiveFilterItems={setActiveFilterItems}
-          {...pageProps}
-        />
-      </div>
-      <NavigationBar />
+    <AuthGuard>
+      <SWRConfig value={{ fetcher }}>
+        <div className="pb-16 mb-6">
+          <Component
+            snippets={snippets}
+            error={error}
+            isLoadingSubmit={isLoadingSubmit}
+            onIsLoadingSubmit={setIsLoadingSubmit}
+            isLoading={isLoading}
+            errorMessage={errorMessage}
+            onSetErrorMessage={setErrorMessage}
+            search={search}
+            onSearch={setSearch}
+            activeFilterItems={activeFilterItems}
+            onActiveFilterItems={setActiveFilterItems}
+            {...pageProps}
+          />
+        </div>
+        <NavigationBar />
 
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss={false}
-        draggable={false}
-        pauseOnHover
-        theme="light"
-      />
-    </SWRConfig>
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss={false}
+          draggable={false}
+          pauseOnHover
+          theme="light"
+        />
+      </SWRConfig>
+    </AuthGuard>
+  );
+}
+export default function App({ Component, pageProps }) {
+  return (
+    <SessionProvider session={pageProps.session}>
+      <AppContent Component={Component} pageProps={pageProps} />
+    </SessionProvider>
   );
 }

@@ -1,8 +1,18 @@
 import dbConnect from "@/db/connect";
 import Snippet from "@/db/models/Snippet";
 import "@/db/models/Tag";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]";
+import { areTagsOwnedByUser } from "@/lib/tags/areTagsOwnedByUser";
 
 export default async function handler(request, response) {
+  const session = await getServerSession(request, response, authOptions);
+
+  if (!session) {
+    response.status(401).json({ message: "Not authenticated." });
+    return;
+  }
+
   try {
     await dbConnect();
   } catch (error) {
@@ -12,7 +22,7 @@ export default async function handler(request, response) {
 
   if (request.method === "GET") {
     try {
-      const snippets = await Snippet.find()
+      const snippets = await Snippet.find({ userId: session.user.id })
         .populate("language")
         .populate("tags")
         .sort({ createdAt: -1 });
@@ -29,8 +39,17 @@ export default async function handler(request, response) {
     try {
       const snippetsData = request.body;
 
-      //Dummy-User
-      snippetsData.userId = "60c72b2f9b1d8b2d88f12345";
+      snippetsData.userId = session.user.id;
+
+      const tagsAreValid = await areTagsOwnedByUser(
+        snippetsData.tags || [],
+        session.user.id
+      );
+
+      if (!tagsAreValid) {
+        response.status(400).json({ error: "Invalid tags." });
+        return;
+      }
 
       const newSnippet = await Snippet.create(snippetsData);
 
@@ -63,6 +82,7 @@ export default async function handler(request, response) {
 
       const deletedSnippet = await Snippet.deleteMany({
         _id: { $in: snippetIds },
+        userId: session.user.id,
       });
 
       response.status(200).json(deletedSnippet);
