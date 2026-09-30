@@ -52,7 +52,7 @@ export default function SnippetPage() {
 
         <div className="flex items-start justify-between">
           <div>
-            <p className="m4-4 text-sm tex-gray 500">{`${formattedDate} · ${language?.name}`}</p>
+            <p className="m4-4 text-sm text-gray-500">{`${formattedDate} · ${language?.name}`}</p>
 
             <h1 className="text-xl font-bold mt-1">{title}</h1>
           </div>
