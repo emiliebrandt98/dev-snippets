@@ -3,6 +3,7 @@ import Snippet from "@/db/models/Snippet";
 import "@/db/models/Tag";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
+import { areTagsOwnedByUser } from "@/lib/tags/areTagsOwnedByUser";
 
 export default async function handler(request, response) {
   const session = await getServerSession(request, response, authOptions);
@@ -39,6 +40,16 @@ export default async function handler(request, response) {
       const snippetsData = request.body;
 
       snippetsData.userId = session.user.id;
+
+      const tagsAreValid = await areTagsOwnedByUser(
+        snippetsData.tags || [],
+        session.user.id
+      );
+
+      if (!tagsAreValid) {
+        response.status(400).json({ error: "Invalid tags." });
+        return;
+      }
 
       const newSnippet = await Snippet.create(snippetsData);
 

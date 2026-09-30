@@ -20,7 +20,9 @@ export default async function handler(request, response) {
 
   if (request.method === "GET") {
     try {
-      const tags = await Tag.find().sort({ createdAt: -1 });
+      const tags = await Tag.find({ userId: session.user.id }).sort({
+        createdAt: -1,
+      });
       response.status(200).json(tags);
       return;
     } catch (error) {
@@ -33,12 +35,18 @@ export default async function handler(request, response) {
   if (request.method === "POST") {
     try {
       const tagsData = request.body;
+      tagsData.userId = session.user.id;
       const newTag = await Tag.create(tagsData);
 
       response.status(201).json(newTag);
       return;
     } catch (error) {
       console.error(error);
+
+      if (error.code === 11000) {
+        response.status(409).json({ error: "This tag already exists." });
+        return;
+      }
 
       if (error.name === "ValidationError") {
         response.status(400).json({ error: error.message });
@@ -53,8 +61,16 @@ export default async function handler(request, response) {
     try {
       const { tagIds } = request.body;
 
-      const deletedTag = await Tag.findByIdAndDelete(tagIds);
-      response.status(200).json(deletedTag);
+      if (!tagIds || !Array.isArray(tagIds) || tagIds.length === 0) {
+        response.status(400).json({ error: "No tag ids provided." });
+        return;
+      }
+
+      const result = await Tag.deleteMany({
+        _id: { $in: tagIds },
+        userId: session.user.id,
+      });
+      response.status(200).json(result);
       return;
     } catch (error) {
       console.error(error);
