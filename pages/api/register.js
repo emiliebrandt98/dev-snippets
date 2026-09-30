@@ -1,7 +1,6 @@
 import bcrypt from "bcryptjs";
 import dbConnect from "@/db/connect";
 import User from "@/db/models/User";
-import { resolve } from "styled-jsx/css";
 
 const EMAIL_PATTERN = /^\S+@\S+\.\S+$/;
 

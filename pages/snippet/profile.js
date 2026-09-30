@@ -17,7 +17,7 @@ export default function ProfilePage() {
   async function handleDeleteAccountConfirm() {
     setIsDeletingAccount(true);
     try {
-      const response = await fetch("/api/user/delete", { method: "DELETE" });
+      const response = await fetch("/api/user", { method: "DELETE" });
 
       if (!response.ok) throw new Error("Failed to delete account");
 
