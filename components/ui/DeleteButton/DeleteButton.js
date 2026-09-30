@@ -1,4 +1,3 @@
-import useSnippetSelection from "@/hooks/useSnippetSelection/useSnippetSelection";
 import { X, Trash } from "lucide-react";
 
 export default function DeleteButton({
