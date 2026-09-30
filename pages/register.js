@@ -1,6 +1,6 @@
-import { useRequiredFieldsValidation } from "@/hooks/useRequiredFieldsValidation/useRequiredFieldsValidation";
 import LoginRegisterForm from "@/components/features/LoginRegisterForm/LoginRegisterForm";
 import { useRouter } from "next/router";
+import { signIn } from "next-auth/react";
 
 const initialValues = { firstName: "", lastName: "", email: "", password: "" };
 const requiredFields = ["firstName", "lastName", "email", "password"];
