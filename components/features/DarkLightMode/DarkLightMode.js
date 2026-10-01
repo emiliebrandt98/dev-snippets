@@ -1,18 +1,3 @@
-import { useEffect, useState } from "react";
-
-function applyTheme(selectedMode) {
-  let theme = selectedMode;
-
-  if (selectedMode === "automatic") {
-    const systemPrefersDark = window.matchMedia(
-      "(prefers-color-schema: dark)"
-    ).matches;
-    theme = systemPrefersDark ? "dark" : "light";
-  }
-
-  document.documentElement.setAttribute("data-theme", theme);
-}
-
 export default function DarkLightMode({ onToggleColorMode, mode }) {
   return (
     <div className="flex flex-row justify-around">

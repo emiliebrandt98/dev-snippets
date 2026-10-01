@@ -21,6 +21,19 @@ const fetcher = async (url) => {
   return response.json();
 };
 
+function applyTheme(selectedMode) {
+  let theme = selectedMode;
+
+  if (selectedMode === "automatic") {
+    const systemPrefersDark = window.matchMedia(
+      "(prefers-color-schema: dark)"
+    ).matches;
+    theme = systemPrefersDark ? "dark" : "light";
+  }
+
+  document.documentElement.setAttribute("data-theme", theme);
+}
+
 function AppContent({ Component, pageProps }) {
   const { status } = useSession();
   const {
