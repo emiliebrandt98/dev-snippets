@@ -1,43 +1,16 @@
-import { useState } from "react";
-
 export default function DeleteConfirmationModal({
   onClose,
   onConfirm,
-  selectedSnippets,
   isDeleting,
+  title = "Are you sure?",
+  children,
 }) {
-  const [showAllTitles, setShowAllTitles] = useState(false);
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
       <div className="bg-white rounded-lg p-6 max-w-md w-full shadow-xl">
-        <h3 className="text-lg font-bold mb-2">Are you sure?</h3>
-        <p className="text-sm text-gray-600 mb-4">
-          You are about to delete the following snippet(s):
-        </p>
-        <ul className="max-h-48 overflow-y-auto border border-gray-200 rounded p-2 mb-4 text-sm bg-gray-50">
-          {(showAllTitles
-            ? selectedSnippets
-            : selectedSnippets.slice(0, 10)
-          ).map((snippet) => (
-            <li
-              key={snippet._id}
-              className="py-1 font-medium text-gray-800 truncate"
-            >
-              • {snippet.title}
-            </li>
-          ))}
-        </ul>
+        <h3 className="text-lg font-bold mb-2">{title}</h3>
 
-        {selectedSnippets.length > 10 && !showAllTitles && (
-          <button
-            type="button"
-            onClick={() => setShowAllTitles(true)}
-            className="text-xs text-blue-600 hover:underline mb-4 block"
-          >
-            Show more ({selectedSnippets.length - 10} more)
-          </button>
-        )}
+        <div className="text-sm text-gray-600 mb-4">{children} </div>
 
         <div className="flex items-center justify-end gap-2 mb-4">
           <button
@@ -47,6 +20,7 @@ export default function DeleteConfirmationModal({
           >
             Cancel
           </button>
+
           <button
             type="button"
             onClick={onConfirm}

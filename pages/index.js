@@ -29,24 +29,20 @@ export default function Home({
   } = useSnippetSelection(snippets);
 
   const filteredSnippets = filterSnippets(snippets ?? [], activeFilterItems);
-
   const { searchedSnippets } = useSearchMatch(filteredSnippets, search);
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error fetching data.</p>;
 
   const hasSearch = search && search.trim() !== "";
-
   const hasActiveFilter =
     activeFilterItems.languages.length > 0 ||
     activeFilterItems.tags.length > 0 ||
     activeFilterItems.years.length > 0;
 
   const showNoSnippets = !snippets || snippets.length === 0;
-
   const showNoFilterResults =
     !showNoSnippets && hasActiveFilter && filteredSnippets.length === 0;
-
   const showNoSearchResults =
     !showNoSnippets &&
     hasSearch &&
@@ -114,9 +110,16 @@ export default function Home({
         <DeleteConfirmationModal
           onClose={() => setIsModalOpen(false)}
           onConfirm={onDeleteConfirmed}
-          selectedSnippets={selectedSnippets}
           isDeleting={isDeleting}
-        />
+          title="Delete Snippets"
+        >
+          <p>You are about to delete the following snippets:</p>
+          <ul className="list-disc pl-5 mt-2">
+            {selectedSnippets.map((snippet) => (
+              <li key={snippet._id}>{snippet.title}</li>
+            ))}
+          </ul>
+        </DeleteConfirmationModal>
       )}
     </div>
   );
