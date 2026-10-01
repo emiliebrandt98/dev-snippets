@@ -5,8 +5,9 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import DeleteConfirmationModal from "@/components/ui/DeleteConfirmationModal/DeleteConfirmationModal";
 import { useState } from "react";
+import Statistics from "@/components/ui/Statistics/Statistics";
 
-export default function ProfilePage() {
+export default function ProfilePage({ snippets = [], favoriteSnippets }) {
   const { data: session } = useSession();
 
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
@@ -60,6 +61,8 @@ export default function ProfilePage() {
       </header>
 
       <main className="flex flex-col gap-8">
+        <Statistics snippets={snippets} favoriteSnippets={favoriteSnippets} />
+
         <section className="flex flex-col gap-6">
           <div>
             <p className="m4-4 text-sm text-gray-500">Name</p>

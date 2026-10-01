@@ -6,6 +6,7 @@ import { useState } from "react";
 import { EMPTY_FILTER } from "@/lib/filter/filterSnippets";
 import { SessionProvider, useSession } from "next-auth/react";
 import AuthGuard from "@/components/AuthGuard/AuthGuard";
+import useFavorite from "@/hooks/useFavorite/useFavorite";
 
 const fetcher = async (url) => {
   const response = await fetch(url);
@@ -27,6 +28,11 @@ function AppContent({ Component, pageProps }) {
     error,
     isLoading,
   } = useSWR(status === "authenticated" ? "/api/snippets" : null, fetcher);
+  const { favoriteIds } = useFavorite();
+
+  const favoriteSnippets = (snippets ?? []).filter((snippet) =>
+    favoriteIds.includes(snippet._id)
+  );
 
   const [search, setSearch] = useState("");
   const [activeFilterItems, setActiveFilterItems] = useState(EMPTY_FILTER);
@@ -49,6 +55,7 @@ function AppContent({ Component, pageProps }) {
             onSearch={setSearch}
             activeFilterItems={activeFilterItems}
             onActiveFilterItems={setActiveFilterItems}
+            favoriteSnippets={favoriteSnippets}
             {...pageProps}
           />
         </div>
