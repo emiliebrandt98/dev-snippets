@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import DeleteConfirmationModal from "@/components/ui/DeleteConfirmationModal/DeleteConfirmationModal";
 import { useState } from "react";
 import Statistics from "@/components/ui/Statistics/Statistics";
+import DarkLightMode from "@/components/features/DarkLightMode/DarkLightMode";
 
 export default function ProfilePage({ snippets = [], favoriteSnippets }) {
   const { data: session } = useSession();
@@ -64,6 +65,16 @@ export default function ProfilePage({ snippets = [], favoriteSnippets }) {
             <p className="m4-4 text-sm text-gray-500">E-Mail</p>
             <p>{session.user.email}</p>
           </div>
+        </section>
+
+        <hr className="text-gray-300" />
+
+        <section>
+          <h2 className="text-xl font-bold">Apperance</h2>
+          <p className="text-sm text-gray-500">
+            Choose a design for DevSnippets.{" "}
+          </p>
+          <DarkLightMode />
         </section>
 
         <hr className="text-gray-300" />
