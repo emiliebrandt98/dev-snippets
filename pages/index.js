@@ -116,7 +116,7 @@ export default function Home({
           <p>You are about to delete the following snippets:</p>
           <ul className="list-disc pl-5 mt-2">
             {selectedSnippets.map((snippet) => (
-              <li key={snippet._id}>· {snippet.title}</li>
+              <li key={snippet._id}>{snippet.title}</li>
             ))}
           </ul>
         </DeleteConfirmationModal>
