@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import DeleteConfirmationModal from "@/components/ui/DeleteConfirmationModal/DeleteConfirmationModal";
 import { useState } from "react";
 
-export default function ProfilePage() {
+export default function ProfilePage({ snippets = [], favoriteSnippets }) {
   const { data: session } = useSession();
 
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
@@ -60,6 +60,23 @@ export default function ProfilePage() {
       </header>
 
       <main className="flex flex-col gap-8">
+        <section className="flex flex-row px-3 py-4 bg-gray-100 rounded-md justify-around">
+          <div className="flex flex-col items-center">
+            <p className="text-3xl font-bold">{favoriteSnippets.length}</p>
+            <p className="m4-4 text-gray-500">Favorites</p>
+          </div>
+
+          <div className="flex flex-col items-center">
+            <p className="text-3xl font-bold">{snippets.length}</p>
+            <p className="m4-4 text-gray-500">My Snippets</p>
+          </div>
+
+          <div className="flex flex-col items-center">
+            <p className="text-3xl font-bold">{favoriteSnippets.length}</p>
+            <p className="m4-4 text-gray-500">All Snippets</p>
+          </div>
+        </section>
+
         <section className="flex flex-col gap-6">
           <div>
             <p className="m4-4 text-sm text-gray-500">Name</p>
