@@ -24,6 +24,7 @@ export default function ProfilePage() {
       await signOut({ callbackUrl: "/login" });
     } catch (error) {
       console.error(error);
+      toast.error("Error deleting account.");
     } finally {
       setIsDeletingAccount(false);
       setIsDeleteModalOpen(false);
