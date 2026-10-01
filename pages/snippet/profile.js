@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import DeleteConfirmationModal from "@/components/ui/DeleteConfirmationModal/DeleteConfirmationModal";
 import { useState } from "react";
+import Statistics from "@/components/ui/Statistics/Statistics";
 
 export default function ProfilePage({ snippets = [], favoriteSnippets }) {
   const { data: session } = useSession();
@@ -60,22 +61,7 @@ export default function ProfilePage({ snippets = [], favoriteSnippets }) {
       </header>
 
       <main className="flex flex-col gap-8">
-        <section className="flex flex-row px-3 py-4 bg-gray-100 rounded-md justify-around">
-          <div className="flex flex-col items-center">
-            <p className="text-3xl font-bold">{favoriteSnippets.length}</p>
-            <p className="m4-4 text-gray-500">Favorites</p>
-          </div>
-
-          <div className="flex flex-col items-center">
-            <p className="text-3xl font-bold">{snippets.length}</p>
-            <p className="m4-4 text-gray-500">My Snippets</p>
-          </div>
-
-          <div className="flex flex-col items-center">
-            <p className="text-3xl font-bold">{favoriteSnippets.length}</p>
-            <p className="m4-4 text-gray-500">All Snippets</p>
-          </div>
-        </section>
+        <Statistics snippets={snippets} favoriteSnippets={favoriteSnippets} />
 
         <section className="flex flex-col gap-6">
           <div>
