@@ -7,7 +7,12 @@ import { useState } from "react";
 import Statistics from "@/components/ui/Statistics/Statistics";
 import DarkLightMode from "@/components/features/DarkLightMode/DarkLightMode";
 
-export default function ProfilePage({ snippets = [], favoriteSnippets }) {
+export default function ProfilePage({
+  snippets = [],
+  favoriteSnippets,
+  mode,
+  onToggleColorMode,
+}) {
   const { data: session } = useSession();
 
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
@@ -74,7 +79,7 @@ export default function ProfilePage({ snippets = [], favoriteSnippets }) {
           <p className="text-sm text-gray-500">
             Choose a design for DevSnippets.{" "}
           </p>
-          <DarkLightMode />
+          <DarkLightMode onToggleColorMode={onToggleColorMode} mode={mode} />
         </section>
 
         <hr className="text-gray-300" />

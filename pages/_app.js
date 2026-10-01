@@ -43,6 +43,20 @@ function AppContent({ Component, pageProps }) {
   const [activeFilterItems, setActiveFilterItems] = useState(EMPTY_FILTER);
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [mode, setMode] = useState("automatic");
+
+  function handleToggleColorMode(event) {
+    const selectedMode = event.target.value;
+    setMode(selectedMode);
+    localStorage.setItem("colorMode", selectedMode);
+    applyTheme(selectedMode);
+  }
+
+  useEffect(() => {
+    const saveMode = localStorage.getItem("colorMode") ?? "automatic";
+    setMode(saveMode);
+    applyTheme(saveMode);
+  }, []);
 
   return (
     <AuthGuard>
@@ -62,6 +76,8 @@ function AppContent({ Component, pageProps }) {
             onActiveFilterItems={setActiveFilterItems}
             favoriteSnippets={favoriteSnippets}
             {...pageProps}
+            mode={mode}
+            onToggleColorMode={handleToggleColorMode}
           />
         </div>
         {showNavigation && <NavigationBar />}
