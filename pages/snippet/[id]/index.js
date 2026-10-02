@@ -20,8 +20,6 @@ export default function SnippetPage() {
     mutate,
   } = useSWR(id ? `/api/snippets/${id}` : null);
 
-  const isOwner = snippet.userId === sessionStorage.user.id;
-
   if (isLoading) {
     return <p className="p-4 text-gray-500">Just a second. Loading...</p>;
   }
@@ -38,6 +36,8 @@ export default function SnippetPage() {
   if (!snippet) {
     return <p className="p-4 textgray-500">This snippet cound not be found.</p>;
   }
+
+  const isOwner = snippet.userId === sessionStorage.user?.id;
 
   const { language, title, code, notes, installCommand, link } = snippet;
   const formattedDate = new Date(snippet.createdAt).toLocaleDateString("de-DE");
