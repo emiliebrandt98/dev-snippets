@@ -81,7 +81,7 @@ export default async function handler(request, response) {
         return;
       }
 
-      const snippet = await snippet.findOneAndUpdate(
+      const snippet = await Snippet.findOneAndUpdate(
         { _id: id, userId: session.user.id },
         { isPublic: isPublic },
         { new: true }
@@ -96,6 +96,8 @@ export default async function handler(request, response) {
       return;
     }
   } catch (error) {
+    console.error(error);
+
     if (error.name === "ValidationError") {
       response.status(400).json({ error: error.message });
       return;

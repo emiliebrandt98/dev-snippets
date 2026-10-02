@@ -1,6 +1,6 @@
 import { ArrowLeft, Pencil } from "lucide-react";
 import { useRouter } from "next/router";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import Link from "next/link";
 import CopyToClipboard from "@/components/ui/CopyToClipboard/CopyToClipboard";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -8,16 +8,17 @@ import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 import FavoriteButton from "@/components/ui/FavoriteButton/FavoriteButton";
 import Switch from "@/components/ui/Switch/Switch";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function SnippetPage() {
   const router = useRouter();
   const { id } = router.query;
-  const [value, setValue] = useState(false);
 
   const {
     data: snippet,
     error,
     isLoading,
+    mutate,
   } = useSWR(id ? `/api/snippets/${id}` : null);
 
   if (isLoading) {
@@ -42,8 +43,20 @@ export default function SnippetPage() {
 
   const safeLanguage = language?.syntax || "text";
 
-  function handleSwitchChange() {
-    setValue((prev) => !prev);
+  async function handleTooglePublic() {
+    const newValue = !snippet.isPublic;
+
+    const response = await fetch(`/api/snippets/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isPublic: newValue }),
+    });
+
+    if (response.ok) {
+      mutate();
+    } else {
+      toast.error("Error switching to PublicToogle.");
+    }
   }
 
   return (
@@ -148,7 +161,7 @@ export default function SnippetPage() {
               displayed on the Public Page, allowing you to share snippets with
               other users.
             </p>
-            <Switch value={value} onChange={handleSwitchChange} />
+            <Switch value={snippet.isPublic} onChange={handleTooglePublic} />
           </div>
         </section>
       </main>
