@@ -6,6 +6,7 @@ import CopyToClipboard from "@/components/ui/CopyToClipboard/CopyToClipboard";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 import FavoriteButton from "@/components/ui/FavoriteButton/FavoriteButton";
+import Switch from "@/components/ui/Switch/Switch";
 
 export default function SnippetPage() {
   const router = useRouter();
@@ -132,6 +133,18 @@ export default function SnippetPage() {
             </div>
           </>
         )}
+
+        <section>
+          <h2 className="font-bold text-lg mt-6 mb-2">Public:</h2>
+          <div className="flex flex-row gap-20">
+            <p className="m4-4 text-sm text-gray-500">
+              When &quot;Public&quot; is activated, this snippet will be
+              displayed on the Public Page, allowing you to share snippets with
+              other users.
+            </p>
+            <Switch />
+          </div>
+        </section>
       </main>
     </div>
   );
