@@ -42,6 +42,7 @@ export default async function handler(request, response) {
 
     if (request.method === "PUT") {
       const snippetData = request.body;
+      const { isPublic } = request.body;
 
       snippetData.userId = session.user.id;
 
@@ -58,6 +59,7 @@ export default async function handler(request, response) {
       const snippet = await Snippet.findOneAndUpdate(
         { _id: id, userId: session.user.id },
         snippetData,
+        { isPublic: isPublic },
         {
           new: true,
           runValidators: true,

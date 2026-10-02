@@ -15,6 +15,7 @@ export default function Home({
   search,
   activeFilterItems,
   onActiveFilterItems,
+  isPublic,
 }) {
   const {
     isDeleteMode,
@@ -103,6 +104,7 @@ export default function Home({
           isDeleteMode={isDeleteMode}
           selectedIds={selectedIds}
           onSelectSnippet={onSelectSnippet}
+          isPublic={isPublic}
         />
       </main>
 

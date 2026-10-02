@@ -1,18 +1,12 @@
 import { useState } from "react";
 
-export default function Switch() {
-  const [value, setValue] = useState(false);
-
-  function handleSwitchChange() {
-    setValue((prev) => !prev);
-  }
-
+export default function Switch({ value, onChange }) {
   return (
     <div className="flex items-center justify-center h-full text-white">
       <div
         role="switch"
-        aria-checked
-        onClick={handleSwitchChange}
+        aria-checked={value}
+        onClick={onChange}
         className={`border border-gray-300 h-8 w-16 rounded-full p-0.75 cursor-pointer ${value ? "bg-purple-200 border border-purple-600" : "bg-transparent"}`}
       >
         <div

@@ -8,6 +8,7 @@ export default function SnippetCard({
   date,
   tags,
   matchedFields,
+  isPublic,
 }) {
   const otherMatches = matchedFields ?? [].filter((field) => field !== "title");
   const formattedDate = new Date(date).toLocaleDateString("de-DE");
@@ -30,6 +31,7 @@ export default function SnippetCard({
         </div>
         <FavoriteButton snippetId={id} />
       </div>
+
       <ul className="flex flex-wrap gap-2 mt-2 list-none pl-0">
         {tags.map((tag) => (
           <li
@@ -40,6 +42,10 @@ export default function SnippetCard({
           </li>
         ))}
       </ul>
+
+      <p className="flex justify-end text-sm text-gray-500">
+        {isPublic ? "Public" : "Private"}
+      </p>
     </Link>
   );
 }

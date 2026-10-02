@@ -5,6 +5,7 @@ export default function SnippetsList({
   isDeleteMode,
   selectedIds,
   onSelectSnippet,
+  isPublic,
 }) {
   return (
     <ul className="grid gap-4">
@@ -30,6 +31,7 @@ export default function SnippetsList({
                 date={snippet.createdAt}
                 tags={snippet.tags}
                 matchedFields={snippet.matchedFields}
+                isPublic={isPublic}
               />
             </div>
           </li>

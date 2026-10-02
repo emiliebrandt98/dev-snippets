@@ -7,10 +7,12 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 import FavoriteButton from "@/components/ui/FavoriteButton/FavoriteButton";
 import Switch from "@/components/ui/Switch/Switch";
+import { useState } from "react";
 
 export default function SnippetPage() {
   const router = useRouter();
   const { id } = router.query;
+  const [value, setValue] = useState(false);
 
   const {
     data: snippet,
@@ -39,6 +41,10 @@ export default function SnippetPage() {
   const formattedDate = new Date(snippet.createdAt).toLocaleDateString("de-DE");
 
   const safeLanguage = language?.syntax || "text";
+
+  function handleSwitchChange() {
+    setValue((prev) => !prev);
+  }
 
   return (
     <div className="max-w-md mx-auto p-4">
@@ -136,13 +142,13 @@ export default function SnippetPage() {
 
         <section>
           <h2 className="font-bold text-lg mt-6 mb-2">Public:</h2>
-          <div className="flex flex-row gap-20">
+          <div className="flex flex-row gap-10">
             <p className="m4-4 text-sm text-gray-500">
               When &quot;Public&quot; is activated, this snippet will be
               displayed on the Public Page, allowing you to share snippets with
               other users.
             </p>
-            <Switch />
+            <Switch value={value} onChange={handleSwitchChange} />
           </div>
         </section>
       </main>

@@ -38,6 +38,7 @@ function AppContent({ Component, pageProps }) {
   const [activeFilterItems, setActiveFilterItems] = useState(EMPTY_FILTER);
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isPublic, setIsPublic] = useState(false);
 
   return (
     <AuthGuard>
@@ -56,6 +57,8 @@ function AppContent({ Component, pageProps }) {
             activeFilterItems={activeFilterItems}
             onActiveFilterItems={setActiveFilterItems}
             favoriteSnippets={favoriteSnippets}
+            isPublic={isPublic}
+            onIsPublic={setIsPublic}
             {...pageProps}
           />
         </div>
