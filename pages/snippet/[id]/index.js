@@ -7,7 +7,6 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 import FavoriteButton from "@/components/ui/FavoriteButton/FavoriteButton";
 import Switch from "@/components/ui/Switch/Switch";
-import { useState } from "react";
 import { toast } from "react-toastify";
 
 export default function SnippetPage() {
@@ -20,6 +19,8 @@ export default function SnippetPage() {
     isLoading,
     mutate,
   } = useSWR(id ? `/api/snippets/${id}` : null);
+
+  const isOwner = snippet.userId === sessionStorage.user.id;
 
   if (isLoading) {
     return <p className="p-4 text-gray-500">Just a second. Loading...</p>;
@@ -79,13 +80,15 @@ export default function SnippetPage() {
 
           <div className="flex items-cener gap-2">
             <FavoriteButton snippetId={id} />
-            <Link
-              href={`/snippet/${snippet?._id}/edit-snippet`}
-              aria-label="edit snippet"
-              className="inline-flex items-center justify-center w-8 h-8 aspect-square rounded-lg bg-gray-100 hover:bg-gray-200"
-            >
-              <Pencil size={16} />
-            </Link>
+            {isOwner && (
+              <Link
+                href={`/snippet/${snippet?._id}/edit-snippet`}
+                aria-label="edit snippet"
+                className="inline-flex items-center justify-center w-8 h-8 aspect-square rounded-lg bg-gray-100 hover:bg-gray-200"
+              >
+                <Pencil size={16} />
+              </Link>
+            )}
           </div>
         </div>
       </header>
@@ -161,7 +164,9 @@ export default function SnippetPage() {
               displayed on the Public Page, allowing you to share snippets with
               other users.
             </p>
-            <Switch value={snippet.isPublic} onChange={handleTooglePublic} />
+            {isOwner && (
+              <Switch value={snippet.isPublic} onChange={handleTooglePublic} />
+            )}
           </div>
         </section>
       </main>

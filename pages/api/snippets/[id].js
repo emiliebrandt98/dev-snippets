@@ -26,7 +26,7 @@ export default async function handler(request, response) {
     if (request.method === "GET") {
       const snippet = await Snippet.findOne({
         _id: id,
-        userId: session.user.id,
+        $or: [{ userId: session.user.id }, { isPublic: true }],
       })
         .populate("language")
         .populate("tags");
