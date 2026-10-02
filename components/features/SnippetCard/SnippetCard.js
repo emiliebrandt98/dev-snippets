@@ -8,7 +8,6 @@ export default function SnippetCard({
   date,
   tags,
   matchedFields,
-  isPublic,
 }) {
   const otherMatches = matchedFields ?? [].filter((field) => field !== "title");
   const formattedDate = new Date(date).toLocaleDateString("de-DE");
@@ -42,10 +41,6 @@ export default function SnippetCard({
           </li>
         ))}
       </ul>
-
-      <p className="flex justify-end text-sm text-gray-500">
-        {isPublic ? "Public" : "Private"}
-      </p>
     </Link>
   );
 }
