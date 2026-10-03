@@ -22,12 +22,9 @@ export default async function handler(request, response) {
 
   if (request.method === "GET") {
     try {
-      const { ids } = request.body;
+      const { ids } = request.query;
       const idList = ids ? ids.split(",") : [];
       const validIds = idList.filter((id) => mongoose.isValidObjectId(id));
-
-      console.log("session user:", session.user.id);
-      console.log("validIds:", validIds);
 
       const snippets = await Snippet.find({
         _id: { $in: validIds },

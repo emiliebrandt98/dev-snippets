@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
 
-export default function DeleteConfirmationModal({
+export default function InfoModal({
   onClose,
   onConfirm,
-  isDeleting,
+  isConfirming,
   title = "Are you sure?",
   children,
 }) {
@@ -17,14 +17,14 @@ export default function DeleteConfirmationModal({
     <dialog
       ref={dialogRef}
       onClose={onClose}
-      aria-labelledby="delete-modal-title"
+      aria-labelledby="confirm-modal-title"
       className="m-auto w-full max-w-md rounded-lg bg-white p-6 shadow-xl backdrop:bg-black/50"
     >
       <h3 id="delete-modal-title" className="text-lg font-bold mb-2">
         {title}
       </h3>
 
-      <div className="text-sm text-gray-600 mb-4">{children} </div>
+      <div className="text-sm text-gray-600 mb-4">{children}</div>
 
       <div className="flex items-center justify-end gap-2 mb-4">
         <button
@@ -41,7 +41,7 @@ export default function DeleteConfirmationModal({
           disabled={isDeleting}
           className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm font-medium transition-colors disabled:opacity-50"
         >
-          {isDeleting ? "Deleting..." : "Yes, delete"}
+          {isConfirming ? "Loading..." : "Yes, publishing"}
         </button>
       </div>
     </dialog>

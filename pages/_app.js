@@ -38,9 +38,6 @@ function AppContent({ Component, pageProps }) {
   const { data: favoriteData } = useSWR(favoritesKey, fetcher);
   const favoriteSnippets = favoriteData ?? [];
 
-  console.log("favoriteData: ", favoriteData);
-  console.log("favoriteIds: ", favoriteIds);
-
   const [search, setSearch] = useState("");
   const [activeFilterItems, setActiveFilterItems] = useState(EMPTY_FILTER);
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);

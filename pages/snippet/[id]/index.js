@@ -1,6 +1,6 @@
 import { ArrowLeft, Pencil } from "lucide-react";
 import { useRouter } from "next/router";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import Link from "next/link";
 import CopyToClipboard from "@/components/ui/CopyToClipboard/CopyToClipboard";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -8,9 +8,11 @@ import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 import FavoriteButton from "@/components/ui/FavoriteButton/FavoriteButton";
 import Switch from "@/components/ui/Switch/Switch";
 import { toast } from "react-toastify";
+import { useSession } from "next-auth/react";
 
 export default function SnippetPage() {
   const router = useRouter();
+  const { data: session } = useSession();
   const { id } = router.query;
 
   const {
@@ -34,17 +36,19 @@ export default function SnippetPage() {
   }
 
   if (!snippet) {
-    return <p className="p-4 textgray-500">This snippet cound not be found.</p>;
+    return (
+      <p className="p-4 text-gray-500">This snippet cound not be found.</p>
+    );
   }
 
-  const isOwner = snippet.userId === sessionStorage.user?.id;
+  const isOwner = snippet.userId === session?.user?.id;
 
   const { language, title, code, notes, installCommand, link } = snippet;
   const formattedDate = new Date(snippet.createdAt).toLocaleDateString("de-DE");
 
   const safeLanguage = language?.syntax || "text";
 
-  async function handleTooglePublic() {
+  async function handleTogglePublic() {
     const newValue = !snippet.isPublic;
 
     const response = await fetch(`/api/snippets/${id}`, {
@@ -73,12 +77,12 @@ export default function SnippetPage() {
 
         <div className="flex items-start justify-between">
           <div>
-            <p className="m4-4 text-sm text-gray-500">{`${formattedDate} · ${language?.name}`}</p>
+            <p className="mb-4 text-sm text-gray-500">{`${formattedDate} · ${language?.name}`}</p>
 
             <h1 className="text-xl font-bold mt-1">{title}</h1>
           </div>
 
-          <div className="flex items-cener gap-2">
+          <div className="flex items-center gap-2">
             <FavoriteButton snippetId={id} />
             {isOwner && (
               <Link
@@ -165,7 +169,7 @@ export default function SnippetPage() {
               other users.
             </p>
             {isOwner && (
-              <Switch value={snippet.isPublic} onChange={handleTooglePublic} />
+              <Switch value={snippet.isPublic} onChange={handleTogglePublic} />
             )}
           </div>
         </section>
