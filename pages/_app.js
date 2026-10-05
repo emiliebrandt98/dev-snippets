@@ -7,6 +7,7 @@ import { EMPTY_FILTER } from "@/lib/filter/filterSnippets";
 import { SessionProvider, useSession } from "next-auth/react";
 import AuthGuard from "@/components/AuthGuard/AuthGuard";
 import useFavorite from "@/hooks/useFavorite/useFavorite";
+import { useRouter } from "next/router";
 
 const fetcher = async (url) => {
   const response = await fetch(url);
@@ -28,6 +29,11 @@ function AppContent({ Component, pageProps }) {
     error,
     isLoading,
   } = useSWR(status === "authenticated" ? "/api/snippets" : null, fetcher);
+
+  const router = useRouter();
+  const pagesWithoutNavigation = ["/login", "/register"];
+  const showNavigation = !pagesWithoutNavigation.includes(router.pathname);
+
   const { favoriteIds } = useFavorite();
 
   const favoritesKey =
@@ -46,7 +52,7 @@ function AppContent({ Component, pageProps }) {
   return (
     <AuthGuard>
       <SWRConfig value={{ fetcher }}>
-        <div className="pb-16 mb-6">
+        <div className={showNavigation ? "pb-16 mb-6" : "mb-6"}>
           <Component
             snippets={snippets}
             error={error}
@@ -63,7 +69,7 @@ function AppContent({ Component, pageProps }) {
             {...pageProps}
           />
         </div>
-        <NavigationBar />
+        {showNavigation && <NavigationBar />}
 
         <ToastContainer
           position="top-center"

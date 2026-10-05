@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
 import dbConnect from "@/db/connect";
 import Snippet from "@/db/models/Snippet";
 import "@/db/models/Tag";
+import "@/db/models/User";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
 
@@ -22,14 +22,7 @@ export default async function handler(request, response) {
 
   if (request.method === "GET") {
     try {
-      const { ids } = request.query;
-      const idList = ids ? ids.split(",") : [];
-      const validIds = idList.filter((id) => mongoose.isValidObjectId(id));
-
-      const snippets = await Snippet.find({
-        _id: { $in: validIds },
-        $or: [{ userId: session.user.id }, { isPublic: true }],
-      })
+      const snippets = await Snippet.find({ isPublic: true })
         .populate("language")
         .populate("tags")
         .populate("userId", "firstName lastName")
@@ -39,8 +32,7 @@ export default async function handler(request, response) {
       return;
     } catch (error) {
       console.error(error);
-
-      response.status(500).json({ error: "Error retrieving the favorites." });
+      response.status(500).json({ error: "Error retrieving public snippets." });
       return;
     }
   }

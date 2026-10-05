@@ -63,6 +63,7 @@ export default function SnippetPage() {
     if (response.ok) {
       await mutate();
       await mutateGlobal("/api/snippets");
+      await mutateGlobal("/api/snippets/public");
     } else {
       toast.error("Error switching to Public.");
     }

@@ -9,6 +9,7 @@ export default function SnippetCard({
   tags,
   matchedFields,
   isPublic,
+  userName,
 }) {
   const otherMatches = matchedFields ?? [].filter((field) => field !== "title");
   const formattedDate = new Date(date).toLocaleDateString("de-DE");
@@ -43,9 +44,10 @@ export default function SnippetCard({
         ))}
       </ul>
 
-      <p className="flex justify-end text-sm text-gray-500">
-        {isPublic ? "Public" : "Private"}
-      </p>
+      <div className="flex justify-end gap-2 text-sm text-gray-500">
+        <p>{isPublic ? "Public" : "Private"}</p>
+        {userName && <p className="text-sm text-gray-500">by {userName}</p>}
+      </div>
     </Link>
   );
 }
