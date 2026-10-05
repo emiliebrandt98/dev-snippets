@@ -32,6 +32,7 @@ export default async function handler(request, response) {
       })
         .populate("language")
         .populate("tags")
+        .populate("userId", "firstName lastName")
         .sort({ createdAt: -1 });
 
       response.status(200).json(snippets);
