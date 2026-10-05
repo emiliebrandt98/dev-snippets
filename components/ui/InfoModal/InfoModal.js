@@ -20,7 +20,7 @@ export default function InfoModal({
       aria-labelledby="confirm-modal-title"
       className="m-auto w-full max-w-md rounded-lg bg-white p-6 shadow-xl backdrop:bg-black/50"
     >
-      <h3 id="delete-modal-title" className="text-lg font-bold mb-2">
+      <h3 id="confirm-modal-title" className="text-lg font-bold mb-2">
         {title}
       </h3>
 
@@ -30,7 +30,7 @@ export default function InfoModal({
         <button
           type="button"
           onClick={onClose}
-          className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 text-sm font-medium"
+          className="cursor-pointer px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 text-sm font-medium"
         >
           Cancel
         </button>
@@ -38,8 +38,8 @@ export default function InfoModal({
         <button
           type="button"
           onClick={onConfirm}
-          disabled={isDeleting}
-          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm font-medium transition-colors disabled:opacity-50"
+          disabled={isConfirming}
+          className="cursor-pointer px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-md text-sm font-medium transition-colors disabled:opacity-50"
         >
           {isConfirming ? "Loading..." : "Yes, publishing"}
         </button>

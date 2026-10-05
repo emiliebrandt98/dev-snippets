@@ -1,6 +1,6 @@
 import { ArrowLeft, Pencil } from "lucide-react";
 import { useRouter } from "next/router";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import Link from "next/link";
 import CopyToClipboard from "@/components/ui/CopyToClipboard/CopyToClipboard";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -9,6 +9,8 @@ import FavoriteButton from "@/components/ui/FavoriteButton/FavoriteButton";
 import Switch from "@/components/ui/Switch/Switch";
 import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
+import InfoModal from "@/components/ui/InfoModal/InfoModal";
+import { useState } from "react";
 
 export default function SnippetPage() {
   const router = useRouter();
@@ -21,6 +23,9 @@ export default function SnippetPage() {
     isLoading,
     mutate,
   } = useSWR(id ? `/api/snippets/${id}` : null);
+  const { mutate: mutateGlobal } = useSWRConfig();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirming, setIsConfirming] = useState(false);
 
   if (isLoading) {
     return <p className="p-4 text-gray-500">Just a second. Loading...</p>;
@@ -48,9 +53,7 @@ export default function SnippetPage() {
 
   const safeLanguage = language?.syntax || "text";
 
-  async function handleTogglePublic() {
-    const newValue = !snippet.isPublic;
-
+  async function updateIsPublic(newValue) {
     const response = await fetch(`/api/snippets/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -58,10 +61,26 @@ export default function SnippetPage() {
     });
 
     if (response.ok) {
-      mutate();
+      await mutate();
+      await mutateGlobal("/api/snippets");
     } else {
-      toast.error("Error switching to PublicToogle.");
+      toast.error("Error switching to Public.");
     }
+  }
+
+  function handleTogglePublic() {
+    if (snippet.isPublic) {
+      updateIsPublic(false);
+    } else {
+      setIsModalOpen(true);
+    }
+  }
+
+  async function handleConfirmPublish() {
+    setIsConfirming(true);
+    await updateIsPublic(true);
+    setIsConfirming(false);
+    setIsModalOpen(false);
   }
 
   return (
@@ -99,7 +118,7 @@ export default function SnippetPage() {
 
       <main>
         <ul className="flex flex-wrap gap-2 mt-2 list-none pl-0">
-          {snippet.tags.map((tag) => (
+          {snippet.tags?.map((tag) => (
             <li
               key={tag._id}
               className="px-3 py-1 text-sm text-gray-700 bg-gray-100 rounded-lg"
@@ -173,6 +192,20 @@ export default function SnippetPage() {
             )}
           </div>
         </section>
+
+        {isModalOpen && (
+          <InfoModal
+            onClose={() => setIsModalOpen(false)}
+            onConfirm={handleConfirmPublish}
+            isConfirming={isConfirming}
+            title="Confirm publish snippet"
+          >
+            <p>
+              When confirming, this snippet can be saved and seen by other
+              users.
+            </p>
+          </InfoModal>
+        )}
       </main>
     </div>
   );
