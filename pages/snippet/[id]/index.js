@@ -84,12 +84,20 @@ export default function SnippetPage() {
     setIsModalOpen(false);
   }
 
+  function handleBack() {
+    if (window.history.length > 1) {
+      router.back();
+    } else {
+      router.push("/");
+    }
+  }
+
   return (
     <div className="max-w-md mx-auto p-4">
       <header className="mb-4">
         <button
           type="button"
-          onClick={() => router.back()}
+          onClick={handleBack}
           aria-label="back to previous page"
           className="inline-flex items-center justify-center w-10 h-10 aspect-square rounded-lg bg-gray-100 hover:bg-gray-200"
         >
