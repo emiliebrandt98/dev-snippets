@@ -30,6 +30,7 @@ export default function SnippetsList({
                 date={snippet.createdAt}
                 tags={snippet.tags}
                 matchedFields={snippet.matchedFields}
+                isPublic={snippet.isPublic}
               />
             </div>
           </li>

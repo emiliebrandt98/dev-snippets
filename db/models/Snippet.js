@@ -31,6 +31,10 @@ const SnippetSchema = new Schema(
       type: String,
       trim: true,
     },
+    isPublic: {
+      type: Boolean,
+      default: false,
+    },
     tags: {
       type: [Schema.Types.ObjectId],
       ref: "Tag",

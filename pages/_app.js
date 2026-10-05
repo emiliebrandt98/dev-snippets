@@ -30,9 +30,13 @@ function AppContent({ Component, pageProps }) {
   } = useSWR(status === "authenticated" ? "/api/snippets" : null, fetcher);
   const { favoriteIds } = useFavorite();
 
-  const favoriteSnippets = (snippets ?? []).filter((snippet) =>
-    favoriteIds.includes(snippet._id)
-  );
+  const favoritesKey =
+    status === "authenticated" && favoriteIds.length > 0
+      ? `/api/snippets/favorites?ids=${favoriteIds.join(",")}`
+      : null;
+
+  const { data: favoriteData } = useSWR(favoritesKey, fetcher);
+  const favoriteSnippets = favoriteData ?? [];
 
   const [search, setSearch] = useState("");
   const [activeFilterItems, setActiveFilterItems] = useState(EMPTY_FILTER);

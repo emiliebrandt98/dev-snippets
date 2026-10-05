@@ -26,7 +26,7 @@ export default async function handler(request, response) {
     if (request.method === "GET") {
       const snippet = await Snippet.findOne({
         _id: id,
-        userId: session.user.id,
+        $or: [{ userId: session.user.id }, { isPublic: true }],
       })
         .populate("language")
         .populate("tags");
@@ -72,7 +72,32 @@ export default async function handler(request, response) {
       response.status(200).json(snippet);
       return;
     }
+
+    if (request.method === "PATCH") {
+      const { isPublic } = request.body;
+
+      if (typeof isPublic !== "boolean") {
+        response.status(400).json({ error: "isPublic must be true or false." });
+        return;
+      }
+
+      const snippet = await Snippet.findOneAndUpdate(
+        { _id: id, userId: session.user.id },
+        { isPublic: isPublic },
+        { new: true }
+      );
+
+      if (!snippet) {
+        response.status(404).json({ status: "Snippet not found." });
+        return;
+      }
+
+      response.status(200).json(snippet);
+      return;
+    }
   } catch (error) {
+    console.error(error);
+
     if (error.name === "ValidationError") {
       response.status(400).json({ error: error.message });
       return;
