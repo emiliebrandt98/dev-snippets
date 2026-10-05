@@ -1,7 +1,6 @@
-import { ArrowLeft, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { toast } from "react-toastify";
-import Link from "next/link";
 import { useSession } from "next-auth/react";
 import DeleteConfirmationModal from "@/components/ui/DeleteConfirmationModal/DeleteConfirmationModal";
 import { useState } from "react";
