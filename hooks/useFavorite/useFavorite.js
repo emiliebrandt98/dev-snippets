@@ -1,21 +1,36 @@
 import { toast } from "react-toastify";
-import useLocalStorageState from "use-local-storage-state";
+import useSWR, { useSWRConfig } from "swr";
+import { useSession } from "next-auth/react";
 
 export default function useFavorite() {
-  const [favoriteIds, setFavoriteIds] = useLocalStorageState("Favorite", {
-    defaultValue: [],
-  });
+  const { status } = useSession();
+  const { mutate } = useSWRConfig();
 
-  function handleToggleFavorite(id) {
+  const { data, mutate: mutateFavoriteIds } = useSWR(
+    status === "authenticated" ? "/api/favorites" : null
+  );
+
+  const favoriteIds = Array.isArray(data)
+    ? data
+    : (data?.favoriteIds ?? data?.favorites ?? []);
+
+  async function handleToggleFavorite(id) {
+    const isFavorite = favoriteIds.includes(id);
+
     try {
-      if (favoriteIds.includes(id)) {
-        const updatedFavoriteIds = favoriteIds.filter(
-          (favoriteId) => favoriteId !== id
-        );
-        setFavoriteIds(updatedFavoriteIds);
-      } else {
-        setFavoriteIds([...favoriteIds, id]);
+      const response = await fetch("/api/favorites", {
+        method: isFavorite ? "DELETE" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ snippetId: id }),
+      });
+
+      if (!response.ok) {
+        toast.error("Something went wrong. Please try again.");
+        return;
       }
+
+      await mutateFavoriteIds();
+      await mutate("/api/snippets/favorites");
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong. Please try again.");

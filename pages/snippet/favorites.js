@@ -3,6 +3,7 @@ import SearchBar from "@/components/features/SearchBar/SearchBar";
 import SnippetsList from "@/components/features/SnippetsList/SnippetsList";
 import DeleteButton from "@/components/ui/DeleteButton/DeleteButton";
 import DeleteConfirmationModal from "@/components/ui/DeleteConfirmationModal/DeleteConfirmationModal";
+import useFavorite from "@/hooks/useFavorite/useFavorite";
 import useSearchMatch from "@/hooks/useSearchMatch/useSearchMatch";
 import useSnippetSelection from "@/hooks/useSnippetSelection/useSnippetSelection";
 import filterSnippets from "@/lib/filter/filterSnippets";
@@ -15,8 +16,16 @@ export default function FavoritesPage({
   search,
   activeFilterItems,
   onActiveFilterItems,
-  favoriteSnippets,
 }) {
+  const { favoriteIds } = useFavorite();
+
+  const favoriteSnippets =
+    snippets?.filter((snippet) => favoriteIds.includes(snippet._id)) ?? [];
+
+  const filteredSnippets = filterSnippets(favoriteSnippets, activeFilterItems);
+
+  const { searchedSnippets } = useSearchMatch(filteredSnippets, search);
+
   const {
     isDeleteMode,
     selectedIds,
@@ -28,13 +37,6 @@ export default function FavoritesPage({
     isDeleting,
     selectedSnippets,
   } = useSnippetSelection(snippets);
-
-  const filteredSnippets = filterSnippets(
-    favoriteSnippets ?? [],
-    activeFilterItems
-  );
-
-  const { searchedSnippets } = useSearchMatch(filteredSnippets, search);
 
   if (isLoading) {
     return <p className="p-4 text-gray-500">Just a second. Loading...</p>;

@@ -6,7 +6,6 @@ import { useState } from "react";
 import { EMPTY_FILTER } from "@/lib/filter/filterSnippets";
 import { SessionProvider, useSession } from "next-auth/react";
 import AuthGuard from "@/components/AuthGuard/AuthGuard";
-import useFavorite from "@/hooks/useFavorite/useFavorite";
 import { useRouter } from "next/router";
 
 const fetcher = async (url) => {
@@ -34,12 +33,8 @@ function AppContent({ Component, pageProps }) {
   const pagesWithoutNavigation = ["/login", "/register"];
   const showNavigation = !pagesWithoutNavigation.includes(router.pathname);
 
-  const { favoriteIds } = useFavorite();
-
   const favoritesKey =
-    status === "authenticated" && favoriteIds.length > 0
-      ? `/api/snippets/favorites?ids=${favoriteIds.join(",")}`
-      : null;
+    status === "authenticated" ? "/api/snippets/favorites" : null;
 
   const { data: favoriteData } = useSWR(favoritesKey, fetcher);
   const favoriteSnippets = favoriteData ?? [];

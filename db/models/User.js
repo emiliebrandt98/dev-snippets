@@ -18,6 +18,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  favorites: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "Snippet",
+    default: [],
+  },
 });
 
 export default mongoose.models.User || mongoose.model("User", UserSchema);
