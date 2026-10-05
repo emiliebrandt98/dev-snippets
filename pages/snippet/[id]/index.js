@@ -87,13 +87,14 @@ export default function SnippetPage() {
   return (
     <div className="max-w-md mx-auto p-4">
       <header className="mb-4">
-        <Link
-          href="/"
+        <button
+          type="button"
+          onClick={() => router.back()}
           aria-label="back to previous page"
           className="inline-flex items-center justify-center w-10 h-10 aspect-square rounded-lg bg-gray-100 hover:bg-gray-200"
         >
           <ArrowLeft className="w-5 h-5" />
-        </Link>
+        </button>
 
         <div className="flex items-start justify-between">
           <div>

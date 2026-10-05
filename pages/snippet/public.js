@@ -12,6 +12,7 @@ export default function PublicPage({
   onActiveFilterItems,
 }) {
   const { data: snippets, error, isLoading } = useSWR("/api/snippets/public");
+  console.log("publicSnippets:", snippets);
 
   const filteredSnippets = filterSnippets(snippets ?? [], activeFilterItems);
   const { searchedSnippets } = useSearchMatch(filteredSnippets, search);
