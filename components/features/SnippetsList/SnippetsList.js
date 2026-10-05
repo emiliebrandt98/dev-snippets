@@ -2,14 +2,18 @@ import SnippetCard from "../SnippetCard/SnippetCard";
 
 export default function SnippetsList({
   snippets,
-  isDeleteMode,
-  selectedIds,
+  isDeleteMode = false,
+  selectedIds = [],
   onSelectSnippet,
 }) {
   return (
     <ul className="grid gap-4">
       {snippets.map((snippet) => {
         const isSelected = selectedIds.includes(snippet._id);
+        const userName = snippet.userId?.firstName
+          ? `${snippet.userId.firstName} ${snippet.userId.lastName}`
+          : null;
+
         return (
           <li key={snippet._id} className="flex items-center gap-3">
             {isDeleteMode && (
@@ -31,6 +35,7 @@ export default function SnippetsList({
                 tags={snippet.tags}
                 matchedFields={snippet.matchedFields}
                 isPublic={snippet.isPublic}
+                userName={userName}
               />
             </div>
           </li>
