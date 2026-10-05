@@ -54,7 +54,7 @@ export default function LoginRegisterForm({
         {isRegister ? (
           <>
             <FormField
-              label="First Name"
+              label="First Name (required)"
               htmlFor="firstName"
               error={
                 isFieldInvalid("firstName") ? "First name is required." : ""
@@ -67,7 +67,7 @@ export default function LoginRegisterForm({
                 value={formValues.firstName}
                 onChange={handleChange}
                 onBlur={() => handleBlurValidation("firstName")}
-                placeholder="e.g. Max"
+                placeholder="Max"
                 className={`w-full rounded-md border px-4 py-3 ${
                   isFieldInvalid("firstName")
                     ? "border-red-500 bg-red-50"
@@ -79,7 +79,7 @@ export default function LoginRegisterForm({
             </FormField>
 
             <FormField
-              label="Last Name"
+              label="Last Name (required)"
               htmlFor="lastName"
               error={isFieldInvalid("lastName") ? "Last name is required." : ""}
             >
@@ -90,7 +90,7 @@ export default function LoginRegisterForm({
                 value={formValues.lastName}
                 onChange={handleChange}
                 onBlur={() => handleBlurValidation("lastName")}
-                placeholder="e.g. Meier"
+                placeholder="Meier"
                 className={`w-full rounded-md border px-4 py-3 ${
                   isFieldInvalid("lastName")
                     ? "border-red-500 bg-red-50"
@@ -104,7 +104,7 @@ export default function LoginRegisterForm({
         ) : null}
 
         <FormField
-          label="E-Mail"
+          label="E-Mail (required)"
           htmlFor="email"
           error={isFieldInvalid("email") ? "Please enter a valid E-Mail." : ""}
         >
@@ -115,7 +115,7 @@ export default function LoginRegisterForm({
             value={formValues.email}
             onChange={handleChange}
             onBlur={() => handleBlurValidation("email")}
-            placeholder="Enter your E-Mail"
+            placeholder="max.meier@gmx.com"
             className={`w-full rounded-md border px-4 py-3 ${
               isFieldInvalid("email")
                 ? "border-red-500 bg-red-50"
@@ -127,7 +127,7 @@ export default function LoginRegisterForm({
         </FormField>
 
         <FormField
-          label="Password"
+          label="Password (required)"
           htmlFor="password"
           error={isFieldInvalid("password") ? passwordError : ""}
         >
@@ -143,7 +143,7 @@ export default function LoginRegisterForm({
             value={formValues.password}
             onChange={handleChange}
             onBlur={() => handleBlurValidation("password")}
-            placeholder="Enter your Password"
+            placeholder="●●●●●●●●"
             className={`w-full rounded-md border px-4 py-3 ${
               isFieldInvalid("password")
                 ? "border-red-500 bg-red-50"
