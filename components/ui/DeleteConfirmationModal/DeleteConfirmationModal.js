@@ -18,7 +18,7 @@ export default function DeleteConfirmationModal({
       ref={dialogRef}
       onClose={onClose}
       aria-labelledby="delete-modal-title"
-      className="m-auto w-full max-w-md rounded-lg bg-white p-6 shadow-xl backdrop:bg-black/50"
+      className="m-auto rounded-lg bg-white p-6 shadow-xl backdrop:bg-black/50"
     >
       <h3 id="delete-modal-title" className="text-lg font-bold mb-2">
         {title}
