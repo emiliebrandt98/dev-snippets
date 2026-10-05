@@ -77,7 +77,7 @@ export default function SnippetForm({
       const response = await fetch("/api/tag", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tagIds: tagId }),
+        body: JSON.stringify({ tagIds: [tagId] }),
       });
 
       if (!response.ok) {
