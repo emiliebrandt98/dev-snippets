@@ -1,7 +1,13 @@
 import useSWR from "swr";
 import { getYears } from "@/lib/filter/filterSnippets";
+import { EMPTY_FILTER } from "@/lib/filter/filterSnippets";
+import { useState } from "react";
 
-export default function useFilterOptions(snippets) {
+export default function useFilterOptions(
+  snippets,
+  activeFilterItems,
+  onActiveFilterItems
+) {
   const {
     data: tags,
     isLoading: isLoadingTags,
@@ -13,6 +19,14 @@ export default function useFilterOptions(snippets) {
     isLoading: isLoadingLanguages,
     error: errorLanguages,
   } = useSWR("/api/language");
+
+  const [draftFilterItems, setDraftFilterItems] = useState(EMPTY_FILTER);
+  const [openFilter, setOpenFilter] = useState(false);
+
+  const activeFilterCount =
+    activeFilterItems.languages.length +
+    activeFilterItems.tags.length +
+    activeFilterItems.years.length;
 
   const languageItems = (languages ?? []).map((language) => {
     return { id: language._id, label: language.name };
@@ -26,6 +40,16 @@ export default function useFilterOptions(snippets) {
     return { id: year, label: year };
   });
 
+  function handleOpenFilter() {
+    setDraftFilterItems(activeFilterItems);
+    setOpenFilter(true);
+  }
+
+  function handleClearFilter() {
+    onActiveFilterItems(EMPTY_FILTER);
+    setDraftFilterItems(EMPTY_FILTER);
+  }
+
   return {
     languageItems,
     tagItems,
@@ -34,5 +58,12 @@ export default function useFilterOptions(snippets) {
     isLoadingTags,
     errorLanguages,
     errorTags,
+    activeFilterCount,
+    onHandleOpenFilter: handleOpenFilter,
+    openFilter,
+    onOpenFilter: setOpenFilter,
+    draftFilterItems,
+    ondraftFilterItems: setDraftFilterItems,
+    onClearFilter: handleClearFilter,
   };
 }

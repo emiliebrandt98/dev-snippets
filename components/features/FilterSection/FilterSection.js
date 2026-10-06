@@ -29,14 +29,14 @@ export default function FilterSection({
             <button
               type="button"
               onClick={onClear}
-              className={getChipClass(selectedIds.length === 0)}
+              className={getChipClass(selectedIds?.length === 0)}
             >
               All
             </button>
           </li>
 
           {items.map((item) => {
-            const isActive = selectedIds.includes(item.id);
+            const isActive = selectedIds?.includes(item.id);
 
             return (
               <li key={item.id}>
@@ -46,7 +46,7 @@ export default function FilterSection({
                   onClick={() => onToggle(item.id)}
                   className={getChipClass(isActive)}
                 >
-                  {item.label}
+                  {item?.label}
                 </button>
               </li>
             );
