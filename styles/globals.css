@@ -5,12 +5,13 @@
 
 @theme inline {
   /* Font */
-  --font-headline: "Zen Kaku Gothic Antique", sans-serif;
-  --font-body: "Zen Kaku Gothic New", sans-serif;
+  --font-headline: "Zen Kaku Gothic Antique", sans-serif, 800;
+  --font-body: "Zen Kaku Gothic New", sans-serif, 600;
 }
 
 body {
   font-family: var(--font-body);
+
   @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-50;
 }
 
@@ -48,5 +49,5 @@ h6 {
 }
 
 @utility button-icon-secondary {
-  @apply bg-purple-400/50 border-purple-400/50 text-purple-900 hover:bg-purple-600 hover:border-purple-600 hover:text-purple-200 focus:outline-purple-500 active:bg-purple-700 active:border-purple-700 active:text-purple-200 dark:bg-purple-700/50 dark:border-purple-700/50 dark:hover:bg-purple-700 dark:hover:border-purple-700 dark:text-purple-200 shadow-lg shadow-purple-500/50;
+  @apply bg-purple-400/50 border-purple-400/50 text-purple-700 hover:bg-purple-500 hover:border-purple-600 hover:text-purple-200 focus:outline-purple-500 active:bg-purple-700 active:border-purple-700 active:text-purple-200 dark:bg-purple-700/50 dark:border-purple-700/50 dark:hover:bg-purple-700 dark:hover:border-purple-700 dark:text-purple-200 shadow-lg shadow-purple-500/50;
 }

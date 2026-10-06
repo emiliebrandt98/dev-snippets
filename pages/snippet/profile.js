@@ -87,20 +87,22 @@ export default function ProfilePage({
 
         <hr className="border-gray-200 dark:border-gray-800" />
 
-        <section className="flex flex-col items-start gap-4">
-          <h2 className="text-xl font-bold">Danger Zone</h2>
+        <section className="flex flex-row  justify-between items-end">
+          <div className="flex flex-col gap-4">
+            <h2 className="text-xl font-bold">Danger Zone</h2>
 
-          <div className="flex flex-col gap-1">
-            <p className="font-medium">Delete Account</p>
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              Permanently delete the account, including all snippets.
-            </p>
+            <div className="flex flex-col gap-1">
+              <p className="font-medium">Delete Account</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                Permanently delete the account, including all snippets.
+              </p>
+            </div>
           </div>
 
           <button
             type="button"
             onClick={() => setIsDeleteModalOpen(true)}
-            className="button button-delete"
+            className="button button-delete w-50"
           >
             Delete Account
           </button>

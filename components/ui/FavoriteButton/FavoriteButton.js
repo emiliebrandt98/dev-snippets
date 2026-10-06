@@ -15,13 +15,9 @@ export default function FavoriteButton({ snippetId }) {
       type="button"
       aria-pressed={isFavorite}
       aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
-      className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-purple-100 hover:bg-purple-200"
+      className="button-icon button-icon-secondary rounded-lg"
     >
-      <Star
-        size={16}
-        className="text-purple-600"
-        fill={isFavorite ? "currentColor" : "none"}
-      />
+      <Star size={20} fill={isFavorite ? "currentColor" : "none"} />
     </button>
   );
 }
