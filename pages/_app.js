@@ -2,7 +2,7 @@ import "@/styles/globals.css";
 import useSWR, { SWRConfig } from "swr";
 import { ToastContainer } from "react-toastify";
 import NavigationBar from "@/components/features/NavigationBar/NavigationBar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { EMPTY_FILTER } from "@/lib/filter/filterSnippets";
 import { SessionProvider, useSession } from "next-auth/react";
 import AuthGuard from "@/components/AuthGuard/AuthGuard";
