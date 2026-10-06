@@ -16,20 +16,22 @@ export default function SnippetCard({
   return (
     <Link
       href={`/snippet/${id}`}
-      className="block rounded-lg bg-gray-50 p-4 hover:bg-gray-100 transition"
+      className="block rounded-lg bg-gray-50 p-4 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 transition"
     >
       <div className="flex flex-row justify-between">
         <div>
-          <p className="text-sm text-gray-500">{`${formattedDate} · ${language}`}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">{`${formattedDate} · ${language}`}</p>
+
           <h2 className="flex flex-col font-semibold text-lg mt-1">
             {title}
             {otherMatches.length > 0 && (
-              <span className=" text-xs font-normal text-gray-400">
+              <span className=" text-xs text-gray-500 dark:text-gray-400">
                 (found in {otherMatches.join(", ")})
               </span>
             )}
           </h2>
         </div>
+
         <FavoriteButton snippetId={id} />
       </div>
 
@@ -37,16 +39,20 @@ export default function SnippetCard({
         {tags.map((tag) => (
           <li
             key={tag._id}
-            className="px-3 py-1 text-sm text-gray-700 bg-gray-100 rounded-lg"
+            className="px-3 py-1 text-sm text-gray-500 bg-gray-700/10 dark:text-gray-400 dark:bg-gray-700 rounded-lg"
           >
             {tag.label}
           </li>
         ))}
       </ul>
 
-      <div className="flex justify-end gap-2 text-sm text-gray-500">
+      <div className="flex justify-end gap-2 text-sm text-gray-500 dark:text-gray-400">
         <p>{isPublic ? "Public" : "Private"}</p>
-        {userName && <p className="text-sm text-gray-500">by {userName}</p>}
+        {userName && (
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            · by {userName}
+          </p>
+        )}
       </div>
     </Link>
   );

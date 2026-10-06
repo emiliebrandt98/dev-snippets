@@ -72,14 +72,16 @@ export default function PublicPage({
       </header>
 
       <main>
-        <section className="flex flex-row items-center gap-2">
-          <SearchBar onSearch={onSearch} search={search} />
+        <section className="flex flex-col mb-4 gap-2">
+          <div className="flex flex-row items-center gap-2">
+            <SearchBar onSearch={onSearch} search={search} />
 
-          <FilterButton
-            activeFilterCount={activeFilterCount}
-            onClearFilter={onClearFilter}
-            onHandleOpenFilter={onHandleOpenFilter}
-          />
+            <FilterButton
+              activeFilterCount={activeFilterCount}
+              onClearFilter={onClearFilter}
+              onHandleOpenFilter={onHandleOpenFilter}
+            />
+          </div>
         </section>
 
         <FilterSnippetList
