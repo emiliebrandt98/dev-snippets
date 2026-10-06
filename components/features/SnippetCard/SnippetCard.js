@@ -13,6 +13,7 @@ export default function SnippetCard({
 }) {
   const otherMatches = matchedFields ?? [].filter((field) => field !== "title");
   const formattedDate = new Date(date).toLocaleDateString("de-DE");
+
   return (
     <Link
       href={`/snippet/${id}`}

@@ -4,7 +4,10 @@ import useSWR, { useSWRConfig } from "swr";
 import Link from "next/link";
 import CopyToClipboard from "@/components/ui/CopyToClipboard/CopyToClipboard";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
+import {
+  oneLight,
+  oneDark,
+} from "react-syntax-highlighter/dist/esm/styles/prism";
 import FavoriteButton from "@/components/ui/FavoriteButton/FavoriteButton";
 import Switch from "@/components/ui/Switch/Switch";
 import { toast } from "react-toastify";
@@ -23,9 +26,11 @@ export default function SnippetPage() {
     isLoading,
     mutate,
   } = useSWR(id ? `/api/snippets/${id}` : null);
+
   const { mutate: mutateGlobal } = useSWRConfig();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
+  const syntaxTheme = isDarkMode ? oneDark : oneLight;
 
   if (isLoading) {
     return <p className="p-4 text-gray-500">Just a second. Loading...</p>;
@@ -99,25 +104,27 @@ export default function SnippetPage() {
           type="button"
           onClick={handleBack}
           aria-label="back to previous page"
-          className="inline-flex items-center justify-center w-10 h-10 aspect-square rounded-lg bg-gray-100 hover:bg-gray-200"
+          className="button-icon button-icon-primary mb-4 rounded-lg"
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
 
         <div className="flex items-start justify-between">
           <div>
-            <p className="mb-4 text-sm text-gray-500">{`${formattedDate} · ${language?.name}`}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{`${formattedDate} · ${language?.name}`}</p>
 
-            <h1 className="text-xl font-bold mt-1">{title}</h1>
+            <h1 className="flex flex-col font-semibold text-xl mt-1">
+              {title}
+            </h1>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             <FavoriteButton snippetId={id} />
             {isOwner && (
               <Link
                 href={`/snippet/${snippet?._id}/edit-snippet`}
                 aria-label="edit snippet"
-                className="inline-flex items-center justify-center w-8 h-8 aspect-square rounded-lg bg-gray-100 hover:bg-gray-200"
+                className="button-icon button-icon-primary rounded-lg"
               >
                 <Pencil size={16} />
               </Link>
@@ -131,17 +138,18 @@ export default function SnippetPage() {
           {snippet.tags?.map((tag) => (
             <li
               key={tag._id}
-              className="px-3 py-1 text-sm text-gray-700 bg-gray-100 rounded-lg"
+              className="px-3 py-1 text-sm text-gray-500 bg-gray-700/10 dark:text-gray-400 dark:bg-gray-700 rounded-lg"
             >
               {tag.label}
             </li>
           ))}
         </ul>
-        <div className="flex items-end justify-between gap-2 bg-gray-100 rounded-lg p-3">
+
+        <div className="flex items-end justify-between gap-2 bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
           <SyntaxHighlighter
             language={safeLanguage}
             showLineNumbers
-            style={oneLight}
+            style={syntaxTheme}
             customStyle={{
               background: "transparent",
               fontSize: "0.8rem",
@@ -152,6 +160,7 @@ export default function SnippetPage() {
           >
             {code}
           </SyntaxHighlighter>
+
           <CopyToClipboard textToCopy={code} />
         </div>
 
