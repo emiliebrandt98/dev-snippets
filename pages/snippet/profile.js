@@ -113,10 +113,11 @@ export default function ProfilePage({
             isDeleting={isDeletingAccount}
             title="Delete Account"
           >
-            <p>
-              Are you sure you want to delete your account? This action is
-              irreversible and will delete all your data, including your
-              snippets.
+            <p className="text-wrap">
+              <strong>Are you sure you want to delete your account?</strong>
+              <br />
+              This action is irreversible and will delete all your data,
+              including your snippets.
             </p>
           </DeleteConfirmationModal>
         )}
