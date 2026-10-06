@@ -100,7 +100,7 @@ export default function FilterSnippetList({
       <dialog
         ref={filterDialogRef}
         onClose={() => setOpenFilter(false)}
-        className="m-0 mt-auto w-full max-w-full rounded-t-3xl p-6 backdrop:bg-black/40"
+        className="m-0 mt-auto w-full max-w-full rounded-t-3xl p-6  bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white backdrop:bg-black/40"
       >
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-2xl font-bold">Filter</h2>
@@ -108,6 +108,7 @@ export default function FilterSnippetList({
             type="button"
             aria-label="Close dialog"
             onClick={handleCancelFilter}
+            className="button-icon button-icon-primary"
           >
             <X />
           </button>
@@ -145,14 +146,14 @@ export default function FilterSnippetList({
           <button
             type="button"
             onClick={handleApplyFilter}
-            className="rounded-md bg-gray-600 py-3 font-bold text-white"
+            className="button button-primary"
           >
             Apply
           </button>
           <button
             type="button"
             onClick={handleCancelFilter}
-            className="rounded-md border-2 border-gray-600 py-3 font-bold text-gray-600"
+            className="button button-secondary"
           >
             Cancle
           </button>

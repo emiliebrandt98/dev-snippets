@@ -21,10 +21,10 @@ export default function CopyToClipboard({ textToCopy }) {
       onClick={handleCopy}
       disabled={isCopied}
       aria-label="copy text"
-      className="cursor-pointer inline-flex items-center justify-center w-6 h-6 aspect-square rounded-lg bg-gray-100"
+      className="button-icon button-icon-primary rounded-lg h-8 w-8 hover:shadow-transparent"
     >
       {isCopied ? (
-        <Check size={16} className="cursor-auto" />
+        <Check size={16} className="cursor-not-allowed" />
       ) : (
         <Copy size={16} />
       )}
