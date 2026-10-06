@@ -26,12 +26,16 @@ function applyTheme(selectedMode) {
 
   if (selectedMode === "automatic") {
     const systemPrefersDark = window.matchMedia(
-      "(prefers-color-schema: dark)"
+      "(prefers-color-scheme: dark)"
     ).matches;
     theme = systemPrefersDark ? "dark" : "light";
   }
 
-  document.documentElement.setAttribute("data-theme", theme);
+  if (theme === "dark") {
+    document.documentElement.classList.add("dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+  }
 }
 
 function AppContent({ Component, pageProps }) {
@@ -56,7 +60,12 @@ function AppContent({ Component, pageProps }) {
   const [activeFilterItems, setActiveFilterItems] = useState(EMPTY_FILTER);
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [mode, setMode] = useState("automatic");
+  const [mode, setMode] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("colorMode") ?? "automatic";
+    }
+    return "automatic";
+  });
 
   function handleToggleColorMode(event) {
     const selectedMode = event.target.value;
@@ -66,10 +75,8 @@ function AppContent({ Component, pageProps }) {
   }
 
   useEffect(() => {
-    const saveMode = localStorage.getItem("colorMode") ?? "automatic";
-    setMode(saveMode);
-    applyTheme(saveMode);
-  }, []);
+    applyTheme(mode);
+  }, [mode]);
 
   return (
     <AuthGuard>

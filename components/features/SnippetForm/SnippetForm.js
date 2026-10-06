@@ -263,7 +263,7 @@ export default function SnippetForm({
         <button
           type="submit"
           disabled={isLoadingSubmit || !isFormValid}
-          className="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 rounded-md transition-colors shadow-md disabled:opacity-50"
+          className="button button-primary"
         >
           {isLoadingSubmit
             ? "Loading..."
@@ -273,7 +273,7 @@ export default function SnippetForm({
         </button>
         <Link
           href={isEditing ? `/snippet/${snippetId}` : "/"}
-          className="flex justify-center align-center w-full border border-gray-300 hover:bg-gray-100 font-medium py-2 rounded-md transition-colors text-gray-700"
+          className="button button-secondary"
         >
           Cancel
         </Link>
