@@ -51,3 +51,7 @@ h6 {
 @utility button-icon-secondary {
   @apply bg-purple-400/50 border-purple-400/50 text-purple-700 hover:bg-purple-500 hover:border-purple-600 hover:text-purple-200 focus:outline-purple-500 active:bg-purple-700 active:border-purple-700 active:text-purple-200 dark:bg-purple-700/50 dark:border-purple-700/50 dark:hover:bg-purple-700 dark:hover:border-purple-700 dark:text-purple-200 shadow-lg shadow-purple-500/30;
 }
+
+@utility input {
+  @apply border border-gray-300 rounded-lg p-2 focus:outline-offset-4 focus:outline-gray-500 dark:focus:outline-gray-400;
+}
