@@ -35,7 +35,7 @@ export default function FilterSection({
             </button>
           </li>
 
-          {items.map((item) => {
+          {items?.map((item) => {
             const isActive = selectedIds?.includes(item.id);
 
             return (
