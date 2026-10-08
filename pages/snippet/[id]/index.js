@@ -113,11 +113,11 @@ export default function SnippetPage({ isDarkMode }) {
           <ArrowLeft className="w-5 h-5" />
         </button>
 
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-sm text-gray-500 dark:text-gray-400">{`${formattedDate} · ${language?.name}`}</p>
 
-            <h1 className="flex flex-col font-semibold text-xl mt-1">
+            <h1 className="flex flex-col font-semibold text-xl mt-1 text-balance">
               {title}
             </h1>
           </div>
@@ -171,7 +171,7 @@ export default function SnippetPage({ isDarkMode }) {
         {notes && (
           <div className="flex flex-col gap-2">
             <h2 className="font-bold text-lg">Notes:</h2>
-            <p className="text-gray-700 dark:text-gray-400 whitespace-pre-line">
+            <p className="text-gray-700 dark:text-gray-400 whitespace-pre-line text-balance">
               {notes}
             </p>
           </div>

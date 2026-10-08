@@ -38,7 +38,8 @@ export default function FavoritesPage({
   } = useFilterOptions(
     favoriteSnippets,
     activeFilterItems,
-    onActiveFilterItems
+    onActiveFilterItems,
+    true
   );
 
   if (isLoading) {

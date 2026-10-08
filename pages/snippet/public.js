@@ -30,7 +30,7 @@ export default function PublicPage({
     onHandleOpenFilter,
     activeFilterCount,
     onClearFilter,
-  } = useFilterOptions(snippets, activeFilterItems, onActiveFilterItems);
+  } = useFilterOptions(snippets, activeFilterItems, onActiveFilterItems, true);
 
   const filteredSnippets = filterSnippets(snippets ?? [], activeFilterItems);
   const { searchedSnippets } = useSearchMatch(filteredSnippets, search);

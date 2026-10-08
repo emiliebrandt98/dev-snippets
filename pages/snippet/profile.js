@@ -93,7 +93,7 @@ export default function ProfilePage({
 
             <div className="flex flex-col gap-1">
               <p className="font-medium">Delete Account</p>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
+              <p className="text-sm text-gray-600 dark:text-gray-300 text-pretty">
                 Permanently delete the account, including all snippets.
               </p>
             </div>
@@ -115,7 +115,7 @@ export default function ProfilePage({
             isDeleting={isDeletingAccount}
             title="Delete Account"
           >
-            <p className="text-wrap">
+            <p className="text-pretty">
               <strong>Are you sure you want to delete your account?</strong>
               <br />
               This action is irreversible and will delete all your data,

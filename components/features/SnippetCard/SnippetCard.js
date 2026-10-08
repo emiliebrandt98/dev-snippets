@@ -17,13 +17,13 @@ export default function SnippetCard({
   return (
     <Link
       href={`/snippet/${id}`}
-      className="block rounded-lg bg-gray-50 p-4 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 transition"
+      className="block rounded-lg bg-gray-50 p-4 border border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 transition"
     >
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row justify-between gap-4">
         <div>
           <p className="text-sm text-gray-500 dark:text-gray-400">{`${formattedDate} · ${language}`}</p>
 
-          <h2 className="flex flex-col font-semibold text-lg mt-1">
+          <h2 className="flex flex-col font-semibold text-lg mt-1 text-balance">
             {title}
             {otherMatches.length > 0 && (
               <span className=" text-xs text-gray-500 dark:text-gray-400">

@@ -1,18 +1,19 @@
 import useSWR from "swr";
-import { getYears } from "@/lib/filter/filterSnippets";
+import { getYears, getTags } from "@/lib/filter/filterSnippets";
 import { EMPTY_FILTER } from "@/lib/filter/filterSnippets";
 import { useState } from "react";
 
 export default function useFilterOptions(
   snippets,
   activeFilterItems,
-  onActiveFilterItems
+  onActiveFilterItems,
+  tagsFromSnippets = false
 ) {
   const {
     data: tags,
     isLoading: isLoadingTags,
     error: errorTags,
-  } = useSWR("/api/tag");
+  } = useSWR(tagsFromSnippets ? null : "/api/tag");
 
   const {
     data: languages,
@@ -32,7 +33,11 @@ export default function useFilterOptions(
     return { id: language._id, label: language.name };
   });
 
-  const tagItems = (tags ?? []).map((tag) => {
+  const availableTags = tagsFromSnippets
+    ? getTags(snippets ?? [])
+    : (tags ?? []);
+
+  const tagItems = availableTags.map((tag) => {
     return { id: tag._id, label: tag.label };
   });
 
