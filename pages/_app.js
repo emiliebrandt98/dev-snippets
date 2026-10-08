@@ -90,7 +90,9 @@ function AppContent({ Component, pageProps }) {
       <SWRConfig value={{ fetcher }}>
         <div
           className={
-            showNavigation ? "pb-16 mb-8 lg:pb-0 lg:mb-0 lg:pl-56" : "mb-8"
+            showNavigation
+              ? "pb-16 mb-8 lg:pb-0 lg:mt-8 lg:mr-8 lg:mb-0 lg:pl-72"
+              : "mb-8"
           }
         >
           <Component

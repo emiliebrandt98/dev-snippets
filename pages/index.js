@@ -75,13 +75,15 @@ export default function Home({
   return (
     <div className="max-w-2xl lg:max-w-none mx-auto p-4">
       <header className="mb-6">
-        <h1 className="text-2xl font-bold">DevSnippets</h1>
+        <h1 className="text-2xl lg:text-4xl font-bold">DevSnippets</h1>
       </header>
 
       <main>
         <section className="flex flex-col mb-4 gap-2 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-row items-center gap-2">
-            <SearchBar onSearch={onSearch} search={search} />
+            <div className="flex-1">
+              <SearchBar onSearch={onSearch} search={search} />
+            </div>
 
             <FilterButton
               activeFilterCount={activeFilterCount}

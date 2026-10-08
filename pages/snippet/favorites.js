@@ -74,7 +74,7 @@ export default function FavoritesPage({
     searchedSnippets.length === 0;
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
+    <div className="max-w-2xl lg:max-w-none mx-auto p-4">
       <header className="mb-6">
         <h1 className="text-2xl font-bold">DevSnippets</h1>
       </header>

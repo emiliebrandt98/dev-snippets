@@ -43,7 +43,7 @@ export default function ProfilePage({
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-4 text-gray-900 dark:text-white">
+    <div className="max-w-2xl lg:max-w-none mx-auto p-4 text-gray-900 dark:text-white">
       <header className="mb-6">
         <section className="flex justify-end">
           <button
@@ -77,17 +77,19 @@ export default function ProfilePage({
 
         <hr className="border-gray-200 dark:border-gray-700" />
 
-        <section>
-          <h2 className="text-xl font-bold">Apperance</h2>
-          <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-            Choose a design for DevSnippets.{" "}
-          </p>
+        <section className="flex justify-between lg:flex-row">
+          <div>
+            <h2 className="text-xl font-bold">Apperance</h2>
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+              Choose a design for DevSnippets.{" "}
+            </p>
+          </div>
           <DarkLightMode onToggleColorMode={onToggleColorMode} mode={mode} />
         </section>
 
         <hr className="border-gray-200 dark:border-gray-700" />
 
-        <section className="flex flex-col gap-4">
+        <section className="flex flex-col gap-4 lg:flex-row">
           <div className="flex flex-col gap-4">
             <h2 className="text-xl font-bold">Danger Zone</h2>
 

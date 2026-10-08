@@ -102,7 +102,7 @@ export default function SnippetPage({ isDarkMode }) {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
+    <div className="max-w-2xl lg:max-w-none mx-auto p-4">
       <header className="mb-4">
         <button
           type="button"
