@@ -17,7 +17,7 @@ export default function SnippetCard({
   return (
     <Link
       href={`/snippet/${id}`}
-      className="block rounded-lg bg-gray-50 p-4 border border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 transition"
+      className="block rounded-lg bg-gray-100 p-4 border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 transition"
     >
       <div className="flex flex-row justify-between gap-4">
         <div>
