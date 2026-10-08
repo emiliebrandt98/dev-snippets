@@ -88,7 +88,11 @@ function AppContent({ Component, pageProps }) {
   return (
     <AuthGuard>
       <SWRConfig value={{ fetcher }}>
-        <div className={showNavigation ? "pb-16 mb-8" : "mb-8"}>
+        <div
+          className={
+            showNavigation ? "pb-16 mb-8 lg:pb-0 lg:mb-0 lg:pl-56" : "mb-8"
+          }
+        >
           <Component
             snippets={snippets}
             error={error}

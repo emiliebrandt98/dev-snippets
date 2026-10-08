@@ -7,7 +7,7 @@ export default function SnippetsList({
   onSelectSnippet,
 }) {
   return (
-    <ul className="grid gap-4">
+    <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
       {snippets.map((snippet) => {
         const isSelected = selectedIds.includes(snippet._id);
         const userName = snippet.userId?.firstName
@@ -15,7 +15,7 @@ export default function SnippetsList({
           : null;
 
         return (
-          <li key={snippet._id} className="flex items-center gap-3">
+          <li key={snippet._id} className="flex items-stretch h-full gap-3">
             {isDeleteMode && (
               <input
                 type="checkbox"

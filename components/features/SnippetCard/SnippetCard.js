@@ -17,7 +17,7 @@ export default function SnippetCard({
   return (
     <Link
       href={`/snippet/${id}`}
-      className="block rounded-lg bg-gray-100 p-4 border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 transition"
+      className="block rounded-lg bg-gray-100 h-full p-4 border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 transition"
     >
       <div className="flex flex-row justify-between gap-4">
         <div>
@@ -44,7 +44,7 @@ export default function SnippetCard({
         ))}
       </ul>
 
-      <div className="flex justify-end gap-2 text-sm text-gray-500 dark:text-gray-400">
+      <div className="flex justify-end gap-2 text-sm mt-auto text-gray-500 dark:text-gray-400">
         <p>{isPublic ? "Public" : "Private"}</p>
         {userName && (
           <p className="text-sm text-gray-500 dark:text-gray-400">
