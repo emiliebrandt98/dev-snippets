@@ -2,12 +2,12 @@ import useSWR from "swr";
 
 export default function Statistics({ snippets, favoriteSnippets }) {
   const { data: publicSnippets } = useSWR("/api/snippets/public");
-
+  console.log(favoriteSnippets);
   return (
     <section className="flex flex-row px-3 py-4 bg-gray-100 dark:bg-gray-800 rounded-2xl justify-around">
       <div className="flex flex-col items-center basis-1/3">
         <p className="text-3xl font-bold text-gray-900 dark:text-gray-50">
-          {favoriteSnippets.length}
+          {favoriteSnippets?.length ?? 0}
         </p>
         <p className="text-sm text-gray-500 dark:text-gray-300 mt-1">
           Favorites
