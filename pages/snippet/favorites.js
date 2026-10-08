@@ -1,15 +1,14 @@
 import FilterSnippetList from "@/components/features/FilterSnippetList/FilterSnippetList";
 import SearchBar from "@/components/features/SearchBar/SearchBar";
 import SnippetsList from "@/components/features/SnippetsList/SnippetsList";
-import DeleteButton from "@/components/ui/DeleteButton/DeleteButton";
-import DeleteConfirmationModal from "@/components/ui/DeleteConfirmationModal/DeleteConfirmationModal";
-import useFavorite from "@/hooks/useFavorite/useFavorite";
+import FilterButton from "@/components/ui/FilterButton/FilterButton";
+import useFilterOptions from "@/hooks/useFilterOptions/useFilterOptions";
 import useSearchMatch from "@/hooks/useSearchMatch/useSearchMatch";
-import useSnippetSelection from "@/hooks/useSnippetSelection/useSnippetSelection";
 import filterSnippets from "@/lib/filter/filterSnippets";
 
 export default function FavoritesPage({
   snippets,
+  favoriteSnippets = [],
   isLoading,
   error,
   onSearch,
@@ -17,26 +16,31 @@ export default function FavoritesPage({
   activeFilterItems,
   onActiveFilterItems,
 }) {
-  const { favoriteIds } = useFavorite();
-
-  const favoriteSnippets =
-    snippets?.filter((snippet) => favoriteIds.includes(snippet._id)) ?? [];
-
   const filteredSnippets = filterSnippets(favoriteSnippets, activeFilterItems);
 
   const { searchedSnippets } = useSearchMatch(filteredSnippets, search);
 
   const {
-    isDeleteMode,
-    selectedIds,
-    onToggleDeleteMode,
-    setIsModalOpen,
-    onSelectSnippet,
-    onDeleteConfirmed,
-    isModalOpen,
-    isDeleting,
-    selectedSnippets,
-  } = useSnippetSelection(snippets);
+    languageItems,
+    tagItems,
+    yearItems,
+    isLoadingLanguages,
+    isLoadingTags,
+    errorLanguages,
+    errorTags,
+    openFilter,
+    onOpenFilter,
+    draftFilterItems,
+    ondraftFilterItems,
+    onHandleOpenFilter,
+    activeFilterCount,
+    onClearFilter,
+  } = useFilterOptions(
+    favoriteSnippets,
+    activeFilterItems,
+    onActiveFilterItems,
+    true
+  );
 
   if (isLoading) {
     return <p className="p-4 text-gray-500">Just a second. Loading...</p>;
@@ -81,17 +85,28 @@ export default function FavoritesPage({
             <div className="flex-1">
               <SearchBar onSearch={onSearch} search={search} />
             </div>
-            <DeleteButton
-              isDeleteMode={isDeleteMode}
-              onToggleDeleteMode={onToggleDeleteMode}
-              selectedIds={selectedIds}
-              setIsModalOpen={setIsModalOpen}
+            <FilterButton
+              activeFilterCount={activeFilterCount}
+              onClearFilter={onClearFilter}
+              onHandleOpenFilter={onHandleOpenFilter}
             />
           </div>
 
           <FilterSnippetList
             activeFilterItems={activeFilterItems}
             onActiveFilterItems={onActiveFilterItems}
+            openFilter={openFilter}
+            onOpenFilter={onOpenFilter}
+            draftFilterItems={draftFilterItems}
+            ondraftFilterItems={ondraftFilterItems}
+            languageItems={languageItems}
+            tagItems={tagItems}
+            yearItems={yearItems}
+            isLoadingLanguages={isLoadingLanguages}
+            isLoadingTags={isLoadingTags}
+            errorLanguages={errorLanguages}
+            errorTags={errorTags}
+
             snippets={snippets}
           />
         </section>
@@ -116,22 +131,8 @@ export default function FavoritesPage({
           </p>
         ) : null}
 
-        <SnippetsList
-          snippets={searchedSnippets}
-          isDeleteMode={isDeleteMode}
-          selectedIds={selectedIds}
-          onSelectSnippet={onSelectSnippet}
-        />
+        <SnippetsList snippets={searchedSnippets} />
       </main>
-
-      {isModalOpen && (
-        <DeleteConfirmationModal
-          onClose={() => setIsModalOpen(false)}
-          onConfirm={onDeleteConfirmed}
-          selectedSnippets={selectedSnippets}
-          isDeleting={isDeleting}
-        />
-      )}
     </div>
   );
 }

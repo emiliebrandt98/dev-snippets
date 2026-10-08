@@ -35,12 +35,11 @@ export default function LoginRegisterForm({
   }
 
   return (
-    <main className="mx-auto max-w-md px-4 py-6">
-      <h1 className="text-4xl font-bold">DevSnippets</h1>
-      <h2 className="mt-24 text-3xl font-bold">
+    <main className="max-w-2xl mx-auto mt-24 p-4">
+      <h1 className="text-4xl font-bold">
         {isRegister ? "Register" : "Login"}
-      </h2>
-      <p className="mt-2 text-gray-600">
+      </h1>
+      <p className="mt-2 text-gray-500 dark:text-gray-400">
         {isRegister
           ? "Please enter your credentials to create an account."
           : "Please enter your credentials to log in."}
@@ -56,6 +55,7 @@ export default function LoginRegisterForm({
             <FormField
               label="First Name (required)"
               htmlFor="firstName"
+              errorId="firstName-error"
               error={
                 isFieldInvalid("firstName") ? "First name is required." : ""
               }
@@ -65,14 +65,18 @@ export default function LoginRegisterForm({
                 name="firstName"
                 type="text"
                 value={formValues.firstName}
+                aria-invalid={isFieldInvalid("firstName")}
+                aria-describedby={
+                  isFieldInvalid("firstName") ? "firstName-error" : undefined
+                }
                 onChange={handleChange}
                 onBlur={() => handleBlurValidation("firstName")}
-                placeholder="Max"
-                className={`w-full rounded-md border px-4 py-3 ${
+                placeholder="e.g. Max"
+                className={`input ${
                   isFieldInvalid("firstName")
-                    ? "border-red-500 bg-red-50"
+                    ? "border-red-500 bg-red-50 dark:bg-red-500/20"
                     : isFieldValid("firstName")
-                      ? "border-green-600 bg-green-50"
+                      ? "border-green-600 bg-green-50 dark:bg-green-600/20"
                       : "border-gray-300"
                 }`}
               />
@@ -81,6 +85,7 @@ export default function LoginRegisterForm({
             <FormField
               label="Last Name (required)"
               htmlFor="lastName"
+              errorId="lastName-error"
               error={isFieldInvalid("lastName") ? "Last name is required." : ""}
             >
               <input
@@ -88,14 +93,18 @@ export default function LoginRegisterForm({
                 name="lastName"
                 type="text"
                 value={formValues.lastName}
+                aria-invalid={isFieldInvalid("title")}
+                aria-describedby={
+                  isFieldInvalid("lastName") ? "lastName-error" : undefined
+                }
                 onChange={handleChange}
                 onBlur={() => handleBlurValidation("lastName")}
                 placeholder="Meier"
-                className={`w-full rounded-md border px-4 py-3 ${
+                className={`input ${
                   isFieldInvalid("lastName")
-                    ? "border-red-500 bg-red-50"
+                    ? "border-red-500 bg-red-50 dark:bg-red-500/20"
                     : isFieldValid("lastName")
-                      ? "border-green-600 bg-green-50"
+                      ? "border-green-600 bg-green-50 dark:bg-green-600/20"
                       : "border-gray-300"
                 }`}
               />
@@ -106,21 +115,27 @@ export default function LoginRegisterForm({
         <FormField
           label="E-Mail (required)"
           htmlFor="email"
+          errorId="email-error"
           error={isFieldInvalid("email") ? "Please enter a valid E-Mail." : ""}
         >
           <input
+            type="email"
             id="email"
             name="email"
-            type="email"
+            placeholder="e.g. max.meier@gmx.com"
+            required
             value={formValues.email}
+            aria-invalid={isFieldInvalid("email")}
+            aria-describedby={
+              isFieldInvalid("email") ? "email-error" : undefined
+            }
             onChange={handleChange}
             onBlur={() => handleBlurValidation("email")}
-            placeholder="max.meier@gmx.com"
-            className={`w-full rounded-md border px-4 py-3 ${
+            className={`input ${
               isFieldInvalid("email")
-                ? "border-red-500 bg-red-50"
-                : isRegister && isFieldValid("email")
-                  ? "border-green-600 bg-green-50"
+                ? "border-red-500 bg-red-50 dark:bg-red-500/20"
+                : isFieldValid("email")
+                  ? "border-green-600 bg-green-50 dark:bg-green-600/20"
                   : "border-gray-300"
             }`}
           />
@@ -129,26 +144,31 @@ export default function LoginRegisterForm({
         <FormField
           label="Password (required)"
           htmlFor="password"
+          errorId="password-error"
           error={isFieldInvalid("password") ? passwordError : ""}
         >
           {isRegister && (
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-500 text-sm mb-2">
               Your password must be at least 8 characters long.
             </p>
           )}
           <input
+            type="password"
             id="password"
             name="password"
-            type="password"
+            placeholder="········"
             value={formValues.password}
+            aria-invalid={isFieldInvalid("password")}
+            aria-describedby={
+              isFieldInvalid("password") ? "password-error" : undefined
+            }
             onChange={handleChange}
             onBlur={() => handleBlurValidation("password")}
-            placeholder="●●●●●●●●"
-            className={`w-full rounded-md border px-4 py-3 ${
+            className={`input placeholder:text-xl placeholder: font-bold ${
               isFieldInvalid("password")
-                ? "border-red-500 bg-red-50"
-                : isRegister && isFieldValid("password")
-                  ? "border-green-600 bg-green-50"
+                ? "border-red-500 bg-red-50 dark:bg-red-500/20"
+                : isFieldValid("password")
+                  ? "border-green-600 bg-green-50 dark:bg-green-600/20"
                   : "border-gray-300"
             }`}
           />
@@ -163,23 +183,29 @@ export default function LoginRegisterForm({
         <button
           type="submit"
           disabled={isLoadingSubmit}
-          className="w-full rounded-md bg-gray-600 py-2 font-medium text-white shadow-md transition-colors hover:bg-gray-700 disabled:opacity-50"
+          className="button button-primary"
         >
           {isLoadingSubmit ? "Loading..." : isRegister ? "Register" : "Login"}
         </button>
       </form>
 
       {isRegister ? (
-        <p className="mt-6 text-center">
+        <p className="mt-6 text-center text-gray-500 dark:text-gray-400">
           You already have an Account?{" "}
-          <Link href="/login" className="underline">
+          <Link
+            href="/login"
+            className="underline text-gray-500 dark:text-gray-400"
+          >
             Log in
           </Link>
         </p>
       ) : (
-        <p className="mt-6 text-center">
+        <p className="mt-6 text-center text-gray-500 dark:text-gray-400">
           You don&apos;t have an Account?{" "}
-          <Link href="/register" className="underline">
+          <Link
+            href="/register"
+            className="underline text-gray-500 dark:text-gray-400"
+          >
             Register
           </Link>
         </p>

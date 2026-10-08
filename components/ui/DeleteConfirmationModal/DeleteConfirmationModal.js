@@ -18,19 +18,21 @@ export default function DeleteConfirmationModal({
       ref={dialogRef}
       onClose={onClose}
       aria-labelledby="delete-modal-title"
-      className="m-auto rounded-lg bg-white p-6 shadow-xl backdrop:bg-black/50"
+      className="m-auto rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white p-6 shadow-xl backdrop:bg-black/70"
     >
       <h3 id="delete-modal-title" className="text-lg font-bold mb-2">
         {title}
       </h3>
 
-      <div className="text-sm text-gray-600 mb-4">{children} </div>
+      <div className="text-sm  text-gray-600 dark:text-gray-300 mb-8">
+        {children}{" "}
+      </div>
 
-      <div className="flex items-center justify-end gap-2 mb-4">
+      <div className="flex items-center justify-end gap-4 mb-4">
         <button
           type="button"
           onClick={onClose}
-          className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 text-sm font-medium"
+          className="button button-secondary w-40"
         >
           Cancel
         </button>
@@ -39,7 +41,7 @@ export default function DeleteConfirmationModal({
           type="button"
           onClick={onConfirm}
           disabled={isDeleting}
-          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm font-medium transition-colors disabled:opacity-50"
+          className="button button-delete w-50"
         >
           {isDeleting ? "Deleting..." : "Yes, delete"}
         </button>

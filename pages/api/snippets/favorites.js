@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
 import dbConnect from "@/db/connect";
 import Snippet from "@/db/models/Snippet";
 import "@/db/models/Tag";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
+import User from "@/db/models/User";
 
 export default async function handler(request, response) {
   const session = await getServerSession(request, response, authOptions);
@@ -22,12 +22,11 @@ export default async function handler(request, response) {
 
   if (request.method === "GET") {
     try {
-      const { ids } = request.query;
-      const idList = ids ? ids.split(",") : [];
-      const validIds = idList.filter((id) => mongoose.isValidObjectId(id));
+      const user = await User.findById(session.user.id).select("favorites");
+      const favoriteIds = user?.favorites ?? [];
 
       const snippets = await Snippet.find({
-        _id: { $in: validIds },
+        _id: { $in: favoriteIds },
         $or: [{ userId: session.user.id }, { isPublic: true }],
       })
         .populate("language")

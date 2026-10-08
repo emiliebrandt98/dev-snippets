@@ -104,12 +104,12 @@ export default function MultiSelect({
 
       <div
         onClick={() => inputRef.current?.focus()}
-        className="flex flex-wrap items-center gap-1 p-2 border border-gray-300 rounded-md focus-within:ring-1 focus-within:ring-black"
+        className="flex flex-wrap items-center gap-2 p-2 input"
       >
         {selectedTags.map((tag) => (
           <span
             key={tag.id}
-            className="flex items-center gap-1 px-3 py-1 text-sm bg-gray-100 rounded-lg"
+            className="flex items-center gap-1 px-2 py-1 text-sm text-gray-700 bg-gray-700/10 dark:text-gray-400 dark:bg-gray-700 rounded-lg"
           >
             {tag.label}
             <button
@@ -133,18 +133,21 @@ export default function MultiSelect({
           placeholder={
             selectedTags.length === 0 ? "Search or create a tag" : ""
           }
-          className="flex-1 min-w-32 outline-none"
+          className="flex-1 m-full outline-none"
         />
       </div>
 
       {errorMessage && (
-        <p role="alert" className=" flex gap-2 mt-1 text-sm text-red-600">
+        <p
+          role="alert"
+          className="text-sm text-red-500 flex items-center gap-2 mt-0.5"
+        >
           <span>⚠️</span>
           {errorMessage}
         </p>
       )}
       {!errorMessage && isMaxTagsReached && (
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
           Max of {maxTags} are reached.
         </p>
       )}
@@ -153,7 +156,7 @@ export default function MultiSelect({
         <ul
           role="listbox"
           aria-label="Available tags"
-          className="absolute z-10 flex flex-col gap-2 top-full left-0 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-md max-h-60 overflow-y-auto"
+          className="absolute z-10 flex flex-col top-full left-0 w-full mt-1 bg-gray-50 dark:bg-gray-800 border border-gray-300 rounded-md shadow-md max-h-60 overflow-y-auto"
         >
           {filteredTags.map((tag) => {
             const isSelected = selectedTagIds.includes(tag.id);
@@ -162,13 +165,13 @@ export default function MultiSelect({
                 key={tag.id}
                 role="option"
                 aria-selected={isSelected}
-                className="flex items-center justify-between px-2 py-1 hover:bg-gray-50"
+                className="flex items-center cursor-pointer justify-between p-2 bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <button
                   type="button"
                   onClick={() => handleSelectTag(tag.id)}
                   disabled={isSelected}
-                  className="flex-1 text-left disabled:text-gray-400 disabled:cursor-not-allowed"
+                  className="flex-1 text-left cursor-pointer disabled:text-gray-400 disabled:cursor-not-allowed"
                 >
                   {tag.label}
                   {isSelected && (
@@ -195,10 +198,10 @@ export default function MultiSelect({
                 type="button"
                 onClick={handleCreateTag}
                 disabled={isCreatingTag}
-                className="w-full px-2 py-1 text-left hover:bg-gray-50"
+                className="w-full p-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
               >
                 <span className="font-medium">
-                  {isCreatingTag ? "Creating..." : "Create:"}
+                  {isCreatingTag ? "Creating..." : "Create: "}
                 </span>
                 {normalizedSearchTerm}
               </button>

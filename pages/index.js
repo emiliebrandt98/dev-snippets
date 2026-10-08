@@ -6,6 +6,8 @@ import SearchBar from "@/components/features/SearchBar/SearchBar";
 import useSearchMatch from "@/hooks/useSearchMatch/useSearchMatch";
 import FilterSnippetList from "@/components/features/FilterSnippetList/FilterSnippetList";
 import filterSnippets from "@/lib/filter/filterSnippets";
+import FilterButton from "@/components/ui/FilterButton/FilterButton";
+import useFilterOptions from "@/hooks/useFilterOptions/useFilterOptions";
 
 export default function Home({
   snippets,
@@ -28,7 +30,28 @@ export default function Home({
     selectedSnippets,
   } = useSnippetSelection(snippets);
 
-  const filteredSnippets = filterSnippets(snippets ?? [], activeFilterItems);
+  const {
+    languageItems,
+    tagItems,
+    yearItems,
+    isLoadingLanguages,
+    isLoadingTags,
+    errorLanguages,
+    errorTags,
+    openFilter,
+    onOpenFilter,
+    draftFilterItems,
+    ondraftFilterItems,
+    onHandleOpenFilter,
+    activeFilterCount,
+    onClearFilter,
+  } = useFilterOptions(snippets, activeFilterItems, onActiveFilterItems);
+
+  const filteredSnippets = filterSnippets(
+    snippets ?? [],
+    activeFilterItems,
+    onActiveFilterItems
+  );
   const { searchedSnippets } = useSearchMatch(filteredSnippets, search);
 
   if (isLoading) return <p>Loading...</p>;
@@ -61,18 +84,37 @@ export default function Home({
             <div className="flex-1">
               <SearchBar onSearch={onSearch} search={search} />
             </div>
-            <DeleteButton
-              isDeleteMode={isDeleteMode}
-              onToggleDeleteMode={onToggleDeleteMode}
-              selectedIds={selectedIds}
-              setIsModalOpen={setIsModalOpen}
+
+            <FilterButton
+              activeFilterCount={activeFilterCount}
+              onClearFilter={onClearFilter}
+              onHandleOpenFilter={onHandleOpenFilter}
             />
+
+            {activeFilterCount > 0 || (
+              <DeleteButton
+                isDeleteMode={isDeleteMode}
+                onToggleDeleteMode={onToggleDeleteMode}
+                selectedIds={selectedIds}
+                setIsModalOpen={setIsModalOpen}
+              />
+            )}
           </div>
 
           <FilterSnippetList
             activeFilterItems={activeFilterItems}
             onActiveFilterItems={onActiveFilterItems}
-            snippets={snippets}
+            openFilter={openFilter}
+            onOpenFilter={onOpenFilter}
+            draftFilterItems={draftFilterItems}
+            ondraftFilterItems={ondraftFilterItems}
+            languageItems={languageItems}
+            tagItems={tagItems}
+            yearItems={yearItems}
+            isLoadingLanguages={isLoadingLanguages}
+            isLoadingTags={isLoadingTags}
+            errorLanguages={errorLanguages}
+            errorTags={errorTags}
           />
         </section>
 

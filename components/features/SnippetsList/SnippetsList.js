@@ -21,7 +21,7 @@ export default function SnippetsList({
                 type="checkbox"
                 checked={isSelected}
                 onChange={() => onSelectSnippet(snippet._id)}
-                className="w-5 h-5 accent-red-600 cursor-pointer transition-all duration-200"
+                className="w-5 h-5 appearance-none rounded border border-gray-400 dark:border-gray-600 bg-white dark:bg-gray-800 checked:bg-red-600 checked:border-red-600 focus:outline-none cursor-pointer transition-all relative flex items-center justify-center checked:after:content-['✓'] checked:after:text-white checked:after:text-sm"
               />
             )}
             <div

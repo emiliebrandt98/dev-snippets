@@ -1,26 +1,73 @@
+@import url("https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap");
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Font */
+  --font-headline: "Zen Kaku Gothic Antique", sans-serif, 800;
+  --font-body: "Zen Kaku Gothic New", sans-serif, 600;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  color-scheme: dark;
+}
+
+.code-block {
+  scrollbar-color: #9ca3af transparent;
+}
+
+.dark .code-block {
+  scrollbar-color: #6b7280 transparent;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+
+  @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-50;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-headline);
+}
+
+@utility button {
+  @apply w-full inline-flex items-center justify-center px-4 pb-2.5 pt-2 font-semibold rounded-lg transition-colors cursor-pointer border-2 border-transparent shadow-lg shadow-transparent disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+@utility button-primary {
+  @apply bg-purple-700 border-purple-800 text-gray-50 hover:bg-purple-800 hover:border-purple-800 hover:text-gray-50 hover:shadow-purple-300/80 focus:outline-offset-4 focus:outline-purple-700 active:bg-purple-900 active:text-gray-50 dark:hover:shadow-purple-600/30;
+}
+
+@utility button-secondary {
+  @apply bg-transparent border-gray-500  text-gray-900  hover:shadow-purple-300/30 hover:bg-gray-200 focus:outline-offset-4 focus:outline-gray-500 active:bg-gray-700 active:text-gray-50 dark:text-gray-50 dark:hover:bg-gray-700 dark:active:bg-gray-700 dark:active:text-gray-50 dark:hover:shadow-gray-700/30;
+}
+
+@utility button-delete {
+  @apply bg-red-500/40  border-red-500 text-gray-900 hover:bg-red-500 hover:text-gray-50 focus:outline-offset-4 focus:outline-red-500 active:bg-red-700 active:text-gray-50 dark:text-gray-50 hover:shadow-red-500/40;
+}
+
+@utility button-icon {
+  @apply inline-flex items-center justify-center cursor-pointer w-10 h-10 aspect-square rounded-full transition-colors border border-transparent focus:outline-offset-4 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+@utility button-icon-primary {
+  @apply bg-gray-100 border-gray-300 text-gray-900 hover:bg-gray-200 hover:border-gray-200 hover:shadow-lg hover:shadow-gray-300/30 focus:outline-gray-500 active:bg-gray-600 active:border-gray-600 active:text-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:text-gray-50 dark:hover:shadow-purple-700/30;
+}
+
+@utility button-icon-secondary {
+  @apply bg-purple-400/50 border-purple-400/50 text-purple-700 hover:bg-purple-500 hover:border-purple-600 hover:text-purple-200 focus:outline-purple-500 active:bg-purple-700 active:border-purple-700 active:text-purple-200 dark:bg-purple-700/50 dark:border-purple-700/50 dark:hover:bg-purple-700 dark:hover:border-purple-700 dark:text-purple-200 hover:shadow-purple-500/30;
+}
+
+@utility input {
+  @apply border border-gray-300 rounded-lg p-2 focus:outline-offset-4 focus:outline-gray-500 dark:focus:outline-gray-400 dark:placeholder:text-gray-500 placeholder:text-gray-400;
+}
+
+@utility tag {
+  @apply px-3 py-1 text-sm text-gray-500 bg-gray-700/10 dark:text-gray-400 dark:bg-gray-700 rounded-lg;
 }

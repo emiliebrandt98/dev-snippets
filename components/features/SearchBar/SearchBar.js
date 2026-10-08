@@ -5,8 +5,8 @@ export default function SearchBar({ search, onSearch }) {
     return onSearch("");
   }
   return (
-    <div className="flex flex-row h-10 w-full items-center gap-2 px-3 rounded-lg bg-gray-100 hover:bg-gray-200 focus-within:ring-1 focus-within:ring-black">
-      <Search size={16} className="text-gray-500 shrink-0" />
+    <div className="button-icon bg-gray-100 border border-gray-300 dark:bg-gray-800 dark:border-gray-700 px-3 w-full rounded-full gap-2 cursor-auto">
+      <Search size={16} className="shrink-0" />
       <input
         id="search"
         name="search"

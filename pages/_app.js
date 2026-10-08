@@ -2,7 +2,7 @@ import "@/styles/globals.css";
 import useSWR, { SWRConfig } from "swr";
 import { ToastContainer } from "react-toastify";
 import NavigationBar from "@/components/features/NavigationBar/NavigationBar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { EMPTY_FILTER } from "@/lib/filter/filterSnippets";
 import { SessionProvider, useSession } from "next-auth/react";
 import AuthGuard from "@/components/AuthGuard/AuthGuard";
@@ -21,7 +21,26 @@ const fetcher = async (url) => {
   return response.json();
 };
 
+function getTheme(selectedMode) {
+  if (selectedMode === "automatic") {
+    const systemPrefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    return systemPrefersDark ? "dark" : "light";
+  }
+  return selectedMode;
+}
+
+function applyTheme(theme) {
+  if (theme === "dark") {
+    document.documentElement.classList.add("dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+  }
+}
+
 function AppContent({ Component, pageProps }) {
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const { status } = useSession();
   const {
     data: snippets,
@@ -43,11 +62,33 @@ function AppContent({ Component, pageProps }) {
   const [activeFilterItems, setActiveFilterItems] = useState(EMPTY_FILTER);
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [mode, setMode] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("colorMode") ?? "automatic";
+    }
+    return "automatic";
+  });
+
+  function updateTheme(selectedMode) {
+    const theme = getTheme(selectedMode);
+    applyTheme(theme);
+    setIsDarkMode(theme === "dark");
+  }
+
+  function handleToggleColorMode(event) {
+    const selectedMode = event.target.value;
+    setMode(selectedMode);
+    localStorage.setItem("colorMode", selectedMode);
+  }
+
+  useEffect(() => {
+    updateTheme(mode);
+  }, [mode]);
 
   return (
     <AuthGuard>
       <SWRConfig value={{ fetcher }}>
-        <div className={showNavigation ? "pb-16 mb-6" : "mb-6"}>
+        <div className={showNavigation ? "pb-16 mb-8" : "mb-8"}>
           <Component
             snippets={snippets}
             error={error}
@@ -62,6 +103,9 @@ function AppContent({ Component, pageProps }) {
             onActiveFilterItems={setActiveFilterItems}
             favoriteSnippets={favoriteSnippets}
             {...pageProps}
+            mode={mode}
+            isDarkMode={isDarkMode}
+            onToggleColorMode={handleToggleColorMode}
           />
         </div>
         {showNavigation && <NavigationBar />}

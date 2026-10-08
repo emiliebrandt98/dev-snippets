@@ -4,6 +4,8 @@ import FilterSnippetList from "@/components/features/FilterSnippetList/FilterSni
 import SnippetsList from "@/components/features/SnippetsList/SnippetsList";
 import useSearchMatch from "@/hooks/useSearchMatch/useSearchMatch";
 import filterSnippets from "@/lib/filter/filterSnippets";
+import FilterButton from "@/components/ui/FilterButton/FilterButton";
+import useFilterOptions from "@/hooks/useFilterOptions/useFilterOptions";
 
 export default function PublicPage({
   search,
@@ -12,7 +14,23 @@ export default function PublicPage({
   onActiveFilterItems,
 }) {
   const { data: snippets, error, isLoading } = useSWR("/api/snippets/public");
-  console.log("publicSnippets:", snippets);
+
+  const {
+    languageItems,
+    tagItems,
+    yearItems,
+    isLoadingLanguages,
+    isLoadingTags,
+    errorLanguages,
+    errorTags,
+    openFilter,
+    onOpenFilter,
+    draftFilterItems,
+    ondraftFilterItems,
+    onHandleOpenFilter,
+    activeFilterCount,
+    onClearFilter,
+  } = useFilterOptions(snippets, activeFilterItems, onActiveFilterItems, true);
 
   const filteredSnippets = filterSnippets(snippets ?? [], activeFilterItems);
   const { searchedSnippets } = useSearchMatch(filteredSnippets, search);
@@ -55,13 +73,33 @@ export default function PublicPage({
 
       <main>
         <section className="flex flex-col mb-4 gap-2">
-          <SearchBar onSearch={onSearch} search={search} />
-          <FilterSnippetList
-            activeFilterItems={activeFilterItems}
-            onActiveFilterItems={onActiveFilterItems}
-            snippets={snippets ?? []}
-          />
+          <div className="flex flex-row items-center gap-2">
+            <SearchBar onSearch={onSearch} search={search} />
+
+            <FilterButton
+              activeFilterCount={activeFilterCount}
+              onClearFilter={onClearFilter}
+              onHandleOpenFilter={onHandleOpenFilter}
+            />
+          </div>
         </section>
+
+        <FilterSnippetList
+          activeFilterItems={activeFilterItems}
+          onActiveFilterItems={onActiveFilterItems}
+          openFilter={openFilter}
+          onOpenFilter={onOpenFilter}
+          draftFilterItems={draftFilterItems}
+          ondraftFilterItems={ondraftFilterItems}
+          languageItems={languageItems}
+          tagItems={tagItems}
+          yearItems={yearItems}
+          isLoadingLanguages={isLoadingLanguages}
+          isLoadingTags={isLoadingTags}
+          errorLanguages={errorLanguages}
+          errorTags={errorTags}
+          snippets={snippets ?? []}
+        />
 
         {showNoSnippets ? (
           <p className="text-gray-500">There are no public snippets yet.</p>

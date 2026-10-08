@@ -4,7 +4,10 @@ import useSWR, { useSWRConfig } from "swr";
 import Link from "next/link";
 import CopyToClipboard from "@/components/ui/CopyToClipboard/CopyToClipboard";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
+import {
+  oneLight,
+  oneDark,
+} from "react-syntax-highlighter/dist/esm/styles/prism";
 import FavoriteButton from "@/components/ui/FavoriteButton/FavoriteButton";
 import Switch from "@/components/ui/Switch/Switch";
 import { toast } from "react-toastify";
@@ -12,7 +15,7 @@ import { useSession } from "next-auth/react";
 import InfoModal from "@/components/ui/InfoModal/InfoModal";
 import { useState } from "react";
 
-export default function SnippetPage() {
+export default function SnippetPage({ isDarkMode }) {
   const router = useRouter();
   const { data: session } = useSession();
   const { id } = router.query;
@@ -23,9 +26,11 @@ export default function SnippetPage() {
     isLoading,
     mutate,
   } = useSWR(id ? `/api/snippets/${id}` : null);
+
   const { mutate: mutateGlobal } = useSWRConfig();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
+  const syntaxTheme = isDarkMode ? oneDark : oneLight;
 
   if (isLoading) {
     return <p className="p-4 text-gray-500">Just a second. Loading...</p>;
@@ -35,14 +40,18 @@ export default function SnippetPage() {
     return (
       <div className="p-4">
         <p className="font-semibold">Oops! Someting did not go as planned...</p>
-        <p className="text-gray-500">Please try again later</p>
+        <p className="text-gray-500 dark:text-gray-400">
+          Please try again later
+        </p>
       </div>
     );
   }
 
   if (!snippet) {
     return (
-      <p className="p-4 text-gray-500">This snippet cound not be found.</p>
+      <p className="p-4 text-gray-500 dark:text-gray-400">
+        This snippet cound not be found.
+      </p>
     );
   }
 
@@ -93,31 +102,33 @@ export default function SnippetPage() {
   }
 
   return (
-    <div className="max-w-md mx-auto p-4">
+    <div className="max-w-2xl mx-auto p-4">
       <header className="mb-4">
         <button
           type="button"
           onClick={handleBack}
           aria-label="back to previous page"
-          className="inline-flex items-center justify-center w-10 h-10 aspect-square rounded-lg bg-gray-100 hover:bg-gray-200"
+          className="button-icon button-icon-primary mb-4 rounded-lg"
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
 
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="mb-4 text-sm text-gray-500">{`${formattedDate} · ${language?.name}`}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{`${formattedDate} · ${language?.name}`}</p>
 
-            <h1 className="text-xl font-bold mt-1">{title}</h1>
+            <h1 className="flex flex-col font-semibold text-xl mt-1 text-balance">
+              {title}
+            </h1>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             <FavoriteButton snippetId={id} />
             {isOwner && (
               <Link
                 href={`/snippet/${snippet?._id}/edit-snippet`}
                 aria-label="edit snippet"
-                className="inline-flex items-center justify-center w-8 h-8 aspect-square rounded-lg bg-gray-100 hover:bg-gray-200"
+                className="button-icon button-icon-primary rounded-lg"
               >
                 <Pencil size={16} />
               </Link>
@@ -126,22 +137,23 @@ export default function SnippetPage() {
         </div>
       </header>
 
-      <main>
-        <ul className="flex flex-wrap gap-2 mt-2 list-none pl-0">
+      <main className="flex flex-col gap-8">
+        <ul className="flex flex-wrap gap-2 mt-2 list-none pl-0 ">
           {snippet.tags?.map((tag) => (
-            <li
-              key={tag._id}
-              className="px-3 py-1 text-sm text-gray-700 bg-gray-100 rounded-lg"
-            >
+            <li key={tag._id} className="tag">
               {tag.label}
             </li>
           ))}
         </ul>
-        <div className="flex items-end justify-between gap-2 bg-gray-100 rounded-lg p-3">
+
+        <hr className="border-gray-200 dark:border-gray-700" />
+
+        <div className="flex items-end justify-between gap-2 bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-4">
           <SyntaxHighlighter
             language={safeLanguage}
             showLineNumbers
-            style={oneLight}
+            className="code-block"
+            style={syntaxTheme}
             customStyle={{
               background: "transparent",
               fontSize: "0.8rem",
@@ -152,56 +164,62 @@ export default function SnippetPage() {
           >
             {code}
           </SyntaxHighlighter>
+
           <CopyToClipboard textToCopy={code} />
         </div>
 
         {notes && (
-          <>
-            <h2 className="font-bold text-lg mt-6 mb-2">Notes:</h2>
-            <p className="text-gray-700 whitespace-pre-line">{notes}</p>
-          </>
+          <div className="flex flex-col gap-2">
+            <h2 className="font-bold text-lg">Notes:</h2>
+            <p className="text-gray-700 dark:text-gray-400 whitespace-pre-line text-balance">
+              {notes}
+            </p>
+          </div>
         )}
 
         {installCommand && (
-          <>
-            <h2 className="font-bold text-lg mt-6 mb-2">Install Command:</h2>
-            <div className="flex items-center justify-between gap-2 bg-gray-100 rounded-md p-3">
-              <p className="text-sm font-mono">{installCommand}</p>
+          <div className="flex flex-col gap-2">
+            <h2 className="font-bold text-lg">Install Command:</h2>
+            <div className="flex items-center justify-between gap-2 bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
+              <p className="text-sm font-mono text-gray-500 dark:text-gray-400">
+                {installCommand}
+              </p>
               <CopyToClipboard textToCopy={installCommand} />
             </div>
-          </>
+          </div>
         )}
 
         {link && (
-          <>
-            <h2 className="font-bold text-lg mt-6 mb-2">Link:</h2>
-            <div className="flex items-center justify-between gap-2 bg-gray-100 rounded-md p-3">
+          <div className="flex flex-col gap-2">
+            <h2 className="font-bold text-lg">Link:</h2>
+            <div className="flex items-center justify-between gap-2 bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
               <Link
                 href={link}
                 target="_blank"
                 rel="noreferrer"
-                className="text-sm text-blue-600 hover:underline break-all"
+                className="text-sm text-purple-600 dark:text-purple-400 hover:underline break-all"
               >
                 {link}
               </Link>
               <CopyToClipboard textToCopy={link} />
             </div>
-          </>
+          </div>
         )}
 
-        <section>
-          <h2 className="font-bold text-lg mt-6 mb-2">Public:</h2>
-          <div className="flex flex-row gap-10">
-            <p className="m4-4 text-sm text-gray-500">
-              When &quot;Public&quot; is activated, this snippet will be
-              displayed on the Public Page, allowing you to share snippets with
-              other users.
-            </p>
-            {isOwner && (
+        {isOwner && (
+          <section>
+            <h2 className="font-bold text-lg">Public:</h2>
+            <div className="flex flex-row gap-10">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                When &quot;Public&quot; is activated, this snippet will be
+                displayed on the Public Page, allowing you to share snippets
+                with other users.
+              </p>
+
               <Switch value={snippet.isPublic} onChange={handleTogglePublic} />
-            )}
-          </div>
-        </section>
+            </div>
+          </section>
+        )}
 
         {isModalOpen && (
           <InfoModal
