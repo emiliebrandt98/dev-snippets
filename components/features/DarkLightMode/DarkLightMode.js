@@ -1,6 +1,6 @@
 export default function DarkLightMode({ onToggleColorMode, mode }) {
   return (
-    <section className="flex flex-row gap-2">
+    <section className="flex flex-row gap-2 lg:w-96">
       <div className="flex flex-col basis-1/3 items-center gap-2 py-2">
         <label className="inheriat" htmlFor="automatic">
           Automatic

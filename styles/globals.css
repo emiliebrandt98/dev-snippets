@@ -37,7 +37,7 @@ h6 {
 }
 
 @utility button {
-  @apply w-full inline-flex items-center justify-center px-4 pb-2.5 pt-2 font-semibold rounded-lg transition-colors cursor-pointer border-2 border-transparent shadow-lg shadow-transparent disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply w-full h-12 inline-flex items-center justify-center px-4 pb-2.5 pt-2 font-semibold rounded-lg transition-colors cursor-pointer border-2 border-transparent shadow-lg shadow-transparent disabled:opacity-50 disabled:cursor-not-allowed;
 }
 
 @utility button-primary {
