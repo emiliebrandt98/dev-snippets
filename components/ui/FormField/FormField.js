@@ -7,7 +7,10 @@ export default function FormField({
 }) {
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={htmlFor} className="text-sm font-medium text-gray-500">
+      <label
+        htmlFor={htmlFor}
+        className="text-sm font-medium text-gray-500 dark:text-gray-400"
+      >
         {label}
       </label>
 
