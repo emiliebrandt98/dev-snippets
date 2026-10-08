@@ -165,7 +165,7 @@ export default function MultiSelect({
                 key={tag.id}
                 role="option"
                 aria-selected={isSelected}
-                className="flex items-center cursor-pointer justify-between p-2 bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="flex items-center cursor-pointer justify-between p-2 bg-gray-50 hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-700"
               >
                 <button
                   type="button"
