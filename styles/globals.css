@@ -9,6 +9,18 @@
   --font-body: "Zen Kaku Gothic New", sans-serif, 600;
 }
 
+.dark {
+  color-scheme: dark;
+}
+
+.code-block {
+  scrollbar-color: #9ca3af transparent;
+}
+
+.dark .code-block {
+  scrollbar-color: #6b7280 transparent;
+}
+
 body {
   font-family: var(--font-body);
 
@@ -45,13 +57,17 @@ h6 {
 }
 
 @utility button-icon-primary {
-  @apply bg-gray-100 border-gray-300 text-gray-900 hover:bg-gray-200 hover:border-gray-200 hover:shadow-lg hover:shadow-purple-300/30 focus:outline-gray-500 active:bg-gray-600 active:border-gray-600 active:text-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:text-gray-50 dark:hover:shadow-purple-700/30;
+  @apply bg-gray-100 border-gray-300 text-gray-900 hover:bg-gray-200 hover:border-gray-200 hover:shadow-lg hover:shadow-gray-300/30 focus:outline-gray-500 active:bg-gray-600 active:border-gray-600 active:text-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:text-gray-50 dark:hover:shadow-purple-700/30;
 }
 
 @utility button-icon-secondary {
-  @apply bg-purple-400/50 border-purple-400/50 text-purple-700 hover:bg-purple-500 hover:border-purple-600 hover:text-purple-200 focus:outline-purple-500 active:bg-purple-700 active:border-purple-700 active:text-purple-200 dark:bg-purple-700/50 dark:border-purple-700/50 dark:hover:bg-purple-700 dark:hover:border-purple-700 dark:text-purple-200 shadow-lg shadow-purple-500/30;
+  @apply bg-purple-400/50 border-purple-400/50 text-purple-700 hover:bg-purple-500 hover:border-purple-600 hover:text-purple-200 focus:outline-purple-500 active:bg-purple-700 active:border-purple-700 active:text-purple-200 dark:bg-purple-700/50 dark:border-purple-700/50 dark:hover:bg-purple-700 dark:hover:border-purple-700 dark:text-purple-200 hover:shadow-purple-500/30;
 }
 
 @utility input {
   @apply border border-gray-300 rounded-lg p-2 focus:outline-offset-4 focus:outline-gray-500 dark:focus:outline-gray-400;
+}
+
+@utility tag {
+  @apply px-3 py-1 text-sm text-gray-500 bg-gray-700/10 dark:text-gray-400 dark:bg-gray-700 rounded-lg;
 }

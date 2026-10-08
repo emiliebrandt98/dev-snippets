@@ -75,7 +75,7 @@ export default function ProfilePage({
           </div>
         </section>
 
-        <hr className="border-gray-200 dark:border-gray-800" />
+        <hr className="border-gray-200 dark:border-gray-700" />
 
         <section>
           <h2 className="text-xl font-bold">Apperance</h2>
@@ -85,7 +85,7 @@ export default function ProfilePage({
           <DarkLightMode onToggleColorMode={onToggleColorMode} mode={mode} />
         </section>
 
-        <hr className="border-gray-200 dark:border-gray-800" />
+        <hr className="border-gray-200 dark:border-gray-700" />
 
         <section className="flex flex-row  justify-between items-end">
           <div className="flex flex-col gap-4">

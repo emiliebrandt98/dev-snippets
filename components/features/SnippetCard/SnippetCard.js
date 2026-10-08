@@ -38,10 +38,7 @@ export default function SnippetCard({
 
       <ul className="flex flex-wrap gap-2 mt-2 list-none pl-0">
         {tags.map((tag) => (
-          <li
-            key={tag._id}
-            className="px-3 py-1 text-sm text-gray-500 bg-gray-700/10 dark:text-gray-400 dark:bg-gray-700 rounded-lg"
-          >
+          <li key={tag._id} className="tag">
             {tag.label}
           </li>
         ))}

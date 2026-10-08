@@ -21,16 +21,17 @@ const fetcher = async (url) => {
   return response.json();
 };
 
-function applyTheme(selectedMode) {
-  let theme = selectedMode;
-
+function getTheme(selectedMode) {
   if (selectedMode === "automatic") {
     const systemPrefersDark = window.matchMedia(
       "(prefers-color-scheme: dark)"
     ).matches;
-    theme = systemPrefersDark ? "dark" : "light";
+    return systemPrefersDark ? "dark" : "light";
   }
+  return selectedMode;
+}
 
+function applyTheme(theme) {
   if (theme === "dark") {
     document.documentElement.classList.add("dark");
   } else {
@@ -39,6 +40,7 @@ function applyTheme(selectedMode) {
 }
 
 function AppContent({ Component, pageProps }) {
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const { status } = useSession();
   const {
     data: snippets,
@@ -67,15 +69,20 @@ function AppContent({ Component, pageProps }) {
     return "automatic";
   });
 
+  function updateTheme(selectedMode) {
+    const theme = getTheme(selectedMode);
+    applyTheme(theme);
+    setIsDarkMode(theme === "dark");
+  }
+
   function handleToggleColorMode(event) {
     const selectedMode = event.target.value;
     setMode(selectedMode);
     localStorage.setItem("colorMode", selectedMode);
-    applyTheme(selectedMode);
   }
 
   useEffect(() => {
-    applyTheme(mode);
+    updateTheme(mode);
   }, [mode]);
 
   return (
@@ -97,6 +104,7 @@ function AppContent({ Component, pageProps }) {
             favoriteSnippets={favoriteSnippets}
             {...pageProps}
             mode={mode}
+            isDarkMode={isDarkMode}
             onToggleColorMode={handleToggleColorMode}
           />
         </div>
