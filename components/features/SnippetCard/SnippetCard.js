@@ -17,32 +17,34 @@ export default function SnippetCard({
   return (
     <Link
       href={`/snippet/${id}`}
-      className="block rounded-lg bg-gray-100 h-full p-4 border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 transition"
+      className="flex flex-col rounded-lg content-between bg-gray-100 h-full p-4 border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 transition"
     >
-      <div className="flex flex-row justify-between gap-4">
-        <div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{`${formattedDate} · ${language}`}</p>
+      <div>
+        <div className="flex flex-row justify-between gap-6">
+          <div>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{`${formattedDate} · ${language}`}</p>
 
-          <h2 className="flex flex-col font-semibold text-lg mt-1 text-balance">
-            {title}
-            {otherMatches.length > 0 && (
-              <span className=" text-xs text-gray-500 dark:text-gray-400">
-                (found in {otherMatches.join(", ")})
-              </span>
-            )}
-          </h2>
+            <h2 className="flex flex-col  font-semibold text-lg/5 my-2  text-balance">
+              {title}
+              {otherMatches.length > 0 && (
+                <span className=" text-xs text-gray-500 dark:text-gray-400">
+                  (found in {otherMatches.join(", ")})
+                </span>
+              )}
+            </h2>
+          </div>
+
+          <FavoriteButton snippetId={id} />
         </div>
 
-        <FavoriteButton snippetId={id} />
+        <ul className="flex flex-wrap gap-2 my-2 list-none pl-0">
+          {tags.map((tag) => (
+            <li key={tag._id} className="tag">
+              {tag.label}
+            </li>
+          ))}
+        </ul>
       </div>
-
-      <ul className="flex flex-wrap gap-2 mt-2 list-none pl-0">
-        {tags.map((tag) => (
-          <li key={tag._id} className="tag">
-            {tag.label}
-          </li>
-        ))}
-      </ul>
 
       <div className="flex justify-end gap-2 text-sm mt-auto text-gray-500 dark:text-gray-400">
         <p>{isPublic ? "Public" : "Private"}</p>
