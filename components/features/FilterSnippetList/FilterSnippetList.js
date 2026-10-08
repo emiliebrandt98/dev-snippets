@@ -59,49 +59,52 @@ export default function FilterSnippetList({
     <dialog
       ref={filterDialogRef}
       onClose={() => onOpenFilter(false)}
-      className="m-0 mt-auto w-full max-w-full rounded-t-3xl p-6 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white backdrop:bg-black/40"
+      className="m-0 mt-auto w-full max-w-full rounded-t-3xl p-6 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white backdrop:bg-black/40
+      lg:m-0 lg:ml-auto lg:h-dvh lg:max-h-none lg:w-96 lg:max-w-xl lg:overflow-y-auto lg:rounded-none lg:p-6 lg:border-0 lg:shadow-none"
     >
-      <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Filter</h2>
-        <button
-          type="button"
-          aria-label="Close dialog"
-          onClick={handleCancelFilter}
-          className="button-icon button-icon-primary"
-        >
-          <X />
-        </button>
+      <div>
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="text-2xl font-bold">Filter</h2>
+          <button
+            type="button"
+            aria-label="Close dialog"
+            onClick={handleCancelFilter}
+            className="button-icon button-icon-primary"
+          >
+            <X />
+          </button>
+        </div>
+
+        <FilterSection
+          title="Language"
+          items={languageItems}
+          selectedIds={draftFilterItems?.languages}
+          isLoading={isLoadingLanguages}
+          error={errorLanguages}
+          onToggle={(id) => handleToggleItem("languages", id)}
+          onClear={() => handleClearCategory("languages")}
+        />
+        <FilterSection
+          title="Tags"
+          items={tagItems}
+          selectedIds={draftFilterItems?.tags}
+          isLoading={isLoadingTags}
+          error={errorTags}
+          onToggle={(id) => handleToggleItem("tags", id)}
+          onClear={() => handleClearCategory("tags")}
+        />
+        <FilterSection
+          title="Year"
+          items={yearItems}
+          selectedIds={draftFilterItems?.years}
+          isLoading={false}
+          error={null}
+          onToggle={(id) => handleToggleItem("years", id)}
+          onClear={() => handleClearCategory("years")}
+        />
       </div>
 
-      <FilterSection
-        title="Language"
-        items={languageItems}
-        selectedIds={draftFilterItems?.languages}
-        isLoading={isLoadingLanguages}
-        error={errorLanguages}
-        onToggle={(id) => handleToggleItem("languages", id)}
-        onClear={() => handleClearCategory("languages")}
-      />
-      <FilterSection
-        title="Tags"
-        items={tagItems}
-        selectedIds={draftFilterItems?.tags}
-        isLoading={isLoadingTags}
-        error={errorTags}
-        onToggle={(id) => handleToggleItem("tags", id)}
-        onClear={() => handleClearCategory("tags")}
-      />
-      <FilterSection
-        title="Year"
-        items={yearItems}
-        selectedIds={draftFilterItems?.years}
-        isLoading={false}
-        error={null}
-        onToggle={(id) => handleToggleItem("years", id)}
-        onClear={() => handleClearCategory("years")}
-      />
-
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-4">
         <button
           type="button"
           onClick={handleApplyFilter}
