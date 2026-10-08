@@ -68,7 +68,7 @@ export default function PublicPage({
   return (
     <div className="max-w-2xl lg:max-w-none mx-auto p-4">
       <header className="mb-6">
-        <h1 className="text-2xl font-bold">Public Snippets</h1>
+        <h1 className="lg:hidden text-2xl font-bold">DiscoverySnippets</h1>
       </header>
 
       <main>

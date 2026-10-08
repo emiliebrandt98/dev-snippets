@@ -77,7 +77,7 @@ export default function ProfilePage({
 
         <hr className="border-gray-200 dark:border-gray-700" />
 
-        <section className="flex justify-between lg:flex-row">
+        <section className="flex flex-col justify-between lg:flex-row">
           <div>
             <h2 className="text-xl font-bold">Apperance</h2>
             <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">

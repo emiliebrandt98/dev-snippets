@@ -76,7 +76,7 @@ export default function FavoritesPage({
   return (
     <div className="max-w-2xl lg:max-w-none mx-auto p-4">
       <header className="mb-6">
-        <h1 className="text-2xl font-bold">DevSnippets</h1>
+        <h1 className="lg:hidden text-2xl font-bold">FavoriteSnippets</h1>
       </header>
 
       <main>
