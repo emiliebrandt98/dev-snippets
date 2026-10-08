@@ -65,7 +65,7 @@ h6 {
 }
 
 @utility input {
-  @apply border border-gray-300 rounded-lg p-2 focus:outline-offset-4 focus:outline-gray-500 dark:focus:outline-gray-400;
+  @apply border border-gray-300 rounded-lg p-2 focus:outline-offset-4 focus:outline-gray-500 dark:focus:outline-gray-400 dark:placeholder:text-gray-500 placeholder:text-gray-400;
 }
 
 @utility tag {

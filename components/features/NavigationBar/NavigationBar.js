@@ -15,7 +15,7 @@ export default function NavigationBar() {
   return (
     <nav
       className="
-  fixed max-w-2xl mx-auto bottom-4 left-4 right-4 z-10 p-1.5 flex justify-around items-center rounded-full border-2 dark:border-gray-600 shadow-xl dark:shadow-purple-800/10 bg-white dark:bg-gray-700"
+  fixed max-w-2xl mx-auto bottom-4 left-4 right-4 z-10 p-1.5 flex justify-around items-center rounded-full border-2 border-gray-100 dark:border-gray-600 shadow-xl shadow-gray-200/30 dark:shadow-purple-800/10 bg-white dark:bg-gray-700"
     >
       {navigationsItems.map(({ href, label, Icon }) => {
         const isActive = router.pathname === href;

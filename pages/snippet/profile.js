@@ -87,7 +87,7 @@ export default function ProfilePage({
 
         <hr className="border-gray-200 dark:border-gray-700" />
 
-        <section className="flex flex-row  justify-between items-end">
+        <section className="flex flex-col gap-4">
           <div className="flex flex-col gap-4">
             <h2 className="text-xl font-bold">Danger Zone</h2>
 
@@ -102,7 +102,7 @@ export default function ProfilePage({
           <button
             type="button"
             onClick={() => setIsDeleteModalOpen(true)}
-            className="button button-delete w-50"
+            className="button button-delete"
           >
             Delete Account
           </button>
