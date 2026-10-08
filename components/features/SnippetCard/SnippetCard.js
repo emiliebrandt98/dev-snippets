@@ -24,7 +24,7 @@ export default function SnippetCard({
           <div>
             <p className="text-sm text-gray-500 dark:text-gray-400">{`${formattedDate} · ${language}`}</p>
 
-            <h2 className="flex flex-col  font-semibold text-lg/5 my-2  text-balance">
+            <h2 className="flex flex-col  font-semibold text-lg/6 my-2  text-balance">
               {title}
               {otherMatches.length > 0 && (
                 <span className=" text-xs text-gray-500 dark:text-gray-400">

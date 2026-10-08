@@ -14,7 +14,7 @@ export default function NavigationBar() {
   const router = useRouter();
   return (
     <nav
-      className="fixed bottom-4 left-4 right-4 z-10 p-1.5 flex justify-around items-center rounded-full border-2 border-gray-100 dark:border-gray-600 shadow-xl shadow-gray-200/30 dark:shadow-purple-800/10 bg-white dark:bg-gray-700
+      className="fixed bottom-4 left-4 right-4 z-10 p-1.5 flex justify-around items-center rounded-full border-2 border-gray-100 dark:border-gray-600 shadow-xl shadow-gray-200/30 dark:shadow-purple-800/10 bg-white dark:bg-gray-800
       lg:top-0 lg:bottom-0 lg:left-0 lg:right-auto lg:w-64 lg:flex-col lg:items-stretch lg:justify-start lg:gap-2 lg:p-4 lg:rounded-none lg:border-0 lg:shadow-none"
     >
       <h1 className="hidden lg:block px-4 pt-8 pb-6 text-3xl font-bold text-gray-900 dark:text-white">

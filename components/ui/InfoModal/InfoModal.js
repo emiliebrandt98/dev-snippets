@@ -43,7 +43,7 @@ export default function InfoModal({
           disabled={isConfirming}
           className="button button-primary w-50"
         >
-          {isConfirming ? "Loading..." : "Yes, publishing"}
+          {isConfirming ? "Loading..." : "Publishing"}
         </button>
       </div>
     </dialog>

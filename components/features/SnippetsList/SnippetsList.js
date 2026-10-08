@@ -15,7 +15,10 @@ export default function SnippetsList({
           : null;
 
         return (
-          <li key={snippet._id} className="flex items-stretch h-full gap-3">
+          <li
+            key={snippet._id}
+            className="flex items-stretch content-center h-full gap-3"
+          >
             {isDeleteMode && (
               <input
                 type="checkbox"
