@@ -13,7 +13,6 @@ Anstatt Code-Snippets in unübersichtlichen Textdateien oder Bookmarks zu verlie
 
 <div align="center">
  <img width="297" height="auto" alt="HomePage" src="https://github.com/user-attachments/assets/b71ac87d-a213-44bd-a332-a10d4e742ffc" />
- <img width="300" height="auto" alt="Detail Page" src="https://github.com/user-attachments/assets/54c64a0e-ef74-4db4-9dea-c4d93e20b9e2" />
  <img width="297" height="auto" alt="Create Snippet" src="https://github.com/user-attachments/assets/40a11deb-e794-4882-a40c-7599b886aa21" />
 </div>
 
