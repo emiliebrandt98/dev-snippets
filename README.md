@@ -6,15 +6,19 @@ Anstatt Code-Snippets in unübersichtlichen Textdateien oder Bookmarks zu verlie
 [![Built with Next.js](https://img.shields.io/badge/Tech-Next.js-black?logo=next.js)](https://nextjs.org/)
 
 
----
+
+
 
 ## 📸 Preview 
 
 <div align="center">
- <img width="300" height="auto" alt="Homepage" src="#" />
+ <img width="297" height="auto" alt="HomePage" src="https://github.com/user-attachments/assets/b71ac87d-a213-44bd-a332-a10d4e742ffc" />
+ <img width="300" height="auto" alt="Detail Page" src="https://github.com/user-attachments/assets/54c64a0e-ef74-4db4-9dea-c4d93e20b9e2" />
+ <img width="297" height="auto" alt="Create Snippet" src="https://github.com/user-attachments/assets/40a11deb-e794-4882-a40c-7599b886aa21" />
 </div>
 
----
+
+
 
 ## 🚀 Features
 
@@ -35,9 +39,14 @@ Anstatt Code-Snippets in unübersichtlichen Textdateien oder Bookmarks zu verlie
 - Favorite Snippets: Save favorite Snippets inside a separate list.
 - ProfilPage: Change login data and view a small statistic.
 - Public/Private Toggle: Share a Snippet with someone else.
-- Import/Export of CVS: Import/Export a bigger list of Snippets easyly.  
 
----
+**Feature Draft**
+- Language Version
+- Import and Export of snippets
+- Onboarding
+- Additional Login options
+
+
 
 ## 🛠️ Tech Stack
 
@@ -50,9 +59,12 @@ Anstatt Code-Snippets in unübersichtlichen Textdateien oder Bookmarks zu verlie
   - `swr` (Datenabfrage)
   - `mongoose` (MongoDB-Connection)
   - `react-toastify` (Toast-Messages)
+  - `react-syntax-highlighter` (Syntax Highlight)
+  - `next-auth` (Login/Registration)
 - **Deployment:** Vercel
 
----
+
+
 
 ## ⌨️ Developer
 
